@@ -1,0 +1,171 @@
+[
+  {
+    "position": 1,
+    "title": "Machine learning for microbiologists",
+    "result_id": "LyT44hZeFM0J",
+    "link": "https://www.nature.com/articles/s41579-023-00984-1",
+    "snippet": "\u2026 how to evaluate a machine learning model and how \u2026 machine learning-based work. The topics presented in this work will allow microbiologists to grasp the potential of machine learning \u2026",
+    "publication_info": {
+      "summary": "F Asnicar, AM Thomas, A Passerini\u2026 - Nature Reviews \u2026, 2024 - nature.com",
+      "authors": [
+        {
+          "name": "F Asnicar",
+          "link": "https://scholar.google.com/citations?user=ZbRfesUAAAAJ&hl=en&num=3&oi=sra",
+          "author_id": "ZbRfesUAAAAJ",
+          "serpapi_scholar_link": "https://serpapi.com/search.json?author_id=ZbRfesUAAAAJ&engine=google_scholar_author&hl=en"
+        },
+        {
+          "name": "AM Thomas",
+          "link": "https://scholar.google.com/citations?user=dMThjQ8AAAAJ&hl=en&num=3&oi=sra",
+          "author_id": "dMThjQ8AAAAJ",
+          "serpapi_scholar_link": "https://serpapi.com/search.json?author_id=dMThjQ8AAAAJ&engine=google_scholar_author&hl=en"
+        },
+        {
+          "name": "A Passerini",
+          "link": "https://scholar.google.com/citations?user=IIXgkLoAAAAJ&hl=en&num=3&oi=sra",
+          "author_id": "IIXgkLoAAAAJ",
+          "serpapi_scholar_link": "https://serpapi.com/search.json?author_id=IIXgkLoAAAAJ&engine=google_scholar_author&hl=en"
+        }
+      ]
+    },
+    "resources": [
+      {
+        "title": "nih.gov",
+        "file_format": "HTML",
+        "link": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11980903/"
+      }
+    ],
+    "inline_links": {
+      "serpapi_cite_link": "https://serpapi.com/search.json?engine=google_scholar_cite&hl=en&q=LyT44hZeFM0J",
+      "html_version": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11980903/",
+      "cited_by": {
+        "total": 265,
+        "link": "https://scholar.google.com/scholar?cites=14777539729699644463&as_sdt=5,34&sciodt=0,34&hl=en&num=3",
+        "cites_id": "14777539729699644463",
+        "serpapi_scholar_link": "https://serpapi.com/search.json?as_sdt=5%2C34&cites=14777539729699644463&engine=google_scholar&hl=en&num=3"
+      },
+      "related_pages_link": "https://scholar.google.com/scholar?q=related:LyT44hZeFM0J:scholar.google.com/&scioq=machine+learning+-site:books.google.com+-filetype:pdf&hl=en&num=3&as_sdt=0,34",
+      "serpapi_related_pages_link": "https://serpapi.com/search.json?as_sdt=0%2C34&engine=google_scholar&hl=en&num=3&q=related%3ALyT44hZeFM0J%3Ascholar.google.com%2F",
+      "versions": {
+        "total": 8,
+        "link": "https://scholar.google.com/scholar?cluster=14777539729699644463&hl=en&num=3&as_sdt=0,34",
+        "cluster_id": "14777539729699644463",
+        "serpapi_scholar_link": "https://serpapi.com/search.json?as_sdt=0%2C34&cluster=14777539729699644463&engine=google_scholar&hl=en&num=3"
+      }
+    }
+  },
+  {
+    "position": 2,
+    "title": "Designing nanotheranostics with machine learning",
+    "result_id": "RDhKxI60LUsJ",
+    "link": "https://www.nature.com/articles/s41565-024-01753-8",
+    "snippet": "\u2026 As a key branch of artificial intelligence, machine learning (ML) provides a set of tools capable of performing time-consuming and result-perception tasks, thus offering unique \u2026",
+    "publication_info": {
+      "summary": "L Rao, Y Yuan, X Shen, G Yu, X Chen - Nature Nanotechnology, 2024 - nature.com",
+      "authors": [
+        {
+          "name": "L Rao",
+          "link": "https://scholar.google.com/citations?user=ml35-BQAAAAJ&hl=en&num=3&oi=sra",
+          "author_id": "ml35-BQAAAAJ",
+          "serpapi_scholar_link": "https://serpapi.com/search.json?author_id=ml35-BQAAAAJ&engine=google_scholar_author&hl=en"
+        },
+        {
+          "name": "Y Yuan",
+          "link": "https://scholar.google.com/citations?user=9tI89HMAAAAJ&hl=en&num=3&oi=sra",
+          "author_id": "9tI89HMAAAAJ",
+          "serpapi_scholar_link": "https://serpapi.com/search.json?author_id=9tI89HMAAAAJ&engine=google_scholar_author&hl=en"
+        },
+        {
+          "name": "X Shen",
+          "link": "https://scholar.google.com/citations?user=nKSXus4AAAAJ&hl=en&num=3&oi=sra",
+          "author_id": "nKSXus4AAAAJ",
+          "serpapi_scholar_link": "https://serpapi.com/search.json?author_id=nKSXus4AAAAJ&engine=google_scholar_author&hl=en"
+        },
+        {
+          "name": "G Yu",
+          "link": "https://scholar.google.com/citations?user=6qP7mdIAAAAJ&hl=en&num=3&oi=sra",
+          "author_id": "6qP7mdIAAAAJ",
+          "serpapi_scholar_link": "https://serpapi.com/search.json?author_id=6qP7mdIAAAAJ&engine=google_scholar_author&hl=en"
+        },
+        {
+          "name": "X Chen",
+          "link": "https://scholar.google.com/citations?user=_yF5knkAAAAJ&hl=en&num=3&oi=sra",
+          "author_id": "_yF5knkAAAAJ",
+          "serpapi_scholar_link": "https://serpapi.com/search.json?author_id=_yF5knkAAAAJ&engine=google_scholar_author&hl=en"
+        }
+      ]
+    },
+    "resources": [
+      {
+        "title": "researchgate.net",
+        "file_format": "PDF",
+        "link": "https://www.researchgate.net/profile/Xi-Shen-10/publication/384619655_Designing_nanotheranostics_with_machine_learning/links/6901c26a368b49329fa7e1bd/Designing-nanotheranostics-with-machine-learning.pdf"
+      }
+    ],
+    "inline_links": {
+      "serpapi_cite_link": "https://serpapi.com/search.json?engine=google_scholar_cite&hl=en&q=RDhKxI60LUsJ",
+      "cited_by": {
+        "total": 176,
+        "link": "https://scholar.google.com/scholar?cites=5417184452068128836&as_sdt=5,34&sciodt=0,34&hl=en&num=3",
+        "cites_id": "5417184452068128836",
+        "serpapi_scholar_link": "https://serpapi.com/search.json?as_sdt=5%2C34&cites=5417184452068128836&engine=google_scholar&hl=en&num=3"
+      },
+      "related_pages_link": "https://scholar.google.com/scholar?q=related:RDhKxI60LUsJ:scholar.google.com/&scioq=machine+learning+-site:books.google.com+-filetype:pdf&hl=en&num=3&as_sdt=0,34",
+      "serpapi_related_pages_link": "https://serpapi.com/search.json?as_sdt=0%2C34&engine=google_scholar&hl=en&num=3&q=related%3ARDhKxI60LUsJ%3Ascholar.google.com%2F",
+      "versions": {
+        "total": 8,
+        "link": "https://scholar.google.com/scholar?cluster=5417184452068128836&hl=en&num=3&as_sdt=0,34",
+        "cluster_id": "5417184452068128836",
+        "serpapi_scholar_link": "https://serpapi.com/search.json?as_sdt=0%2C34&cluster=5417184452068128836&engine=google_scholar&hl=en&num=3"
+      }
+    }
+  },
+  {
+    "position": 3,
+    "title": "Machine learning: Trends, perspectives, and prospects",
+    "result_id": "pdcI9r5sCJcJ",
+    "link": "https://www.science.org/doi/abs/10.1126/science.aaa8415",
+    "snippet": "\u2026 Machine learning addresses the question of how to build computers that improve \u2026 Recent progress in machine learning has been driven both by the development of new learning \u2026",
+    "publication_info": {
+      "summary": "MI Jordan, TM Mitchell - Science, 2015 - science.org",
+      "authors": [
+        {
+          "name": "MI Jordan",
+          "link": "https://scholar.google.com/citations?user=yxUduqMAAAAJ&hl=en&num=3&oi=sra",
+          "author_id": "yxUduqMAAAAJ",
+          "serpapi_scholar_link": "https://serpapi.com/search.json?author_id=yxUduqMAAAAJ&engine=google_scholar_author&hl=en"
+        },
+        {
+          "name": "TM Mitchell",
+          "link": "https://scholar.google.com/citations?user=MnfzuPYAAAAJ&hl=en&num=3&oi=sra",
+          "author_id": "MnfzuPYAAAAJ",
+          "serpapi_scholar_link": "https://serpapi.com/search.json?author_id=MnfzuPYAAAAJ&engine=google_scholar_author&hl=en"
+        }
+      ]
+    },
+    "resources": [
+      {
+        "title": "cmu.edu",
+        "file_format": "PDF",
+        "link": "http://www.cs.cmu.edu/~tom/pubs/Science-ML-2015.pdf"
+      }
+    ],
+    "inline_links": {
+      "serpapi_cite_link": "https://serpapi.com/search.json?engine=google_scholar_cite&hl=en&q=pdcI9r5sCJcJ",
+      "cited_by": {
+        "total": 14640,
+        "link": "https://scholar.google.com/scholar?cites=10883068066968164261&as_sdt=5,34&sciodt=0,34&hl=en&num=3",
+        "cites_id": "10883068066968164261",
+        "serpapi_scholar_link": "https://serpapi.com/search.json?as_sdt=5%2C34&cites=10883068066968164261&engine=google_scholar&hl=en&num=3"
+      },
+      "related_pages_link": "https://scholar.google.com/scholar?q=related:pdcI9r5sCJcJ:scholar.google.com/&scioq=machine+learning+-site:books.google.com+-filetype:pdf&hl=en&num=3&as_sdt=0,34",
+      "serpapi_related_pages_link": "https://serpapi.com/search.json?as_sdt=0%2C34&engine=google_scholar&hl=en&num=3&q=related%3ApdcI9r5sCJcJ%3Ascholar.google.com%2F",
+      "versions": {
+        "total": 22,
+        "link": "https://scholar.google.com/scholar?cluster=10883068066968164261&hl=en&num=3&as_sdt=0,34",
+        "cluster_id": "10883068066968164261",
+        "serpapi_scholar_link": "https://serpapi.com/search.json?as_sdt=0%2C34&cluster=10883068066968164261&engine=google_scholar&hl=en&num=3"
+      }
+    }
+  }
+]
