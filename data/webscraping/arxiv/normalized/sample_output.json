@@ -1,0 +1,133 @@
+[
+  {
+    "corpus_id": "sha256:arxiv:2211.02350v1",
+    "source": "arxiv",
+    "external_id": "2211.02350v1",
+    "title": "Tierkreis: A Dataflow Framework for Hybrid Quantum-Classical Computing",
+    "abstract": "We present Tierkreis, a higher-order dataflow graph program representation and runtime designed for compositional, quantum-classical hybrid algorithms. The design of the system is motivated by the remote nature of quantum computers, the need for hybrid algorithms to involve cloud and distributed computing, and the long-running nature of these algorithms. The graph-based representation reflects how designers reason about and visualise algorithms, and allows automatic parallelism and asynchronicity. A strong, static type system and higher-order semantics allow for high expressivity and compositionality in the program. The flexible runtime protocol enables third-party developers to add functionality using any language or environment. With Tierkreis, quantum software developers can easily build, visualise, verify, test, and debug complex hybrid workflows, and immediately deploy them to the cloud or a custom distributed environment.",
+    "authors": [
+      {
+        "name": "Seyon Sivarajah",
+        "affiliation": null
+      },
+      {
+        "name": "Lukas Heidemann",
+        "affiliation": null
+      },
+      {
+        "name": "Alan Lawrence",
+        "affiliation": null
+      },
+      {
+        "name": "Ross Duncan",
+        "affiliation": null
+      }
+    ],
+    "published_at": "2022-11-04T10:14:47Z",
+    "updated_at": "2022-11-04T10:14:47Z",
+    "landing_url": "http://arxiv.org/abs/2211.02350v1",
+    "pdf_url": "https://arxiv.org/pdf/2211.02350v1",
+    "categories": [
+      "quant-ph",
+      "cs.DC"
+    ],
+    "keywords": [],
+    "venue": null,
+    "citation_count": null,
+    "snippet_is_partial": false,
+    "authors_incomplete": false,
+    "fetched_at": "2026-04-22T13:39:48Z"
+  },
+  {
+    "corpus_id": "sha256:arxiv:2403.02240v5",
+    "source": "arxiv",
+    "external_id": "2403.02240v5",
+    "title": "Quantum Computing: Vision and Challenges",
+    "abstract": "The recent development of quantum computing, which uses entanglement, superposition, and other quantum fundamental concepts, can provide substantial processing advantages over traditional computing. These quantum features help solve many complex problems that cannot be solved otherwise with conventional computing methods. These problems include modeling quantum mechanics, logistics, chemical-based advances, drug design, statistical science, sustainable energy, banking, reliable communication, and quantum chemical engineering. The last few years have witnessed remarkable progress in quantum software and algorithm creation and quantum hardware research, which has significantly advanced the prospect of realizing quantum computers. It would be helpful to have comprehensive literature research on this area to grasp the current status and find outstanding problems that require considerable attention from the research community working in the quantum computing industry. To better understand quantum computing, this paper examines the foundations and vision based on current research in this area. We discuss cutting-edge developments in quantum computer hardware advancement and subsequent advances in quantum cryptography, quantum software, and high-scalability quantum computers. Many potential challenges and exciting new trends for quantum technology research and development are highlighted in this paper for a broader debate.",
+    "authors": [
+      {
+        "name": "Sukhpal Singh Gill",
+        "affiliation": null
+      },
+      {
+        "name": "Oktay Cetinkaya",
+        "affiliation": null
+      },
+      {
+        "name": "Stefano Marrone",
+        "affiliation": null
+      },
+      {
+        "name": "Daniel Claudino",
+        "affiliation": null
+      },
+      {
+        "name": "David Haunschild",
+        "affiliation": null
+      },
+      {
+        "name": "Leon Schlote",
+        "affiliation": null
+      },
+      {
+        "name": "Huaming Wu",
+        "affiliation": null
+      },
+      {
+        "name": "Carlo Ottaviani",
+        "affiliation": null
+      },
+      {
+        "name": "Xiaoyuan Liu",
+        "affiliation": null
+      },
+      {
+        "name": "Sree Pragna Machupalli",
+        "affiliation": null
+      },
+      {
+        "name": "Kamalpreet Kaur",
+        "affiliation": null
+      },
+      {
+        "name": "Priyansh Arora",
+        "affiliation": null
+      },
+      {
+        "name": "Ji Liu",
+        "affiliation": null
+      },
+      {
+        "name": "Ahmed Farouk",
+        "affiliation": null
+      },
+      {
+        "name": "Houbing Herbert Song",
+        "affiliation": null
+      },
+      {
+        "name": "Steve Uhlig",
+        "affiliation": null
+      },
+      {
+        "name": "Kotagiri Ramamohanarao",
+        "affiliation": null
+      }
+    ],
+    "published_at": "2024-03-04T17:33:18Z",
+    "updated_at": "2025-04-07T15:07:51Z",
+    "landing_url": "http://arxiv.org/abs/2403.02240v5",
+    "pdf_url": "https://arxiv.org/pdf/2403.02240v5",
+    "categories": [
+      "cs.DC",
+      "cs.ET",
+      "quant-ph"
+    ],
+    "keywords": [],
+    "venue": null,
+    "citation_count": null,
+    "snippet_is_partial": false,
+    "authors_incomplete": false,
+    "fetched_at": "2026-04-22T13:39:48Z"
+  }
+]
