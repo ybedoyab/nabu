@@ -4,10 +4,7 @@ from typing import List, Dict, Any
 from datetime import datetime, timezone
 import json
 import os
-import sys
 
-# Ensure Python path includes the parent directory so we can import 'common'
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from common.logger import setup_scraper_logger
 
 class ArxivScraper:
