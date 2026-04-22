@@ -98,7 +98,7 @@ def run(query: str, limit: int, raw: bool) -> None:
 if __name__ == "__main__":
     # ── Edit these to try different cases ──────────────────────────────────
     QUERY = "machine learning -site:books.google.com -filetype:pdf"
-    LIMIT = 3       # 1–20
+    LIMIT = 10       # 1–20
     RAW   = False   # True → prints the raw JSON response
     # ───────────────────────────────────────────────────────────────────────
 

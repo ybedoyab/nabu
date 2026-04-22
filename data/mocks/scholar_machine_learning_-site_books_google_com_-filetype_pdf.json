@@ -10,19 +10,19 @@
       "authors": [
         {
           "name": "F Asnicar",
-          "link": "https://scholar.google.com/citations?user=ZbRfesUAAAAJ&hl=en&num=3&oi=sra",
+          "link": "https://scholar.google.com/citations?user=ZbRfesUAAAAJ&hl=en&oi=sra",
           "author_id": "ZbRfesUAAAAJ",
           "serpapi_scholar_link": "https://serpapi.com/search.json?author_id=ZbRfesUAAAAJ&engine=google_scholar_author&hl=en"
         },
         {
           "name": "AM Thomas",
-          "link": "https://scholar.google.com/citations?user=dMThjQ8AAAAJ&hl=en&num=3&oi=sra",
+          "link": "https://scholar.google.com/citations?user=dMThjQ8AAAAJ&hl=en&oi=sra",
           "author_id": "dMThjQ8AAAAJ",
           "serpapi_scholar_link": "https://serpapi.com/search.json?author_id=dMThjQ8AAAAJ&engine=google_scholar_author&hl=en"
         },
         {
           "name": "A Passerini",
-          "link": "https://scholar.google.com/citations?user=IIXgkLoAAAAJ&hl=en&num=3&oi=sra",
+          "link": "https://scholar.google.com/citations?user=IIXgkLoAAAAJ&hl=en&oi=sra",
           "author_id": "IIXgkLoAAAAJ",
           "serpapi_scholar_link": "https://serpapi.com/search.json?author_id=IIXgkLoAAAAJ&engine=google_scholar_author&hl=en"
         }
@@ -40,17 +40,17 @@
       "html_version": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11980903/",
       "cited_by": {
         "total": 265,
-        "link": "https://scholar.google.com/scholar?cites=14777539729699644463&as_sdt=5,34&sciodt=0,34&hl=en&num=3",
+        "link": "https://scholar.google.com/scholar?cites=14777539729699644463&as_sdt=5,26&sciodt=0,26&hl=en",
         "cites_id": "14777539729699644463",
-        "serpapi_scholar_link": "https://serpapi.com/search.json?as_sdt=5%2C34&cites=14777539729699644463&engine=google_scholar&hl=en&num=3"
+        "serpapi_scholar_link": "https://serpapi.com/search.json?as_sdt=5%2C26&cites=14777539729699644463&engine=google_scholar&hl=en"
       },
-      "related_pages_link": "https://scholar.google.com/scholar?q=related:LyT44hZeFM0J:scholar.google.com/&scioq=machine+learning+-site:books.google.com+-filetype:pdf&hl=en&num=3&as_sdt=0,34",
-      "serpapi_related_pages_link": "https://serpapi.com/search.json?as_sdt=0%2C34&engine=google_scholar&hl=en&num=3&q=related%3ALyT44hZeFM0J%3Ascholar.google.com%2F",
+      "related_pages_link": "https://scholar.google.com/scholar?q=related:LyT44hZeFM0J:scholar.google.com/&scioq=machine+learning+-site:books.google.com+-filetype:pdf&hl=en&as_sdt=0,26",
+      "serpapi_related_pages_link": "https://serpapi.com/search.json?as_sdt=0%2C26&engine=google_scholar&hl=en&num=10&q=related%3ALyT44hZeFM0J%3Ascholar.google.com%2F",
       "versions": {
         "total": 8,
-        "link": "https://scholar.google.com/scholar?cluster=14777539729699644463&hl=en&num=3&as_sdt=0,34",
+        "link": "https://scholar.google.com/scholar?cluster=14777539729699644463&hl=en&as_sdt=0,26",
         "cluster_id": "14777539729699644463",
-        "serpapi_scholar_link": "https://serpapi.com/search.json?as_sdt=0%2C34&cluster=14777539729699644463&engine=google_scholar&hl=en&num=3"
+        "serpapi_scholar_link": "https://serpapi.com/search.json?as_sdt=0%2C26&cluster=14777539729699644463&engine=google_scholar&hl=en"
       }
     }
   },
@@ -65,31 +65,31 @@
       "authors": [
         {
           "name": "L Rao",
-          "link": "https://scholar.google.com/citations?user=ml35-BQAAAAJ&hl=en&num=3&oi=sra",
+          "link": "https://scholar.google.com/citations?user=ml35-BQAAAAJ&hl=en&oi=sra",
           "author_id": "ml35-BQAAAAJ",
           "serpapi_scholar_link": "https://serpapi.com/search.json?author_id=ml35-BQAAAAJ&engine=google_scholar_author&hl=en"
         },
         {
           "name": "Y Yuan",
-          "link": "https://scholar.google.com/citations?user=9tI89HMAAAAJ&hl=en&num=3&oi=sra",
+          "link": "https://scholar.google.com/citations?user=9tI89HMAAAAJ&hl=en&oi=sra",
           "author_id": "9tI89HMAAAAJ",
           "serpapi_scholar_link": "https://serpapi.com/search.json?author_id=9tI89HMAAAAJ&engine=google_scholar_author&hl=en"
         },
         {
           "name": "X Shen",
-          "link": "https://scholar.google.com/citations?user=nKSXus4AAAAJ&hl=en&num=3&oi=sra",
+          "link": "https://scholar.google.com/citations?user=nKSXus4AAAAJ&hl=en&oi=sra",
           "author_id": "nKSXus4AAAAJ",
           "serpapi_scholar_link": "https://serpapi.com/search.json?author_id=nKSXus4AAAAJ&engine=google_scholar_author&hl=en"
         },
         {
           "name": "G Yu",
-          "link": "https://scholar.google.com/citations?user=6qP7mdIAAAAJ&hl=en&num=3&oi=sra",
+          "link": "https://scholar.google.com/citations?user=6qP7mdIAAAAJ&hl=en&oi=sra",
           "author_id": "6qP7mdIAAAAJ",
           "serpapi_scholar_link": "https://serpapi.com/search.json?author_id=6qP7mdIAAAAJ&engine=google_scholar_author&hl=en"
         },
         {
           "name": "X Chen",
-          "link": "https://scholar.google.com/citations?user=_yF5knkAAAAJ&hl=en&num=3&oi=sra",
+          "link": "https://scholar.google.com/citations?user=_yF5knkAAAAJ&hl=en&oi=sra",
           "author_id": "_yF5knkAAAAJ",
           "serpapi_scholar_link": "https://serpapi.com/search.json?author_id=_yF5knkAAAAJ&engine=google_scholar_author&hl=en"
         }
@@ -106,17 +106,17 @@
       "serpapi_cite_link": "https://serpapi.com/search.json?engine=google_scholar_cite&hl=en&q=RDhKxI60LUsJ",
       "cited_by": {
         "total": 176,
-        "link": "https://scholar.google.com/scholar?cites=5417184452068128836&as_sdt=5,34&sciodt=0,34&hl=en&num=3",
+        "link": "https://scholar.google.com/scholar?cites=5417184452068128836&as_sdt=5,26&sciodt=0,26&hl=en",
         "cites_id": "5417184452068128836",
-        "serpapi_scholar_link": "https://serpapi.com/search.json?as_sdt=5%2C34&cites=5417184452068128836&engine=google_scholar&hl=en&num=3"
+        "serpapi_scholar_link": "https://serpapi.com/search.json?as_sdt=5%2C26&cites=5417184452068128836&engine=google_scholar&hl=en"
       },
-      "related_pages_link": "https://scholar.google.com/scholar?q=related:RDhKxI60LUsJ:scholar.google.com/&scioq=machine+learning+-site:books.google.com+-filetype:pdf&hl=en&num=3&as_sdt=0,34",
-      "serpapi_related_pages_link": "https://serpapi.com/search.json?as_sdt=0%2C34&engine=google_scholar&hl=en&num=3&q=related%3ARDhKxI60LUsJ%3Ascholar.google.com%2F",
+      "related_pages_link": "https://scholar.google.com/scholar?q=related:RDhKxI60LUsJ:scholar.google.com/&scioq=machine+learning+-site:books.google.com+-filetype:pdf&hl=en&as_sdt=0,26",
+      "serpapi_related_pages_link": "https://serpapi.com/search.json?as_sdt=0%2C26&engine=google_scholar&hl=en&num=10&q=related%3ARDhKxI60LUsJ%3Ascholar.google.com%2F",
       "versions": {
         "total": 8,
-        "link": "https://scholar.google.com/scholar?cluster=5417184452068128836&hl=en&num=3&as_sdt=0,34",
+        "link": "https://scholar.google.com/scholar?cluster=5417184452068128836&hl=en&as_sdt=0,26",
         "cluster_id": "5417184452068128836",
-        "serpapi_scholar_link": "https://serpapi.com/search.json?as_sdt=0%2C34&cluster=5417184452068128836&engine=google_scholar&hl=en&num=3"
+        "serpapi_scholar_link": "https://serpapi.com/search.json?as_sdt=0%2C26&cluster=5417184452068128836&engine=google_scholar&hl=en"
       }
     }
   },
@@ -131,13 +131,13 @@
       "authors": [
         {
           "name": "MI Jordan",
-          "link": "https://scholar.google.com/citations?user=yxUduqMAAAAJ&hl=en&num=3&oi=sra",
+          "link": "https://scholar.google.com/citations?user=yxUduqMAAAAJ&hl=en&oi=sra",
           "author_id": "yxUduqMAAAAJ",
           "serpapi_scholar_link": "https://serpapi.com/search.json?author_id=yxUduqMAAAAJ&engine=google_scholar_author&hl=en"
         },
         {
           "name": "TM Mitchell",
-          "link": "https://scholar.google.com/citations?user=MnfzuPYAAAAJ&hl=en&num=3&oi=sra",
+          "link": "https://scholar.google.com/citations?user=MnfzuPYAAAAJ&hl=en&oi=sra",
           "author_id": "MnfzuPYAAAAJ",
           "serpapi_scholar_link": "https://serpapi.com/search.json?author_id=MnfzuPYAAAAJ&engine=google_scholar_author&hl=en"
         }
@@ -154,17 +154,307 @@
       "serpapi_cite_link": "https://serpapi.com/search.json?engine=google_scholar_cite&hl=en&q=pdcI9r5sCJcJ",
       "cited_by": {
         "total": 14640,
-        "link": "https://scholar.google.com/scholar?cites=10883068066968164261&as_sdt=5,34&sciodt=0,34&hl=en&num=3",
+        "link": "https://scholar.google.com/scholar?cites=10883068066968164261&as_sdt=5,26&sciodt=0,26&hl=en",
         "cites_id": "10883068066968164261",
-        "serpapi_scholar_link": "https://serpapi.com/search.json?as_sdt=5%2C34&cites=10883068066968164261&engine=google_scholar&hl=en&num=3"
+        "serpapi_scholar_link": "https://serpapi.com/search.json?as_sdt=5%2C26&cites=10883068066968164261&engine=google_scholar&hl=en"
       },
-      "related_pages_link": "https://scholar.google.com/scholar?q=related:pdcI9r5sCJcJ:scholar.google.com/&scioq=machine+learning+-site:books.google.com+-filetype:pdf&hl=en&num=3&as_sdt=0,34",
-      "serpapi_related_pages_link": "https://serpapi.com/search.json?as_sdt=0%2C34&engine=google_scholar&hl=en&num=3&q=related%3ApdcI9r5sCJcJ%3Ascholar.google.com%2F",
+      "related_pages_link": "https://scholar.google.com/scholar?q=related:pdcI9r5sCJcJ:scholar.google.com/&scioq=machine+learning+-site:books.google.com+-filetype:pdf&hl=en&as_sdt=0,26",
+      "serpapi_related_pages_link": "https://serpapi.com/search.json?as_sdt=0%2C26&engine=google_scholar&hl=en&num=10&q=related%3ApdcI9r5sCJcJ%3Ascholar.google.com%2F",
       "versions": {
         "total": 22,
-        "link": "https://scholar.google.com/scholar?cluster=10883068066968164261&hl=en&num=3&as_sdt=0,34",
+        "link": "https://scholar.google.com/scholar?cluster=10883068066968164261&hl=en&as_sdt=0,26",
         "cluster_id": "10883068066968164261",
-        "serpapi_scholar_link": "https://serpapi.com/search.json?as_sdt=0%2C34&cluster=10883068066968164261&engine=google_scholar&hl=en&num=3"
+        "serpapi_scholar_link": "https://serpapi.com/search.json?as_sdt=0%2C26&cluster=10883068066968164261&engine=google_scholar&hl=en"
+      }
+    }
+  },
+  {
+    "position": 4,
+    "title": "What is machine learning?",
+    "result_id": "6uA6mpei2rcJ",
+    "link": "https://link.springer.com/chapter/10.1007/978-3-319-18305-3_1",
+    "snippet": "\u2026 A machine learning algorithm is a computational process that \u2026 This training is the \u201clearning\u201d part of machine learning. The \u2026 can practice \u201clifelong\u201d learning as it processes new data and \u2026",
+    "publication_info": {
+      "summary": "I El Naqa, MJ Murphy - Machine learning in radiation oncology: theory and \u2026, 2015 - Springer",
+      "authors": [
+        {
+          "name": "I El Naqa",
+          "link": "https://scholar.google.com/citations?user=9Vdfc2sAAAAJ&hl=en&oi=sra",
+          "author_id": "9Vdfc2sAAAAJ",
+          "serpapi_scholar_link": "https://serpapi.com/search.json?author_id=9Vdfc2sAAAAJ&engine=google_scholar_author&hl=en"
+        },
+        {
+          "name": "MJ Murphy"
+        }
+      ]
+    },
+    "inline_links": {
+      "serpapi_cite_link": "https://serpapi.com/search.json?engine=google_scholar_cite&hl=en&q=6uA6mpei2rcJ",
+      "cited_by": {
+        "total": 2102,
+        "link": "https://scholar.google.com/scholar?cites=13248080025875046634&as_sdt=5,26&sciodt=0,26&hl=en",
+        "cites_id": "13248080025875046634",
+        "serpapi_scholar_link": "https://serpapi.com/search.json?as_sdt=5%2C26&cites=13248080025875046634&engine=google_scholar&hl=en"
+      },
+      "related_pages_link": "https://scholar.google.com/scholar?q=related:6uA6mpei2rcJ:scholar.google.com/&scioq=machine+learning+-site:books.google.com+-filetype:pdf&hl=en&as_sdt=0,26",
+      "serpapi_related_pages_link": "https://serpapi.com/search.json?as_sdt=0%2C26&engine=google_scholar&hl=en&num=10&q=related%3A6uA6mpei2rcJ%3Ascholar.google.com%2F",
+      "versions": {
+        "total": 6,
+        "link": "https://scholar.google.com/scholar?cluster=13248080025875046634&hl=en&as_sdt=0,26",
+        "cluster_id": "13248080025875046634",
+        "serpapi_scholar_link": "https://serpapi.com/search.json?as_sdt=0%2C26&cluster=13248080025875046634&engine=google_scholar&hl=en"
+      }
+    }
+  },
+  {
+    "position": 5,
+    "title": "What is machine learning? A primer for the epidemiologist",
+    "result_id": "LDE5SAcBB-gJ",
+    "link": "https://academic.oup.com/aje/article-abstract/188/12/2222/5567515",
+    "snippet": "\u2026 We provide a brief introduction to 5 common machine learning \u2026 of machine learning techniques in the published literature. We recommend approaches to incorporate machine learning \u2026",
+    "publication_info": {
+      "summary": "Q Bi, KE Goodman, J Kaminsky\u2026 - American journal of \u2026, 2019 - academic.oup.com",
+      "authors": [
+        {
+          "name": "Q Bi",
+          "link": "https://scholar.google.com/citations?user=xzss3t0AAAAJ&hl=en&oi=sra",
+          "author_id": "xzss3t0AAAAJ",
+          "serpapi_scholar_link": "https://serpapi.com/search.json?author_id=xzss3t0AAAAJ&engine=google_scholar_author&hl=en"
+        },
+        {
+          "name": "KE Goodman"
+        },
+        {
+          "name": "J Kaminsky",
+          "link": "https://scholar.google.com/citations?user=BFdcm_gAAAAJ&hl=en&oi=sra",
+          "author_id": "BFdcm_gAAAAJ",
+          "serpapi_scholar_link": "https://serpapi.com/search.json?author_id=BFdcm_gAAAAJ&engine=google_scholar_author&hl=en"
+        }
+      ]
+    },
+    "inline_links": {
+      "serpapi_cite_link": "https://serpapi.com/search.json?engine=google_scholar_cite&hl=en&q=LDE5SAcBB-gJ",
+      "cited_by": {
+        "total": 889,
+        "link": "https://scholar.google.com/scholar?cites=16719333272424362284&as_sdt=5,26&sciodt=0,26&hl=en",
+        "cites_id": "16719333272424362284",
+        "serpapi_scholar_link": "https://serpapi.com/search.json?as_sdt=5%2C26&cites=16719333272424362284&engine=google_scholar&hl=en"
+      },
+      "related_pages_link": "https://scholar.google.com/scholar?q=related:LDE5SAcBB-gJ:scholar.google.com/&scioq=machine+learning+-site:books.google.com+-filetype:pdf&hl=en&as_sdt=0,26",
+      "serpapi_related_pages_link": "https://serpapi.com/search.json?as_sdt=0%2C26&engine=google_scholar&hl=en&num=10&q=related%3ALDE5SAcBB-gJ%3Ascholar.google.com%2F",
+      "versions": {
+        "total": 10,
+        "link": "https://scholar.google.com/scholar?cluster=16719333272424362284&hl=en&as_sdt=0,26",
+        "cluster_id": "16719333272424362284",
+        "serpapi_scholar_link": "https://serpapi.com/search.json?as_sdt=0%2C26&cluster=16719333272424362284&engine=google_scholar&hl=en"
+      }
+    }
+  },
+  {
+    "position": 6,
+    "title": "International conference on machine learning",
+    "result_id": "gUoVCWuQbkcJ",
+    "type": "Pdf",
+    "link": "https://par.nsf.gov/servlets/purl/10418406",
+    "snippet": "In this paper, we make the key delineation on the roles of resolution and statistical uncertainty in hierarchical bandits-based black-box optimization algorithms, guiding a more general \u2026",
+    "publication_info": {
+      "summary": "W Li, C Wang, G Cheng, Q Song - Transactions on machine learning \u2026, 2023 - par.nsf.gov",
+      "authors": [
+        {
+          "name": "W Li"
+        },
+        {
+          "name": "C Wang"
+        },
+        {
+          "name": "G Cheng"
+        },
+        {
+          "name": "Q Song"
+        }
+      ]
+    },
+    "resources": [
+      {
+        "title": "nsf.gov",
+        "file_format": "PDF",
+        "link": "https://par.nsf.gov/servlets/purl/10418406"
+      }
+    ],
+    "inline_links": {
+      "serpapi_cite_link": "https://serpapi.com/search.json?engine=google_scholar_cite&hl=en&q=gUoVCWuQbkcJ",
+      "cited_by": {
+        "total": 3408,
+        "link": "https://scholar.google.com/scholar?cites=5147210213519346305&as_sdt=5,26&sciodt=0,26&hl=en",
+        "cites_id": "5147210213519346305",
+        "serpapi_scholar_link": "https://serpapi.com/search.json?as_sdt=5%2C26&cites=5147210213519346305&engine=google_scholar&hl=en"
+      },
+      "related_pages_link": "https://scholar.google.com/scholar?q=related:gUoVCWuQbkcJ:scholar.google.com/&scioq=machine+learning+-site:books.google.com+-filetype:pdf&hl=en&as_sdt=0,26",
+      "serpapi_related_pages_link": "https://serpapi.com/search.json?as_sdt=0%2C26&engine=google_scholar&hl=en&num=10&q=related%3AgUoVCWuQbkcJ%3Ascholar.google.com%2F",
+      "cached_page_link": "https://scholar.googleusercontent.com/scholar?q=cache:gUoVCWuQbkcJ:scholar.google.com/+machine+learning+-site:books.google.com+-filetype:pdf&hl=en&as_sdt=0,26"
+    }
+  },
+  {
+    "position": 7,
+    "title": "What is machine learning?",
+    "result_id": "OsB2qindikUJ",
+    "link": "https://onlinelibrary.wiley.com/doi/abs/10.1002/9781119815075.ch18",
+    "snippet": "\u2026 that one can employ in machine learning (ML). The required \u2026 of two learning types: supervised or unsupervised learning. \u2026 skills through either automated learning or learning via human \u2026",
+    "publication_info": {
+      "summary": "J Bell - Machine learning and the city: applications in \u2026, 2022 - Wiley Online Library",
+      "authors": [
+        {
+          "name": "J Bell"
+        }
+      ]
+    },
+    "inline_links": {
+      "serpapi_cite_link": "https://serpapi.com/search.json?engine=google_scholar_cite&hl=en&q=OsB2qindikUJ",
+      "cited_by": {
+        "total": 172,
+        "link": "https://scholar.google.com/scholar?cites=5011060706426404922&as_sdt=5,26&sciodt=0,26&hl=en",
+        "cites_id": "5011060706426404922",
+        "serpapi_scholar_link": "https://serpapi.com/search.json?as_sdt=5%2C26&cites=5011060706426404922&engine=google_scholar&hl=en"
+      },
+      "related_pages_link": "https://scholar.google.com/scholar?q=related:OsB2qindikUJ:scholar.google.com/&scioq=machine+learning+-site:books.google.com+-filetype:pdf&hl=en&as_sdt=0,26",
+      "serpapi_related_pages_link": "https://serpapi.com/search.json?as_sdt=0%2C26&engine=google_scholar&hl=en&num=10&q=related%3AOsB2qindikUJ%3Ascholar.google.com%2F",
+      "versions": {
+        "total": 4,
+        "link": "https://scholar.google.com/scholar?cluster=5011060706426404922&hl=en&as_sdt=0,26",
+        "cluster_id": "5011060706426404922",
+        "serpapi_scholar_link": "https://serpapi.com/search.json?as_sdt=0%2C26&cluster=5011060706426404922&engine=google_scholar&hl=en"
+      }
+    }
+  },
+  {
+    "position": 8,
+    "title": "A brief review of machine learning and its application",
+    "result_id": "iDuXN4hCwvIJ",
+    "link": "https://ieeexplore.ieee.org/abstract/document/5362936/",
+    "snippet": "\u2026 Machine learning is the core issue of artificial intelligence research\u2026 machine learning and its basic structure, and describes a variety of machine learning methods, including rote learning\u2026",
+    "publication_info": {
+      "summary": "H Wang, C Ma, L Zhou - 2009 international conference on \u2026, 2009 - ieeexplore.ieee.org",
+      "authors": [
+        {
+          "name": "H Wang"
+        },
+        {
+          "name": "C Ma"
+        },
+        {
+          "name": "L Zhou"
+        }
+      ]
+    },
+    "inline_links": {
+      "serpapi_cite_link": "https://serpapi.com/search.json?engine=google_scholar_cite&hl=en&q=iDuXN4hCwvIJ",
+      "cited_by": {
+        "total": 336,
+        "link": "https://scholar.google.com/scholar?cites=17492617055476071304&as_sdt=5,26&sciodt=0,26&hl=en",
+        "cites_id": "17492617055476071304",
+        "serpapi_scholar_link": "https://serpapi.com/search.json?as_sdt=5%2C26&cites=17492617055476071304&engine=google_scholar&hl=en"
+      },
+      "related_pages_link": "https://scholar.google.com/scholar?q=related:iDuXN4hCwvIJ:scholar.google.com/&scioq=machine+learning+-site:books.google.com+-filetype:pdf&hl=en&as_sdt=0,26",
+      "serpapi_related_pages_link": "https://serpapi.com/search.json?as_sdt=0%2C26&engine=google_scholar&hl=en&num=10&q=related%3AiDuXN4hCwvIJ%3Ascholar.google.com%2F",
+      "versions": {
+        "total": 3,
+        "link": "https://scholar.google.com/scholar?cluster=17492617055476071304&hl=en&as_sdt=0,26",
+        "cluster_id": "17492617055476071304",
+        "serpapi_scholar_link": "https://serpapi.com/search.json?as_sdt=0%2C26&cluster=17492617055476071304&engine=google_scholar&hl=en"
+      }
+    }
+  },
+  {
+    "position": 9,
+    "title": "Machine learning that matters",
+    "result_id": "rC80G66ugSYJ",
+    "link": "https://arxiv.org/abs/1206.4656",
+    "snippet": "\u2026 Many machine learning problems are phrased \u2026 machine learning innovations? This short position paper argues for a change in how we view the relationship between machine learning \u2026",
+    "publication_info": {
+      "summary": "K Wagstaff - arXiv preprint arXiv:1206.4656, 2012 - arxiv.org",
+      "authors": [
+        {
+          "name": "K Wagstaff",
+          "link": "https://scholar.google.com/citations?user=dQmkJlcAAAAJ&hl=en&oi=sra",
+          "author_id": "dQmkJlcAAAAJ",
+          "serpapi_scholar_link": "https://serpapi.com/search.json?author_id=dQmkJlcAAAAJ&engine=google_scholar_author&hl=en"
+        }
+      ]
+    },
+    "resources": [
+      {
+        "title": "arxiv.org",
+        "file_format": "PDF",
+        "link": "https://arxiv.org/pdf/1206.4656"
+      }
+    ],
+    "inline_links": {
+      "serpapi_cite_link": "https://serpapi.com/search.json?engine=google_scholar_cite&hl=en&q=rC80G66ugSYJ",
+      "cited_by": {
+        "total": 486,
+        "link": "https://scholar.google.com/scholar?cites=2774690908240883628&as_sdt=5,26&sciodt=0,26&hl=en",
+        "cites_id": "2774690908240883628",
+        "serpapi_scholar_link": "https://serpapi.com/search.json?as_sdt=5%2C26&cites=2774690908240883628&engine=google_scholar&hl=en"
+      },
+      "related_pages_link": "https://scholar.google.com/scholar?q=related:rC80G66ugSYJ:scholar.google.com/&scioq=machine+learning+-site:books.google.com+-filetype:pdf&hl=en&as_sdt=0,26",
+      "serpapi_related_pages_link": "https://serpapi.com/search.json?as_sdt=0%2C26&engine=google_scholar&hl=en&num=10&q=related%3ArC80G66ugSYJ%3Ascholar.google.com%2F",
+      "versions": {
+        "total": 16,
+        "link": "https://scholar.google.com/scholar?cluster=2774690908240883628&hl=en&as_sdt=0,26",
+        "cluster_id": "2774690908240883628",
+        "serpapi_scholar_link": "https://serpapi.com/search.json?as_sdt=0%2C26&cluster=2774690908240883628&engine=google_scholar&hl=en"
+      },
+      "cached_page_link": "https://scholar.googleusercontent.com/scholar?q=cache:rC80G66ugSYJ:scholar.google.com/+machine+learning+-site:books.google.com+-filetype:pdf&hl=en&as_sdt=0,26"
+    }
+  },
+  {
+    "position": 10,
+    "title": "Machine learning: a primer",
+    "result_id": "8Ow8Yr5978YJ",
+    "link": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5905345/",
+    "snippet": "\u2026 learning methods\u2014for example, clustering and principal component analysis\u2014as well as supervised learning \u2026 This process is called machine learning (ML), a rapidly developing \u2026",
+    "publication_info": {
+      "summary": "D Bzdok, M Krzywinski, N Altman - Nature methods, 2017 - pmc.ncbi.nlm.nih.gov",
+      "authors": [
+        {
+          "name": "D Bzdok",
+          "link": "https://scholar.google.com/citations?user=yMLTxlUAAAAJ&hl=en&oi=sra",
+          "author_id": "yMLTxlUAAAAJ",
+          "serpapi_scholar_link": "https://serpapi.com/search.json?author_id=yMLTxlUAAAAJ&engine=google_scholar_author&hl=en"
+        },
+        {
+          "name": "M Krzywinski",
+          "link": "https://scholar.google.com/citations?user=C2wEkvAAAAAJ&hl=en&oi=sra",
+          "author_id": "C2wEkvAAAAAJ",
+          "serpapi_scholar_link": "https://serpapi.com/search.json?author_id=C2wEkvAAAAAJ&engine=google_scholar_author&hl=en"
+        },
+        {
+          "name": "N Altman"
+        }
+      ]
+    },
+    "resources": [
+      {
+        "title": "nih.gov",
+        "file_format": "PDF",
+        "link": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5905345/pdf/nihms924146.pdf"
+      }
+    ],
+    "inline_links": {
+      "serpapi_cite_link": "https://serpapi.com/search.json?engine=google_scholar_cite&hl=en&q=8Ow8Yr5978YJ",
+      "cited_by": {
+        "total": 267,
+        "link": "https://scholar.google.com/scholar?cites=14334814395588996336&as_sdt=5,26&sciodt=0,26&hl=en",
+        "cites_id": "14334814395588996336",
+        "serpapi_scholar_link": "https://serpapi.com/search.json?as_sdt=5%2C26&cites=14334814395588996336&engine=google_scholar&hl=en"
+      },
+      "related_pages_link": "https://scholar.google.com/scholar?q=related:8Ow8Yr5978YJ:scholar.google.com/&scioq=machine+learning+-site:books.google.com+-filetype:pdf&hl=en&as_sdt=0,26",
+      "serpapi_related_pages_link": "https://serpapi.com/search.json?as_sdt=0%2C26&engine=google_scholar&hl=en&num=10&q=related%3A8Ow8Yr5978YJ%3Ascholar.google.com%2F",
+      "versions": {
+        "total": 11,
+        "link": "https://scholar.google.com/scholar?cluster=14334814395588996336&hl=en&as_sdt=0,26",
+        "cluster_id": "14334814395588996336",
+        "serpapi_scholar_link": "https://serpapi.com/search.json?as_sdt=0%2C26&cluster=14334814395588996336&engine=google_scholar&hl=en"
       }
     }
   }

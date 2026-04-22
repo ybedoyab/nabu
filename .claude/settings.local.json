@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(C:\\\\Users\\\\aleja\\\\Documents\\\\nabu\\\\.venv\\\\Scripts\\\\python.exe *)"
+    ]
+  }
+}
