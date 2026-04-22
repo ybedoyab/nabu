@@ -1,9 +1,9 @@
 {
   "status": "ok",
-  "session_id": "sess_77ff215af6a445749542086b9756fe97",
+  "session_id": "sess_dfa4311edf52454a85fc09b3f6eb5bf3",
   "query": "machine learning",
   "ttl_seconds": 3600,
-  "expires_at": "2026-04-22T16:50:33Z",
+  "expires_at": "2026-04-22T18:24:07Z",
   "sources_queried": [
     "arxiv",
     "scholar"
@@ -49,7 +49,7 @@
       "citation_count": null,
       "snippet_is_partial": false,
       "authors_incomplete": false,
-      "fetched_at": "2026-04-22T15:50:33Z"
+      "fetched_at": "2026-04-22T17:24:07Z"
     },
     {
       "corpus_id": "sha256:arxiv:2006.16189v4",
@@ -109,7 +109,7 @@
       "citation_count": null,
       "snippet_is_partial": false,
       "authors_incomplete": false,
-      "fetched_at": "2026-04-22T15:50:33Z"
+      "fetched_at": "2026-04-22T17:24:07Z"
     },
     {
       "corpus_id": "sha256:arxiv:2201.12150v2",
@@ -140,7 +140,7 @@
       "citation_count": null,
       "snippet_is_partial": false,
       "authors_incomplete": false,
-      "fetched_at": "2026-04-22T15:50:33Z"
+      "fetched_at": "2026-04-22T17:24:07Z"
     },
     {
       "corpus_id": "sha256:arxiv:2302.08893v4",
@@ -173,7 +173,7 @@
       "citation_count": null,
       "snippet_is_partial": false,
       "authors_incomplete": false,
-      "fetched_at": "2026-04-22T15:50:33Z"
+      "fetched_at": "2026-04-22T17:24:07Z"
     },
     {
       "corpus_id": "sha256:arxiv:2304.02381v2",
@@ -205,7 +205,7 @@
       "citation_count": null,
       "snippet_is_partial": false,
       "authors_incomplete": false,
-      "fetched_at": "2026-04-22T15:50:33Z"
+      "fetched_at": "2026-04-22T17:24:07Z"
     },
     {
       "corpus_id": "sha256:arxiv:2303.15563v1",
@@ -245,7 +245,7 @@
       "citation_count": null,
       "snippet_is_partial": false,
       "authors_incomplete": false,
-      "fetched_at": "2026-04-22T15:50:33Z"
+      "fetched_at": "2026-04-22T17:24:07Z"
     },
     {
       "corpus_id": "sha256:arxiv:1905.04749v2",
@@ -291,7 +291,7 @@
       "citation_count": null,
       "snippet_is_partial": false,
       "authors_incomplete": false,
-      "fetched_at": "2026-04-22T15:50:33Z"
+      "fetched_at": "2026-04-22T17:24:07Z"
     },
     {
       "corpus_id": "sha256:arxiv:2602.11092v2",
@@ -356,7 +356,7 @@
       "citation_count": null,
       "snippet_is_partial": false,
       "authors_incomplete": false,
-      "fetched_at": "2026-04-22T15:50:33Z"
+      "fetched_at": "2026-04-22T17:24:07Z"
     },
     {
       "corpus_id": "sha256:arxiv:1705.05172v1",
@@ -395,7 +395,7 @@
       "citation_count": null,
       "snippet_is_partial": false,
       "authors_incomplete": false,
-      "fetched_at": "2026-04-22T15:50:33Z"
+      "fetched_at": "2026-04-22T17:24:07Z"
     },
     {
       "corpus_id": "sha256:arxiv:2509.08759v3",
@@ -431,7 +431,7 @@
       "citation_count": null,
       "snippet_is_partial": false,
       "authors_incomplete": false,
-      "fetched_at": "2026-04-22T15:50:33Z"
+      "fetched_at": "2026-04-22T17:24:07Z"
     },
     {
       "corpus_id": "sha256:arxiv:1906.01101v1",
@@ -479,7 +479,7 @@
       "citation_count": null,
       "snippet_is_partial": false,
       "authors_incomplete": false,
-      "fetched_at": "2026-04-22T15:50:33Z"
+      "fetched_at": "2026-04-22T17:24:07Z"
     },
     {
       "corpus_id": "sha256:arxiv:2404.12511v1",
@@ -518,7 +518,7 @@
       "citation_count": null,
       "snippet_is_partial": false,
       "authors_incomplete": false,
-      "fetched_at": "2026-04-22T15:50:33Z"
+      "fetched_at": "2026-04-22T17:24:07Z"
     },
     {
       "corpus_id": "sha256:arxiv:2402.01393v3",
@@ -563,7 +563,7 @@
       "citation_count": null,
       "snippet_is_partial": false,
       "authors_incomplete": false,
-      "fetched_at": "2026-04-22T15:50:33Z"
+      "fetched_at": "2026-04-22T17:24:07Z"
     },
     {
       "corpus_id": "sha256:arxiv:1812.09225v4",
@@ -595,7 +595,7 @@
       "citation_count": null,
       "snippet_is_partial": false,
       "authors_incomplete": false,
-      "fetched_at": "2026-04-22T15:50:33Z"
+      "fetched_at": "2026-04-22T17:24:07Z"
     },
     {
       "corpus_id": "sha256:arxiv:2111.07508v1",
@@ -636,15 +636,15 @@
       "citation_count": null,
       "snippet_is_partial": false,
       "authors_incomplete": false,
-      "fetched_at": "2026-04-22T15:50:33Z"
+      "fetched_at": "2026-04-22T17:24:07Z"
     },
     {
-      "corpus_id": "sha256:scholar:72c0b53bed079130a40538eafc13b300c8f6221c20b686c2180a86635618c148",
+      "corpus_id": "sha256:scholar:EQ8shYj8Ai8J",
       "source": "scholar",
-      "external_id": "c88aeb6cdb706b7e",
-      "title": "[BOOK] [B] Machine learning",
-      "abstract": "",
-      "snippet": "… from data is called learning or training. The … machine learning is to find or approximate ground-truth. In this book, models are sometimes called learners, which are machine learning …",
+      "external_id": "EQ8shYj8Ai8J",
+      "title": "Machine learning",
+      "abstract": "... from data is called learning or training. The ... machine learning is to find or approximate ground-truth. In this book, models are sometimes called learners, which are machine learning ...",
+      "snippet": "",
       "authors": [
         {
           "name": "ZH Zhou",
@@ -653,23 +653,23 @@
       ],
       "published_at": "2021-01-01T00:00:00Z",
       "updated_at": null,
-      "landing_url": "https://books.google.com/books?hl=en&lr=&id=ctM-EAAAQBAJ&oi=fnd&pg=PR6&dq=machine+learning&ots=o_Pn-5Yu-r&sig=9dcuEDZYQ0vc7QbOiH4uDXwHItg",
+      "landing_url": "https://books.google.com/books?hl=en&lr=&id=ctM-EAAAQBAJ&oi=fnd&pg=PR6&dq=machine+learning&ots=o_Pn-6Uq1n&sig=8--i1fkNp_bBk4dujBGQJUwx3_A",
       "pdf_url": null,
       "categories": [],
       "keywords": [],
       "venue": null,
-      "citation_count": null,
+      "citation_count": 3695,
       "snippet_is_partial": true,
-      "authors_incomplete": true,
-      "fetched_at": "2026-04-22T15:50:35Z"
+      "authors_incomplete": false,
+      "fetched_at": "2026-04-22T17:24:09Z"
     },
     {
-      "corpus_id": "sha256:scholar:94c5e382bf8057208ed29fba48a2d026c43d040d3c94c69e34ce19d6506e549f",
+      "corpus_id": "sha256:scholar:_zuqxloS2b0J",
       "source": "scholar",
-      "external_id": "d3344dd7e3dd41f8",
-      "title": "[BOOK] [B] Machine learning",
-      "abstract": "",
-      "snippet": "MIT presents a concise primer on machine learning —computer programs that learn from data and the basis of applications like voice recognition and driverless cars. No in-depth …",
+      "external_id": "_zuqxloS2b0J",
+      "title": "Machine learning",
+      "abstract": "MIT presents a concise primer on machine learning—computer programs that learn from data and the basis of applications like voice recognition and driverless cars. No in-depth ...",
+      "snippet": "",
       "authors": [
         {
           "name": "E Alpaydin",
@@ -678,23 +678,23 @@
       ],
       "published_at": "2021-01-01T00:00:00Z",
       "updated_at": null,
-      "landing_url": "https://books.google.com/books?hl=en&lr=&id=Eyk5EAAAQBAJ&oi=fnd&pg=PA1&dq=machine+learning&ots=WRzPje1jrO&sig=G-uduWf0ZDjsIcsEsulRXVZBLho",
-      "pdf_url": null,
+      "landing_url": "https://books.google.com/books?hl=en&lr=&id=Eyk5EAAAQBAJ&oi=fnd&pg=PA1&dq=machine+learning&ots=WRzPjfZftK&sig=_dIXH8aOynTKHQ0s79rcyBTXnBM",
+      "pdf_url": "https://cs.pomona.edu/~dkauchak/classes/s16/cs30-s16/lectures/lecture12-NN-basics.pdf",
       "categories": [],
       "keywords": [],
       "venue": null,
-      "citation_count": null,
+      "citation_count": 1648,
       "snippet_is_partial": true,
-      "authors_incomplete": true,
-      "fetched_at": "2026-04-22T15:50:35Z"
+      "authors_incomplete": false,
+      "fetched_at": "2026-04-22T17:24:09Z"
     },
     {
-      "corpus_id": "sha256:scholar:da7a7d86f6e96eb8a3a9052eacc449665068b51ebc3f8ec81a69a2bf6a151886",
+      "corpus_id": "sha256:scholar:pdcI9r5sCJcJ",
       "source": "scholar",
-      "external_id": "4c9d4512fc6c44eb",
-      "title": "Machine learning : Trends, perspectives, and prospects",
-      "abstract": "",
-      "snippet": "… Machine learning addresses the question of how to build computers that improve … Recent progress in machine learning has been driven both by the development of new learning …",
+      "external_id": "pdcI9r5sCJcJ",
+      "title": "Machine learning: Trends, perspectives, and prospects",
+      "abstract": "... Machine learning addresses the question of how to build computers that improve ... Recent progress in machine learning has been driven both by the development of new learning ...",
+      "snippet": "",
       "authors": [
         {
           "name": "MI Jordan",
@@ -708,33 +708,29 @@
       "published_at": "2015-01-01T00:00:00Z",
       "updated_at": null,
       "landing_url": "https://www.science.org/doi/abs/10.1126/science.aaa8415",
-      "pdf_url": null,
+      "pdf_url": "http://www.cs.cmu.edu/~tom/pubs/Science-ML-2015.pdf",
       "categories": [],
       "keywords": [],
-      "venue": null,
-      "citation_count": null,
+      "venue": "Science",
+      "citation_count": 14617,
       "snippet_is_partial": true,
-      "authors_incomplete": true,
-      "fetched_at": "2026-04-22T15:50:35Z"
+      "authors_incomplete": false,
+      "fetched_at": "2026-04-22T17:24:09Z"
     },
     {
-      "corpus_id": "sha256:scholar:796215e4c710dcc0f719d455fccba7cb51ed2fbd45e2505a915ba7f81b9903af",
+      "corpus_id": "sha256:scholar:6uA6mpei2rcJ",
       "source": "scholar",
-      "external_id": "d4b95630d388bf04",
-      "title": "What is machine learning ?",
-      "abstract": "",
-      "snippet": "… A machine learning algorithm is a computational process that … This training is the “ learning ” part of machine learning . The … can practice “lifelong” learning as it processes new data and …",
+      "external_id": "6uA6mpei2rcJ",
+      "title": "What is machine learning?",
+      "abstract": "... A machine learning algorithm is a computational process that ... This training is the “learning” part of machine learning. The ... can practice “lifelong” learning as it processes new data and ...",
+      "snippet": "",
       "authors": [
         {
           "name": "I El Naqa",
           "affiliation": null
         },
         {
-          "name": "MJ Murphy - Machine learning in radiation oncology: theory and …",
-          "affiliation": null
-        },
-        {
-          "name": "2015",
+          "name": "MJ Murphy",
           "affiliation": null
         }
       ],
@@ -744,19 +740,19 @@
       "pdf_url": null,
       "categories": [],
       "keywords": [],
-      "venue": null,
-      "citation_count": null,
+      "venue": "Machine learning in radiation oncology: theory and …",
+      "citation_count": 2102,
       "snippet_is_partial": true,
-      "authors_incomplete": true,
-      "fetched_at": "2026-04-22T15:50:35Z"
+      "authors_incomplete": false,
+      "fetched_at": "2026-04-22T17:24:09Z"
     },
     {
-      "corpus_id": "sha256:scholar:db22703a90f977745da8fde25d050c4b954dde5169f34241b52ce346fdd0d034",
+      "corpus_id": "sha256:scholar:sgzh8w-wKWIJ",
       "source": "scholar",
-      "external_id": "caa9d215e006aa58",
-      "title": "[PDF] [PDF] Machine learning",
-      "abstract": "",
-      "snippet": "The study of machine learning methods has progressed greatly in the past few years. This progress has taken many directions. First, in the area of inductive learning , a new formal de …",
+      "external_id": "sgzh8w-wKWIJ",
+      "title": "Machine learning",
+      "abstract": "The study of machine learning methods has progressed greatly in the past few years. This progress has taken many directions. First, in the area of inductive learning, a new formal de ...",
+      "snippet": "",
       "authors": [
         {
           "name": "TG Dietterich",
@@ -766,59 +762,96 @@
       "published_at": "1990-01-01T00:00:00Z",
       "updated_at": null,
       "landing_url": "https://web.engr.oregonstate.edu/~tgd/publications/arcs.pdf",
-      "pdf_url": null,
+      "pdf_url": "https://web.engr.oregonstate.edu/~tgd/publications/arcs.pdf",
       "categories": [],
       "keywords": [],
-      "venue": null,
-      "citation_count": null,
+      "venue": "Annual review of computer science",
+      "citation_count": 286,
       "snippet_is_partial": true,
-      "authors_incomplete": true,
-      "fetched_at": "2026-04-22T15:50:35Z"
+      "authors_incomplete": false,
+      "fetched_at": "2026-04-22T17:24:09Z"
     },
     {
-      "corpus_id": "sha256:scholar:2c473b38c0e8fcdcddb42ce7da48a24fa9a157fc1145bd8c600f39bf14048a76",
+      "corpus_id": "sha256:scholar:TVVEPP7WNfUJ",
       "source": "scholar",
-      "external_id": "08342a0c1bf5af02",
-      "title": "A brief review of machine learning and its application",
-      "abstract": "",
-      "snippet": "… Machine learning is the core issue of artificial intelligence research… machine learning and its basic structure, and describes a variety of machine learning methods, including rote learning …",
+      "external_id": "TVVEPP7WNfUJ",
+      "title": "Machine learning algorithms: a review",
+      "abstract": "... There are a wide range of applications of machine learning methods ... the overview of different machine learning approaches. ... Unsupervised learning is a class of machine learning that ...",
+      "snippet": "",
+      "authors": [
+        {
+          "name": "D Pandey",
+          "affiliation": null
+        },
+        {
+          "name": "K Niwaria",
+          "affiliation": null
+        },
+        {
+          "name": "B Chourasia",
+          "affiliation": null
+        }
+      ],
+      "published_at": "2019-01-01T00:00:00Z",
+      "updated_at": null,
+      "landing_url": "https://www.academia.edu/download/59817925/IRJET-V6I217620190621-73452-h5pwu7.pdf",
+      "pdf_url": "https://www.academia.edu/download/59817925/IRJET-V6I217620190621-73452-h5pwu7.pdf",
+      "categories": [],
+      "keywords": [],
+      "venue": "Mach. Learn",
+      "citation_count": 5711,
+      "snippet_is_partial": true,
+      "authors_incomplete": false,
+      "fetched_at": "2026-04-22T17:24:09Z"
+    },
+    {
+      "corpus_id": "sha256:scholar:p7YVSi5UNiMJ",
+      "source": "scholar",
+      "external_id": "p7YVSi5UNiMJ",
+      "title": "Machine learning basics",
+      "abstract": "... To obtain theoretical guarantees about generalization of a machine learning algorithm, we ... Why does deep learning have different behavior than other machine learning methods for ...",
+      "snippet": "",
       "authors": [
         {
           "name": "H Wang",
           "affiliation": null
         },
         {
-          "name": "C Ma",
+          "name": "Z Lei",
           "affiliation": null
         },
         {
-          "name": "L Zhou - 2009 international conference on …",
+          "name": "X Zhang",
           "affiliation": null
         },
         {
-          "name": "2009",
+          "name": "B Zhou",
+          "affiliation": null
+        },
+        {
+          "name": "J Peng",
           "affiliation": null
         }
       ],
-      "published_at": "2009-01-01T00:00:00Z",
+      "published_at": "2016-01-01T00:00:00Z",
       "updated_at": null,
-      "landing_url": "https://ieeexplore.ieee.org/abstract/document/5362936/",
-      "pdf_url": null,
+      "landing_url": "http://whdeng.cn/Teaching/PPT_01_Machine%20learning%20Basics.pdf",
+      "pdf_url": "http://whdeng.cn/Teaching/PPT_01_Machine%20learning%20Basics.pdf",
       "categories": [],
       "keywords": [],
-      "venue": null,
-      "citation_count": null,
+      "venue": "Deep learning",
+      "citation_count": 2160,
       "snippet_is_partial": true,
-      "authors_incomplete": true,
-      "fetched_at": "2026-04-22T15:50:35Z"
+      "authors_incomplete": false,
+      "fetched_at": "2026-04-22T17:24:09Z"
     },
     {
-      "corpus_id": "sha256:scholar:7fa69b898b0b16c0c1bfdedabe9f56ddc781ec5ca5132f886436842a30a6c6df",
+      "corpus_id": "sha256:scholar:LDE5SAcBB-gJ",
       "source": "scholar",
-      "external_id": "e4a3669c1894eff6",
-      "title": "What is machine learning ? A primer for the epidemiologist",
-      "abstract": "",
-      "snippet": "… We provide a brief introduction to 5 common machine learning … of machine learning techniques in the published literature. We recommend approaches to incorporate machine learning …",
+      "external_id": "LDE5SAcBB-gJ",
+      "title": "What is machine learning? A primer for the epidemiologist",
+      "abstract": "... We provide a brief introduction to 5 common machine learning ... of machine learning techniques in the published literature. We recommend approaches to incorporate machine learning ...",
+      "snippet": "",
       "authors": [
         {
           "name": "Q Bi",
@@ -829,11 +862,7 @@
           "affiliation": null
         },
         {
-          "name": "J Kaminsky … - American journal of …",
-          "affiliation": null
-        },
-        {
-          "name": "2019",
+          "name": "J Kaminsky",
           "affiliation": null
         }
       ],
@@ -843,19 +872,19 @@
       "pdf_url": null,
       "categories": [],
       "keywords": [],
-      "venue": null,
-      "citation_count": null,
+      "venue": "American journal of …",
+      "citation_count": 886,
       "snippet_is_partial": true,
-      "authors_incomplete": true,
-      "fetched_at": "2026-04-22T15:50:35Z"
+      "authors_incomplete": false,
+      "fetched_at": "2026-04-22T17:24:09Z"
     },
     {
-      "corpus_id": "sha256:scholar:72515052019ebf33064cf8a2db61c493ece0661f62f795887350cb6987cde992",
+      "corpus_id": "sha256:scholar:eucrqVB_bisJ",
       "source": "scholar",
-      "external_id": "3325e60e6c56069f",
+      "external_id": "eucrqVB_bisJ",
       "title": "Machine learning and the physical sciences",
-      "abstract": "",
-      "snippet": "… II, where the interaction with machine learning has a long history, drawing on methods in … in machine learning . We then turn the wheel in the other direction of using machine learning for …",
+      "abstract": "... II, where the interaction with machine learning has a long history, drawing on methods in ... in machine learning. We then turn the wheel in the other direction of using machine learning for ...",
+      "snippet": "",
       "authors": [
         {
           "name": "G Carleo",
@@ -874,99 +903,50 @@
           "affiliation": null
         },
         {
-          "name": "M Schuld… - Reviews of Modern …",
+          "name": "M Schuld",
           "affiliation": null
         }
       ],
       "published_at": "2019-01-01T00:00:00Z",
       "updated_at": null,
       "landing_url": "https://journals.aps.org/rmp/abstract/10.1103/RevModPhys.91.045002",
-      "pdf_url": null,
+      "pdf_url": "https://link.aps.org/accepted/10.1103/RevModPhys.91.045002",
       "categories": [],
       "keywords": [],
-      "venue": null,
-      "citation_count": null,
+      "venue": "Reviews of Modern …",
+      "citation_count": 3301,
       "snippet_is_partial": true,
-      "authors_incomplete": true,
-      "fetched_at": "2026-04-22T15:50:35Z"
+      "authors_incomplete": false,
+      "fetched_at": "2026-04-22T17:24:09Z"
     },
     {
-      "corpus_id": "sha256:scholar:32f9614f74ed533a271f002167ef219a557c3a711135a53e3983ce195b18a199",
+      "corpus_id": "sha256:scholar:i7tgqUFf020J",
       "source": "scholar",
-      "external_id": "4aa6200f045f7a7b",
-      "title": "[HTML] [HTML] Machine learning : a primer",
-      "abstract": "",
-      "snippet": "… learning methods—for example, clustering and principal component analysis—as well as supervised learning … This process is called machine learning (ML), a rapidly developing …",
+      "external_id": "i7tgqUFf020J",
+      "title": "On applied research in machine learning",
+      "abstract": "... Much of the \\science\" of Machine Learning is a ... er learning research, that misclassi cation errors have equal costs. The vast majority of classi er learning research in Machine Learning ...",
+      "snippet": "",
       "authors": [
         {
-          "name": "D Bzdok",
+          "name": "F Provost",
           "affiliation": null
         },
         {
-          "name": "M Krzywinski",
-          "affiliation": null
-        },
-        {
-          "name": "N Altman - Nature methods",
-          "affiliation": null
-        },
-        {
-          "name": "2017",
+          "name": "R Kohavi",
           "affiliation": null
         }
       ],
-      "published_at": "2017-01-01T00:00:00Z",
+      "published_at": "1998-01-01T00:00:00Z",
       "updated_at": null,
-      "landing_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5905345/",
-      "pdf_url": null,
+      "landing_url": "https://ai.stanford.edu/~ronnyk/editorial.pdf",
+      "pdf_url": "https://ai.stanford.edu/~ronnyk/editorial.pdf",
       "categories": [],
       "keywords": [],
-      "venue": null,
-      "citation_count": null,
+      "venue": "MACHINE LEARNING-BOSTON-",
+      "citation_count": 377,
       "snippet_is_partial": true,
-      "authors_incomplete": true,
-      "fetched_at": "2026-04-22T15:50:35Z"
-    },
-    {
-      "corpus_id": "sha256:scholar:d1602757beac657a3e4bfa99e49926756bcf1045ce72a26f78481ee23edc2e95",
-      "source": "scholar",
-      "external_id": "02ecefaba0a69f84",
-      "title": "[PDF] [PDF] International conference on machine learning",
-      "abstract": "",
-      "snippet": "In this paper, we make the key delineation on the roles of resolution and statistical uncertainty in hierarchical bandits-based black-box optimization algorithms, guiding a more general …",
-      "authors": [
-        {
-          "name": "W Li",
-          "affiliation": null
-        },
-        {
-          "name": "C Wang",
-          "affiliation": null
-        },
-        {
-          "name": "G Cheng",
-          "affiliation": null
-        },
-        {
-          "name": "Q Song - Transactions on machine learning …",
-          "affiliation": null
-        },
-        {
-          "name": "2023",
-          "affiliation": null
-        }
-      ],
-      "published_at": "2023-01-01T00:00:00Z",
-      "updated_at": null,
-      "landing_url": "https://par.nsf.gov/servlets/purl/10418406",
-      "pdf_url": null,
-      "categories": [],
-      "keywords": [],
-      "venue": null,
-      "citation_count": null,
-      "snippet_is_partial": true,
-      "authors_incomplete": true,
-      "fetched_at": "2026-04-22T15:50:35Z"
+      "authors_incomplete": false,
+      "fetched_at": "2026-04-22T17:24:09Z"
     }
   ],
   "errors_by_source": {}
