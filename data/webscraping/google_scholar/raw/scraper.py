@@ -6,9 +6,9 @@ from typing import Any, Dict, List, Optional, Tuple
 
 import serpapi
 
-from common.logger import setup_scraper_logger
+from ...common.logger import setup_scraper_logger
 from ..types import OrganicResult
-
+from dotenv import load_dotenv
 
 class GoogleScholarScraper:
     """
@@ -144,6 +144,7 @@ class GoogleScholarScraper:
 
 
 if __name__ == "__main__":
+    load_dotenv()
     scraper1 = GoogleScholarScraper()
     scraper2 = GoogleScholarScraper()
 
