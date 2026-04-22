@@ -1,13 +1,6 @@
-import os
-import re
-from datetime import datetime, timezone
-from typing import List, Optional, Tuple
-
-import serpapi
+from typing import Any, List
 
 from ...domain.entities import ArticleRecord, Author
-from ...infrastructure.logger import setup_scraper_logger
-from ..types import OrganicResult
 
 
 class GoogleScholarSearchProvider:
@@ -17,125 +10,61 @@ class GoogleScholarSearchProvider:
     """
     source_name = "scholar"
     _instance = None
+    _scraper = None
 
     def __new__(cls, *args, **kwargs):
         if cls._instance is None:
             cls._instance = super(GoogleScholarSearchProvider, cls).__new__(cls)
 
-            api_key = os.environ.get("SERPAPI_API_KEY")
-            if not api_key:
-                raise RuntimeError("SERPAPI_API_KEY environment variable is not set.")
-            cls._instance.client = serpapi.Client(api_key=api_key)
-
-            base_dir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-            log_dir = os.path.join(base_dir, "webscraping", "logs", "scholar")
-            cls._instance.logger = setup_scraper_logger("scholar_provider", log_dir)
-            cls._instance.logger.info("GoogleScholarSearchProvider instantiated.")
+            # Defer hard failures to search() so Data API can still boot
+            # and return partial responses when Scholar is unavailable.
+            cls._instance._scraper = None
 
         return cls._instance
 
+    def _get_scraper(self) -> Any:
+        if self._scraper is None:
+            try:
+                from data.webscraping.google_scholar.raw.scraper import GoogleScholarScraper
+            except Exception as exc:
+                raise RuntimeError(f"Google Scholar scraper unavailable: {exc}") from exc
+            self._scraper = GoogleScholarScraper()
+        return self._scraper
+
     @staticmethod
-    def _parse_venue_and_year(summary: str) -> Tuple[Optional[str], Optional[str]]:
-        """
-        Parse `publication_info.summary` of the form
-            '<authors abbrev> - <venue>, <year> - <domain>' or
-            '<authors abbrev> - <year> - <domain>'.
-        Returns (venue, published_at_iso_or_None).
-        """
-        if not summary:
-            return None, None
+    def _to_article(record: dict) -> ArticleRecord:
+        external_id = (record.get("external_id") or "").strip()
+        authors = [
+            Author(
+                name=(a.get("name") or "").strip(),
+                affiliation=a.get("affiliation"),
+            )
+            for a in (record.get("authors") or [])
+            if (a.get("name") or "").strip()
+        ]
 
-        parts = [p.strip() for p in summary.split(" - ")]
-        if len(parts) < 2:
-            return None, None
-
-        middle = parts[1] if len(parts) >= 3 else ""
-        if not middle:
-            return None, None
-
-        year_match = re.search(r"(\d{4})\s*$", middle)
-        year = year_match.group(1) if year_match else None
-
-        venue = middle
-        if year:
-            venue = re.sub(r",?\s*" + year + r"\s*$", "", middle).strip()
-        venue = venue or None
-
-        published_at = f"{year}-01-01T00:00:00Z" if year else None
-        return venue, published_at
+        return ArticleRecord(
+            corpus_id=f"sha256:scholar:{external_id}",
+            source="scholar",
+            external_id=external_id,
+            title=(record.get("title") or "").strip(),
+            abstract=(record.get("abstract") or "").strip(),
+            authors=authors,
+            published_at=record.get("published_at"),
+            updated_at=record.get("updated_at"),
+            landing_url=(record.get("landing_url") or "").strip(),
+            pdf_url=record.get("pdf_url"),
+            categories=record.get("categories") or [],
+            keywords=record.get("keywords") or [],
+            venue=record.get("venue"),
+            citation_count=record.get("citation_count"),
+            snippet_is_partial=bool(record.get("snippet_is_partial")),
+            authors_incomplete=bool(record.get("authors_incomplete")),
+            fetched_at=record.get("fetched_at") or "",
+        )
 
     def search(self, query: str, limit: int) -> List[ArticleRecord]:
-        """
-        Fetches data from Google Scholar (via SerpAPI) based on a query and maps
-        it to ArticleRecord entities.
-        """
         limit = max(1, min(limit, 20))
-        self.logger.info(f"Fetching Google Scholar data for query: '{query}' (limit={limit})")
-
-        records: List[ArticleRecord] = []
-        fetched_timestamp = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-
-        try:
-            response = self.client.search(
-                {
-                    "engine": "google_scholar",
-                    "q": query,
-                    "hl": "en",
-                    "num": limit,
-                }
-            )
-            organic_results: List[OrganicResult] = response.get("organic_results", []) or []
-
-            for item in organic_results:
-                external_id = item.get("result_id")
-                if not external_id:
-                    continue
-
-                publication_info = item.get("publication_info", {}) or {}
-                inline_links = item.get("inline_links", {}) or {}
-                resources = item.get("resources", []) or []
-
-                venue, published_at = self._parse_venue_and_year(
-                    publication_info.get("summary", "")
-                )
-                pdf_url = next(
-                    (r["link"] for r in resources if r.get("file_format") == "PDF"),
-                    None,
-                )
-                citation_count = (inline_links.get("cited_by") or {}).get("total")
-                authors = [
-                    Author(name=a.get("name", ""), affiliation=None)
-                    for a in publication_info.get("authors", []) or []
-                ]
-                abstract = (item.get("snippet") or "").replace("…", "...").strip()
-
-                records.append(
-                    ArticleRecord(
-                        corpus_id=f"sha256:scholar:{external_id}",
-                        source=self.source_name,
-                        external_id=external_id,
-                        title=(item.get("title") or "").strip(),
-                        abstract=abstract,
-                        authors=authors,
-                        published_at=published_at,
-                        updated_at=None,
-                        landing_url=item.get("link") or "",
-                        pdf_url=pdf_url,
-                        categories=[],
-                        keywords=[],
-                        venue=venue,
-                        citation_count=citation_count,
-                        snippet_is_partial=True,
-                        authors_incomplete=False,
-                        fetched_at=fetched_timestamp,
-                    )
-                )
-
-            self.logger.info(
-                f"Successfully retrieved and normalized {len(records)} results from Google Scholar."
-            )
-
-        except Exception as e:
-            self.logger.error(f"Error fetching data from Google Scholar: {e}")
-
-        return records
+        scraper = self._get_scraper()
+        normalized = scraper.fetch_data(query=query, max_results=limit)
+        return [self._to_article(record) for record in normalized if record.get("external_id")]

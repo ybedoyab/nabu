@@ -67,6 +67,32 @@ def session_fetch(payload: SessionFetchRequest):
     )
     return JSONResponse(content=asdict(result))
 
+
+@app.post("/api/v1/stats/query-images")
+def query_images(payload: StatsQueryRequest):
+    query = (payload.research_query or "").strip()
+    if not query:
+        return JSONResponse(
+            status_code=400,
+            content={"status": "error", "message": "research_query is required"},
+        )
+
+    urls = payload.article_urls or []
+    limited_urls = urls[: global_settings.DATA_API_MAX_ARTICLE_URLS]
+
+    # Placeholder response for the integrated flow. Real image extraction
+    # can be wired here without changing frontend/backend contract.
+    return JSONResponse(
+        content={
+            "status": "ok",
+            "research_query": query,
+            "count": 0,
+            "images": [],
+            "source_urls_considered": len(limited_urls),
+            "timestamp": 0,
+        }
+    )
+
 # testing
 if __name__ == "__main__":
     import uvicorn

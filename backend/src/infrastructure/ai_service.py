@@ -6,8 +6,12 @@ Handles all AI-related operations using the research flow system.
 import sys
 import os
 import json
+import time
+import logging
 from typing import List, Dict, Any, Optional
 from pathlib import Path
+from urllib import request as urllib_request
+from urllib import error as urllib_error
 
 # Import backend config first
 from .config import settings
@@ -33,6 +37,8 @@ os.environ.update({
 from ai.src.adapters.outbound.openai_client import OpenAIClient
 from ai.src.application.services.research_flow import ResearchFlow
 
+logger = logging.getLogger(__name__)
+
 class AIService:
     """Service class for AI operations."""
     
@@ -45,7 +51,9 @@ class AIService:
     
     def _initialize(self):
         """Initialize AI components."""
+        started_at = time.perf_counter()
         try:
+            logger.info("AIService initialization started")
             # Initialize OpenAI client
             self.openai_client = OpenAIClient()
             
@@ -54,9 +62,14 @@ class AIService:
             
             # Load analyzed articles
             self._load_analyzed_articles()
+            logger.info(
+                "AIService initialization completed in %.2fs (cached_articles=%d)",
+                time.perf_counter() - started_at,
+                len(self.analyzed_articles),
+            )
             
         except Exception as e:
-            print(f"Error initializing AI service: {str(e)}")
+            logger.exception("AIService initialization failed: %s", str(e))
             raise
     
     def _load_analyzed_articles(self):
@@ -72,12 +85,12 @@ class AIService:
             articles_loaded = False
             self.analyzed_articles = []
             
-            print("🔍 Searching for analyzed articles...")
+            print("[INFO] Searching for analyzed articles...")
             
             for output_dir in possible_dirs:
-                print(f"📁 Checking directory: {output_dir}")
+                print(f"[INFO] Checking directory: {output_dir}")
                 if os.path.exists(output_dir):
-                    print(f"✅ Directory exists: {output_dir}")
+                    print(f"[OK] Directory exists: {output_dir}")
                     
                     # Check for analyzed articles first (priority)
                     analyzed_files = [
@@ -88,7 +101,7 @@ class AIService:
                     
                     for analyzed_file in analyzed_files:
                         if os.path.exists(analyzed_file):
-                            print(f"📄 Found analyzed file: {analyzed_file}")
+                            print(f"[INFO] Found analyzed file: {analyzed_file}")
                             try:
                                 with open(analyzed_file, 'r', encoding='utf-8') as f:
                                     data = json.load(f)
@@ -98,7 +111,7 @@ class AIService:
                                     # Checkpoint format
                                     if isinstance(data, dict) and 'processed_articles' in data:
                                         articles = data['processed_articles']
-                                        print(f"📊 Checkpoint contains {len(articles)} analyzed articles")
+                                        print(f"[INFO] Checkpoint contains {len(articles)} analyzed articles")
                                     else:
                                         articles = data if isinstance(data, list) else []
                                 else:
@@ -108,25 +121,25 @@ class AIService:
                                 if articles:
                                     self.analyzed_articles = articles
                                     articles_loaded = True
-                                    print(f"✅ Loaded {len(self.analyzed_articles)} analyzed articles from {analyzed_file}")
+                                    print(f"[OK] Loaded {len(self.analyzed_articles)} analyzed articles from {analyzed_file}")
                                     break
                                     
                             except Exception as e:
-                                print(f"❌ Error loading {analyzed_file}: {str(e)}")
+                                print(f"[ERROR] Error loading {analyzed_file}: {str(e)}")
                                 continue
                     
                     if articles_loaded:
                         break
                     
                     # Fallback: load batch files (scraped, not analyzed)
-                    print("📄 No analyzed articles found, checking batch files...")
+                    print("[INFO] No analyzed articles found, checking batch files...")
                     batch_files = []
                     for filename in os.listdir(output_dir):
                         if filename.startswith("articles_batch_") and filename.endswith(".json"):
                             batch_files.append(os.path.join(output_dir, filename))
                     
                     if batch_files:
-                        print(f"📦 Found {len(batch_files)} batch files")
+                        print(f"[INFO] Found {len(batch_files)} batch files")
                         # Sort batch files by number
                         batch_files.sort(key=lambda x: int(x.split("articles_batch_")[1].split(".json")[0]))
                         
@@ -144,32 +157,32 @@ class AIService:
                                         else:
                                             self.analyzed_articles.append(batch_articles)
                             except Exception as e:
-                                print(f"❌ Error loading batch file {batch_file}: {str(e)}")
+                                print(f"[ERROR] Error loading batch file {batch_file}: {str(e)}")
                                 continue
                         
                         if self.analyzed_articles:
                             articles_loaded = True
-                            print(f"📦 Loaded {len(self.analyzed_articles)} scraped articles from {len(batch_files)} batch files")
+                            print(f"[OK] Loaded {len(self.analyzed_articles)} scraped articles from {len(batch_files)} batch files")
                             break
                 else:
-                    print(f"❌ Directory not found: {output_dir}")
+                    print(f"[WARN] Directory not found: {output_dir}")
             
             if not articles_loaded:
                 self.analyzed_articles = []
-                print("❌ No articles found (neither analyzed nor scraped)")
+                print("[WARN] No articles found (neither analyzed nor scraped)")
             else:
-                print(f"🎉 Total articles loaded: {len(self.analyzed_articles)}")
+                print(f"[OK] Total articles loaded: {len(self.analyzed_articles)}")
                 if len(self.analyzed_articles) > 0:
                     # Check if articles are analyzed or just scraped
                     first_article = self.analyzed_articles[0]
                     if 'article_metadata' in first_article:
-                        print("✅ Articles appear to be AI-analyzed")
+                        print("[OK] Articles appear to be AI-analyzed")
                     else:
-                        print("⚠️ Articles appear to be scraped only (not AI-analyzed)")
+                        print("[WARN] Articles appear to be scraped only (not AI-analyzed)")
                 
         except Exception as e:
             self.analyzed_articles = []
-            print(f"❌ Error loading articles: {str(e)}")
+            print(f"[ERROR] Error loading articles: {str(e)}")
     
     def get_recommendations(self, research_query: str, top_k: int = 5) -> Dict[str, Any]:
         """
@@ -182,17 +195,137 @@ class AIService:
         Returns:
             Recommendations response
         """
+        started_at = time.perf_counter()
+        logger.info(
+            "Recommendations requested (query=%r, top_k=%d, cached_articles=%d)",
+            research_query,
+            top_k,
+            len(self.analyzed_articles),
+        )
         if not self.analyzed_articles:
-            raise ValueError("No analyzed articles available. Please run analysis first.")
+            logger.info("No cached analyzed articles, triggering on-demand fetch")
+            fetched = self._fetch_and_prepare_articles(research_query)
+            if fetched == 0:
+                raise ValueError(
+                    "No articles available for this query. Please try a different query or check data providers."
+                )
         
         if not research_query.strip():
             raise ValueError("Research query cannot be empty")
         
-        return self.research_flow.get_research_recommendations(
+        response = self.research_flow.get_research_recommendations(
             research_query, 
             self.analyzed_articles, 
             top_k
         )
+        logger.info(
+            "Recommendations generated (query=%r, returned=%d, elapsed=%.2fs)",
+            research_query,
+            len(response.get("recommendations", [])),
+            time.perf_counter() - started_at,
+        )
+        return response
+
+    def _fetch_and_prepare_articles(self, research_query: str) -> int:
+        """Fetch articles from Data API and map them into recommendation-ready format."""
+        started_at = time.perf_counter()
+        data_api_url = os.getenv("DATA_API_URL", "http://127.0.0.1:8081")
+        endpoint = f"{data_api_url.rstrip('/')}/api/v1/session/fetch"
+
+        payload = {
+            "query": research_query,
+            "limits": {
+                "arxiv": int(os.getenv("DATA_API_DEFAULT_ARXIV_LIMIT", "15")),
+                "scholar": int(os.getenv("DATA_API_DEFAULT_SCHOLAR_LIMIT", "10")),
+            },
+            "locale": "es",
+        }
+        req_body = json.dumps(payload).encode("utf-8")
+        req = urllib_request.Request(
+            endpoint,
+            data=req_body,
+            headers={"Content-Type": "application/json"},
+            method="POST",
+        )
+        logger.info(
+            "Fetching articles from Data API (endpoint=%s, query=%r, arxiv=%s, scholar=%s)",
+            endpoint,
+            research_query,
+            payload["limits"]["arxiv"],
+            payload["limits"]["scholar"],
+        )
+
+        try:
+            with urllib_request.urlopen(req, timeout=60) as response:
+                body = response.read().decode("utf-8")
+                parsed = json.loads(body)
+        except urllib_error.HTTPError as exc:
+            detail = exc.read().decode("utf-8", errors="replace")
+            logger.error("Data API HTTP error (%s): %s", exc.code, detail)
+            return 0
+        except Exception as exc:
+            logger.exception("Failed to fetch articles from Data API: %s", exc)
+            return 0
+
+        articles = parsed.get("articles", [])
+        mapped = [self._map_fetched_article(article) for article in articles]
+        mapped = [article for article in mapped if article.get("article_metadata", {}).get("title")]
+        self.analyzed_articles = mapped
+        logger.info(
+            "On-demand article fetch completed (raw=%d, mapped=%d, elapsed=%.2fs)",
+            len(articles),
+            len(self.analyzed_articles),
+            time.perf_counter() - started_at,
+        )
+        return len(self.analyzed_articles)
+
+    def _map_fetched_article(self, article: Dict[str, Any]) -> Dict[str, Any]:
+        """Map Data API article shape to the analyzed-article shape expected by ResearchFlow."""
+        title = article.get("title", "")
+        abstract = article.get("abstract", "") or article.get("snippet", "")
+        keywords = article.get("keywords", []) or []
+        categories = article.get("categories", []) or []
+        concepts = self._extract_key_concepts(title=title, abstract=abstract, keywords=keywords, categories=categories)
+
+        return {
+            "article_metadata": {
+                "title": title,
+                "url": article.get("landing_url", ""),
+            },
+            "summary": {
+                "summary": abstract,
+            },
+            "organism_analysis": {
+                "organisms": [],
+            },
+            "knowledge_analysis": {
+                "key_concepts": concepts,
+            },
+        }
+
+    @staticmethod
+    def _extract_key_concepts(
+        title: str, abstract: str, keywords: List[str], categories: List[str]
+    ) -> List[str]:
+        combined = " ".join([title, abstract])
+        tokens = [tok.strip(".,:;()[]{}!?\"'").lower() for tok in combined.split()]
+        candidate_tokens = [
+            tok for tok in tokens
+            if len(tok) > 3 and tok.isascii() and tok not in {"with", "from", "that", "this", "using", "based"}
+        ]
+
+        concepts: List[str] = []
+        seen = set()
+        for item in list(keywords) + list(categories) + candidate_tokens:
+            normalized = item.strip().lower()
+            if not normalized or normalized in seen:
+                continue
+            seen.add(normalized)
+            concepts.append(normalized)
+            if len(concepts) >= 12:
+                break
+
+        return concepts
     
     def get_summaries_and_questions(self, selected_articles: List[Dict], research_query: str) -> Dict[str, Any]:
         """
@@ -205,16 +338,30 @@ class AIService:
         Returns:
             Summaries and questions response
         """
+        started_at = time.perf_counter()
+        logger.info(
+            "Summaries generation requested (query=%r, selected_articles=%d)",
+            research_query,
+            len(selected_articles),
+        )
         if not selected_articles:
             raise ValueError("At least one article must be selected")
         
         if not research_query.strip():
             raise ValueError("Research query cannot be empty")
         
-        return self.research_flow.generate_summaries_and_questions(
+        response = self.research_flow.generate_summaries_and_questions(
             selected_articles, 
             research_query
         )
+        logger.info(
+            "Summaries generation completed (query=%r, summaries=%d, questions=%d, elapsed=%.2fs)",
+            research_query,
+            len(response.get("article_summaries", [])),
+            len(response.get("suggested_questions", [])),
+            time.perf_counter() - started_at,
+        )
+        return response
     
     def chat_with_articles(self, user_question: str, selected_articles: List[Dict], 
                           research_query: str, chat_history: Optional[List[Dict]] = None) -> Dict[str, Any]:
@@ -230,18 +377,33 @@ class AIService:
         Returns:
             Chat response
         """
+        started_at = time.perf_counter()
+        history_size = len(chat_history or [])
+        logger.info(
+            "Chat requested (query=%r, selected_articles=%d, chat_history=%d)",
+            research_query,
+            len(selected_articles),
+            history_size,
+        )
         if not user_question.strip():
             raise ValueError("User question cannot be empty")
         
         if not selected_articles:
             raise ValueError("At least one article must be selected")
         
-        return self.research_flow.chat_with_selected_articles(
+        response = self.research_flow.chat_with_selected_articles(
             user_question,
             selected_articles,
             research_query,
             chat_history or []
         )
+        logger.info(
+            "Chat completed (query=%r, follow_ups=%d, elapsed=%.2fs)",
+            research_query,
+            len(response.get("follow_up_questions", [])),
+            time.perf_counter() - started_at,
+        )
+        return response
     
     def get_articles_list(self, limit: int = 10) -> List[Dict[str, Any]]:
         """

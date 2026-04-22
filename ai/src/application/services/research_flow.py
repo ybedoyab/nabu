@@ -8,8 +8,11 @@ Implements the complete scientific research workflow:
 
 import json
 import time
+import logging
 from typing import Dict, List, Any, Optional
 from ...adapters.outbound.openai_client import OpenAIClient
+
+logger = logging.getLogger(__name__)
 
 class ResearchFlow:
     """Main class for handling the scientific research workflow."""
@@ -29,7 +32,7 @@ class ResearchFlow:
         Returns:
             JSON response for frontend with recommendations
         """
-        print(f"Getting recommendations for: {research_query}")
+        logger.info("ResearchFlow recommendations started (query=%r, candidates=%d)", research_query, len(analyzed_articles))
         
         # Get recommendations using fast keyword matching (much faster!)
         recommendations = self.openai_client.recommend_articles_fast(
@@ -65,6 +68,12 @@ class ResearchFlow:
                 "selected": False  # For frontend state management
             })
         
+        logger.info(
+            "ResearchFlow recommendations completed (query=%r, returned=%d, relevant_found=%d)",
+            research_query,
+            len(frontend_response["recommendations"]),
+            frontend_response["metadata"]["relevant_found"],
+        )
         return frontend_response
     
     def generate_summaries_and_questions(self, selected_articles: List[Dict], research_query: str) -> Dict[str, Any]:
@@ -78,7 +87,11 @@ class ResearchFlow:
         Returns:
             JSON response with summaries and suggested questions
         """
-        print(f"Generating summaries for {len(selected_articles)} selected articles")
+        logger.info(
+            "ResearchFlow summaries started (query=%r, selected_articles=%d)",
+            research_query,
+            len(selected_articles),
+        )
         
         # Generate summaries for each selected article
         article_summaries = []
@@ -111,6 +124,12 @@ class ResearchFlow:
             }
         }
         
+        logger.info(
+            "ResearchFlow summaries completed (query=%r, summaries=%d, questions=%d)",
+            research_query,
+            len(frontend_response["article_summaries"]),
+            len(frontend_response["suggested_questions"]),
+        )
         return frontend_response
     
     def chat_with_selected_articles(self, user_question: str, selected_articles: List[Dict], 
@@ -127,7 +146,12 @@ class ResearchFlow:
         Returns:
             JSON response with AI answer and follow-up suggestions
         """
-        print(f"Processing chat question: {user_question}")
+        logger.info(
+            "ResearchFlow chat started (query=%r, selected_articles=%d, question_len=%d)",
+            research_query,
+            len(selected_articles),
+            len(user_question),
+        )
         
         # Prepare context from selected articles
         article_context = self._prepare_article_context(selected_articles)
@@ -178,6 +202,12 @@ class ResearchFlow:
             }
         }
         
+        logger.info(
+            "ResearchFlow chat completed (query=%r, history_size=%d, follow_ups=%d)",
+            research_query,
+            len(frontend_response["chat_history"]),
+            len(frontend_response["follow_up_questions"]),
+        )
         return frontend_response
     
     def _generate_article_summary(self, article: Dict, research_query: str) -> Dict[str, Any]:
