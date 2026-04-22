@@ -105,7 +105,7 @@ function Test-HttpReady {
         [string]$Url
     )
     try {
-        $response = Invoke-WebRequest -Uri $Url -Method GET -TimeoutSec 2
+        $response = Invoke-WebRequest -Uri $Url -Method GET -TimeoutSec 2 -UseBasicParsing
         return $response.StatusCode -ge 200 -and $response.StatusCode -lt 500
     } catch {
         return $false
@@ -125,9 +125,9 @@ function Wait-ForAllServices {
             }
         }
 
-        $backOk = Test-HttpReady "http://localhost:8000/health"
-        $dataOk = Test-HttpReady "http://localhost:8081/health"
-        $frontOk = Test-HttpReady "http://localhost:3000/"
+        $backOk = Test-HttpReady "http://127.0.0.1:8000/health"
+        $dataOk = Test-HttpReady "http://127.0.0.1:8081/health"
+        $frontOk = Test-HttpReady "http://127.0.0.1:3000/"
 
         if ($backOk -and $dataOk -and $frontOk) {
             return $true
