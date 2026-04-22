@@ -158,7 +158,7 @@ if __name__ == "__main__":
     output_file = os.path.join(
         os.path.dirname(os.path.abspath(__file__)),
         "..",
-        "normalized",
+        "raw",
         "sample_output.json",
     )
     os.makedirs(os.path.dirname(output_file), exist_ok=True)
