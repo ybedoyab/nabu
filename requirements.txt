@@ -30,3 +30,5 @@ urllib3
 uvicorn[standard]>=0.24.0
 pytest>=8.0.0
 pytest-cov>=5.0.0
+arxiv>=3.0.0
+pylatexenc>=2.10

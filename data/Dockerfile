@@ -25,8 +25,8 @@ RUN pip install --no-cache-dir --upgrade pip && \
 COPY data/ ./data
 COPY settings.py ./settings.py
 
-# Create necessary directories
-RUN mkdir -p /app/data/processed
+# Create necessary directories for logs
+RUN mkdir -p /app/data/webscraping/logs/arxiv /app/data/webscraping/logs/scholar
 
 # Run service from data folder
 WORKDIR /app/data

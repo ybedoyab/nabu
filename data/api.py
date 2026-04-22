@@ -3,8 +3,6 @@ from typing import List, Optional
 import sys
 from pathlib import Path
 
-import requests
-from bs4 import BeautifulSoup
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
@@ -69,59 +67,8 @@ def session_fetch(payload: SessionFetchRequest):
     )
     return JSONResponse(content=asdict(result))
 
+# testing
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run("api:app", host="127.0.0.1", port=8080, reload=True)
 
-@app.post("/api/v1/stats/query-images")
-def get_query_images(req: StatsQueryRequest):
-    query = (req.research_query or "").strip()
-    if not query:
-        return JSONResponse(
-            status_code=400,
-            content={"status": "error", "message": "research_query is required"},
-        )
-
-    images = []
-    seen = set()
-    headers = {"User-Agent": "Mozilla/5.0 (compatible; NabuBot/1.0)"}
-
-    for url in (req.article_urls or [])[: global_settings.DATA_API_MAX_ARTICLE_URLS]:
-        try:
-            resp = requests.get(url, timeout=15, headers=headers)
-            if resp.status_code != 200:
-                continue
-            soup = BeautifulSoup(resp.text, "html.parser")
-            for tag in soup.select("figure img, img"):
-                src = tag.get("src") or tag.get("data-src")
-                if not src:
-                    continue
-                if src.startswith("//"):
-                    src = f"https:{src}"
-                if src.startswith("/"):
-                    continue
-                if src in seen:
-                    continue
-                seen.add(src)
-                images.append(
-                    {
-                        "study_id": None,
-                        "passage_anchor": None,
-                        "summary": None,
-                        "image_url": src,
-                        "caption": tag.get("alt"),
-                        "source_url": url,
-                    }
-                )
-                if len(images) >= global_settings.DATA_API_MAX_IMAGES:
-                    break
-            if len(images) >= global_settings.DATA_API_MAX_IMAGES:
-                break
-        except Exception:
-            continue
-
-    return JSONResponse(
-        content={
-            "status": "success",
-            "research_query": query,
-            "count": len(images),
-            "images": images,
-        }
-    )
