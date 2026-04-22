@@ -1,0 +1,136 @@
+# Google Cloud Build - Unified Deployment for Nabu AI
+steps:
+  # Build and push AI backend image
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/nabu-ai-backend:latest'
+      - '-f'
+      - './backend/Dockerfile'
+      - '.'
+
+  # Push AI backend image
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'gcr.io/$PROJECT_ID/nabu-ai-backend:latest'
+
+  # Build and push Data backend image
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/nabu-data-backend:latest'
+      - '-f'
+      - './data/Dockerfile'
+      - '.'
+
+  # Push Data backend image
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'gcr.io/$PROJECT_ID/nabu-data-backend:latest'
+
+  # Deploy AI backend to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'gcloud'
+    args:
+      - 'run'
+      - 'deploy'
+      - 'nabu-ai-backend'
+      - '--image'
+      - 'gcr.io/$PROJECT_ID/nabu-ai-backend:latest'
+      - '--region'
+      - 'us-central1'
+      - '--platform'
+      - 'managed'
+      - '--allow-unauthenticated'
+      - '--set-env-vars'
+      - 'API_HOST=0.0.0.0,API_PORT=8080,OPENAI_API_KEY=${_OPENAI_API_KEY},OPENAI_MODEL=${_OPENAI_MODEL},OPENAI_MAX_TOKENS=${_OPENAI_MAX_TOKENS},OPENAI_TEMPERATURE=${_OPENAI_TEMPERATURE},MAX_CONCURRENT_REQUESTS=${_MAX_CONCURRENT_REQUESTS},REQUEST_DELAY=${_REQUEST_DELAY},CHUNK_SIZE=${_CHUNK_SIZE},DATA_DIR=/app/data,OUTPUT_DIR=/app/output,CACHE_DIR=/app/cache,LOG_LEVEL=${_LOG_LEVEL},CORS_ORIGINS=*'
+      - '--port'
+      - '8080'
+      - '--memory'
+      - '2Gi'
+      - '--cpu'
+      - '2'
+      - '--max-instances'
+      - '10'
+      - '--timeout'
+      - '900'
+
+  # Deploy Data backend to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'gcloud'
+    args:
+      - 'run'
+      - 'deploy'
+      - 'nabu-data-backend'
+      - '--image'
+      - 'gcr.io/$PROJECT_ID/nabu-data-backend:latest'
+      - '--region'
+      - 'us-central1'
+      - '--platform'
+      - 'managed'
+      - '--allow-unauthenticated'
+      - '--set-env-vars'
+      - 'OPENAI_API_KEY=${_OPENAI_API_KEY},CORS_ORIGINS=*,LOG_LEVEL=${_LOG_LEVEL}'
+      - '--port'
+      - '8080'
+      - '--memory'
+      - '1Gi'
+      - '--cpu'
+      - '1'
+      - '--max-instances'
+      - '5'
+      - '--timeout'
+      - '300'
+
+  # AI service is a CLI tool, not a web service, so we skip deployment
+
+  # Build frontend for Firebase Hosting
+  - name: 'node:20'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        cd frontend
+        npm ci
+        echo "VITE_APP_AI_API_BASE_URL=https://nabu-ai-backend-spelnuireq-uc.a.run.app" > .env.production
+        echo "VITE_APP_DATA_API_BASE_URL=https://nabu-data-backend-spelnuireq-uc.a.run.app" >> .env.production
+        echo "VITE_APP_API_VERSION=v1" >> .env.production
+        echo "VITE_APP_ENVIRONMENT=production" >> .env.production
+        echo "VITE_APP_DEBUG=false" >> .env.production
+        npm run build
+
+  # Deploy frontend to Firebase Hosting
+  - name: 'node:20'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        cd frontend
+        npm install -g firebase-tools
+        firebase deploy --only hosting --project $PROJECT_ID --token ${_FIREBASE_TOKEN}
+
+# Store images in Container Registry
+images:
+  - 'gcr.io/$PROJECT_ID/nabu-ai-backend:latest'
+  - 'gcr.io/$PROJECT_ID/nabu-data-backend:latest'
+
+# Build options
+options:
+  logging: CLOUD_LOGGING_ONLY
+  machineType: 'E2_HIGHCPU_8'
+
+# Substitution variables (will be passed from deploy script)
+substitutions:
+  _OPENAI_API_KEY: '${_OPENAI_API_KEY}'
+  _OPENAI_MODEL: 'gpt-4o-mini'
+  _OPENAI_MAX_TOKENS: '4000'
+  _OPENAI_TEMPERATURE: '0.1'
+  _MAX_CONCURRENT_REQUESTS: '5'
+  _REQUEST_DELAY: '1.0'
+  _CHUNK_SIZE: '1000'
+  _LOG_LEVEL: 'INFO'
+  _FIREBASE_TOKEN: '${_FIREBASE_TOKEN}'

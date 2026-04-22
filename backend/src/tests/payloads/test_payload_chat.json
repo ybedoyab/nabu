@@ -1,0 +1,17 @@
+{
+  "user_question": "What implementation trade-offs are highlighted by these articles?",
+  "research_query": "long-context attention methods",
+  "selected_articles": [
+    {
+      "id": "rec_1",
+      "title": "Acceleration profiles and processing methods for parabolic flight.",
+      "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6081456/"
+    },
+    {
+      "id": "rec_2",
+      "title": "Validation of methods to assess the immunoglobulin gene repertoire in tissues obtained from mice on the International Space Station.",
+      "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5736159/"
+    }
+  ],
+  "chat_history": []
+}

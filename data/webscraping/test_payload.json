@@ -1,0 +1,8 @@
+{
+  "query": "attention transformers",
+  "limits": {
+    "arxiv": 2,
+    "scholar": 2
+  },
+  "locale": "es"
+}

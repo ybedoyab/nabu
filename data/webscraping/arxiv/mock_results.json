@@ -1,0 +1,45 @@
+[
+  {
+    "corpus_id": "sha256:arxiv:2401.12345v2",
+    "source": "arxiv",
+    "external_id": "2401.12345v2",
+    "title": "FlashAttention-3: Fast and Accurate Attention with Asynchrony and Low-precision",
+    "abstract": "We present FlashAttention-3, an optimized attention kernel for long-context transformers.",
+    "authors": [
+      { "name": "Jay Shah", "affiliation": null },
+      { "name": "Ganesh Bikshandi", "affiliation": null }
+    ],
+    "published_at": "2024-01-22T00:00:00Z",
+    "updated_at": "2024-02-10T00:00:00Z",
+    "landing_url": "https://arxiv.org/abs/2401.12345",
+    "pdf_url": "https://arxiv.org/pdf/2401.12345.pdf",
+    "categories": ["cs.LG", "cs.AI"],
+    "keywords": ["transformers", "attention", "long context"],
+    "venue": null,
+    "citation_count": null,
+    "snippet_is_partial": false,
+    "authors_incomplete": false,
+    "fetched_at": "2026-04-22T00:00:00Z"
+  },
+  {
+    "corpus_id": "sha256:arxiv:2402.88888v1",
+    "source": "arxiv",
+    "external_id": "2402.88888v1",
+    "title": "Efficient Retrieval-Augmented Generation for Domain-Specific Assistants",
+    "abstract": "This work explores RAG pipelines for specialized assistants with hybrid ranking.",
+    "authors": [
+      { "name": "M. Rivera", "affiliation": "Nabu Lab" }
+    ],
+    "published_at": "2024-02-11T00:00:00Z",
+    "updated_at": "2024-02-15T00:00:00Z",
+    "landing_url": "https://arxiv.org/abs/2402.88888",
+    "pdf_url": "https://arxiv.org/pdf/2402.88888.pdf",
+    "categories": ["cs.IR", "cs.CL"],
+    "keywords": ["rag", "retrieval", "assistant"],
+    "venue": null,
+    "citation_count": null,
+    "snippet_is_partial": false,
+    "authors_incomplete": false,
+    "fetched_at": "2026-04-22T00:00:00Z"
+  }
+]

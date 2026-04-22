@@ -1,0 +1,41 @@
+{
+  "research_query": "long-context attention methods",
+  "selected_articles": [
+    {
+      "id": "rec_1",
+      "title": "Acceleration profiles and processing methods for parabolic flight.",
+      "relevance_score": 3.6,
+      "relevance_reasons": [
+        "Title contains relevant keywords: methods",
+        "Content discusses: methods"
+      ],
+      "research_applications": [
+        "Studies using cells as model organism"
+      ],
+      "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6081456/",
+      "organisms": [
+        "cells"
+      ],
+      "key_concepts": [],
+      "selected": true
+    },
+    {
+      "id": "rec_2",
+      "title": "Validation of methods to assess the immunoglobulin gene repertoire in tissues obtained from mice on the International Space Station.",
+      "relevance_score": 3.6,
+      "relevance_reasons": [
+        "Title contains relevant keywords: methods",
+        "Content discusses: methods"
+      ],
+      "research_applications": [
+        "Studies using mice as model organism"
+      ],
+      "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5736159/",
+      "organisms": [
+        "mice"
+      ],
+      "key_concepts": [],
+      "selected": true
+    }
+  ]
+}
