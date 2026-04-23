@@ -78,7 +78,7 @@ class SummariesResponse(BaseModel):
 
 class ChatMessage(BaseModel):
     id: str
-    type: str
+    role: str
     content: str
     timestamp: float
     follow_up_questions: Optional[List[Dict[str, Any]]] = Field(default=[])

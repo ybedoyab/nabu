@@ -5,7 +5,7 @@ import { useResearch } from '../../context/ResearchContext';
 
 interface LocalMessage {
   id: string;
-  type: 'user' | 'assistant';
+  role: 'user' | 'assistant';
   content: string;
   timestamp: number;
   follow_up_questions?: { question: string }[];
@@ -49,12 +49,12 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
     }
 
     // Solo actualizar si hay nuevos mensajes en chatHistory
-    const contextMessages = chatHistory as any[];
+    const contextMessages = chatHistory;
     if (contextMessages.length > lastChatHistoryLengthRef.current) {
       setLocalMessages(contextMessages.map((msg, index) => ({
         id: msg.id ?? `${msg.role}-${index}`,
-        type: msg.type ?? msg.role,
-        content: msg.content ?? msg.message,
+        role: msg.role,
+        content: msg.content,
         timestamp: msg.timestamp ?? Date.now() / 1000,
         follow_up_questions: msg.follow_up_questions,
         isPending: false,
@@ -97,7 +97,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
     // Add user message immediately to local state
     const userMsg: LocalMessage = {
       id: `user-${Date.now()}`,
-      type: 'user',
+      role: 'user',
       content: userMessage,
       timestamp: Date.now() / 1000,
       isPending: false
@@ -122,7 +122,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
     // Add user question immediately to local state
     const userMsg: LocalMessage = {
       id: `user-${Date.now()}`,
-      type: 'user',
+      role: 'user',
       content: q,
       timestamp: Date.now() / 1000,
       isPending: false
@@ -182,10 +182,10 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
           <div className="space-y-4">
             {/* Display all local messages */}
             {localMessages.map((msg) => (
-              <div key={msg.id} className={`chat ${msg.type === 'user' ? 'chat-end' : 'chat-start'}`}>
+              <div key={msg.id} className={`chat ${msg.role === 'user' ? 'chat-end' : 'chat-start'}`}>
                 <div 
                   className={`chat-bubble ${
-                    msg.type === 'user' 
+                    msg.role === 'user' 
                       ? 'chat-bubble-primary' 
                       : 'bg-base-200 text-base-content'
                   }`}
@@ -196,7 +196,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
                   </div>
                   
                   {/* Follow-up questions in assistant messages */}
-                  {msg.type === 'assistant' && msg.follow_up_questions && msg.follow_up_questions.length > 0 && (
+                  {msg.role === 'assistant' && msg.follow_up_questions && msg.follow_up_questions.length > 0 && (
                     <div className="mt-3 pt-3 border-t border-base-content/10">
                       <p className="text-xs font-semibold mb-2 opacity-80">Preguntas de seguimiento:</p>
                       <div className="space-y-1.5">

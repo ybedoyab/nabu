@@ -156,28 +156,28 @@ class ResearchFlow:
         # Prepare context from selected articles
         article_context = self._prepare_article_context(selected_articles)
         
-        # Get AI response
-        ai_response = self.openai_client.chat_with_articles(
-            user_question, 
-            article_context
+        # Get AI response and follow-ups in one call
+        ai_result = self.openai_client.chat_with_articles(
+            query=user_question, 
+            article_context=article_context,
+            chat_history=chat_history,
+            research_query=research_query
         )
         
-        # Generate follow-up questions
-        follow_up_questions = self._generate_follow_up_questions(
-            user_question, ai_response, selected_articles, research_query
-        )
+        ai_response = ai_result.get("response", "Error generating response.")
+        follow_up_questions = ai_result.get("follow_up_questions", [])
         
         # Format chat response
         chat_message = {
             "id": f"msg_{int(time.time())}",
-            "type": "user",
+            "role": "user",
             "content": user_question,
             "timestamp": time.time()
         }
         
         ai_message = {
             "id": f"msg_{int(time.time()) + 1}",
-            "type": "assistant",
+            "role": "assistant",
             "content": ai_response,
             "follow_up_questions": follow_up_questions,
             "timestamp": time.time()
@@ -213,12 +213,14 @@ class ResearchFlow:
     def _generate_article_summary(self, article: Dict, research_query: str) -> Dict[str, Any]:
         """Generate detailed summary for a single article."""
         title = article.get('title', '')
+        abstract = article.get('abstract', 'No abstract available.')
         
         # Create a focused summary prompt
         summary_prompt = f"""
         Based on the research query "{research_query}", provide a focused summary of this article:
         
         Article: {title}
+        Abstract: {abstract}
         
         Please provide:
         1. Key findings relevant to the research query
@@ -382,7 +384,7 @@ class ResearchFlow:
         for article in selected_articles:
             context.append({
                 "title": article.get('title', ''),
-                "summary": article.get('summary', ''),
+                "summary": article.get('abstract', article.get('summary', '')),
                 "organisms": article.get('organisms', []),
                 "key_concepts": article.get('key_concepts', []),
                 "url": article.get('url', '')

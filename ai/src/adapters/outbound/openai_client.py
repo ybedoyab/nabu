@@ -6,7 +6,7 @@ Handles all interactions with OpenAI API for text analysis and extraction.
 import openai
 import json
 from typing import Dict, List, Optional, Any
-import asyncio
+import os
 from tqdm import tqdm
 import time
 from ...infrastructure.config import Config
@@ -342,51 +342,100 @@ class OpenAIClient:
         with open(checkpoint_path, 'w', encoding='utf-8') as f:
             json.dump(checkpoint_data, f, indent=2, ensure_ascii=False)
     
-    def chat_with_articles(self, query: str, article_context: List[Dict] = None) -> str:
+    def chat_with_articles(self, query: str, article_context: List[Dict] = None, chat_history: List[Dict] = None, research_query: str = None) -> Dict[str, Any]:
         """
         Chat interface for asking questions about processed articles.
         
         Args:
             query: User question
             article_context: List of relevant articles for context
+            chat_history: Previous chat messages
+            research_query: Original research topic
             
         Returns:
-            AI response
+            Dictionary with 'response' and 'follow_up_questions'
         """
-        system_prompt = """You are a scientific research assistant specializing in scientific literature analysis.
+        system_prompt = f"""You are a scientific research assistant specializing in scientific literature analysis.
         You have access to a database of scientific publications.
+        {"The user is researching: " + research_query if research_query else ""}
         
         When answering questions:
-        1. Be precise and cite specific studies when possible
+        1. Be precise and cite specific studies using [Article Title]
         2. Focus on practical implications for real-world adoption
         3. Identify knowledge gaps and research needs
-        4. Use clear, accessible language for diverse audiences
-        5. If you don't have specific information, say so clearly"""
+        4. Synthesize information across multiple articles when applicable
+        5. Use clear, accessible language for diverse audiences
         
-        user_prompt = f"Question: {query}\n\n"
+        You must format your response as a JSON object with two fields:
+        - "response": Your detailed answer to the user's question. Use Markdown for formatting.
+        - "follow_up_questions": A list of 3-4 specific follow-up questions the researcher might want to explore further, based on your response.
         
+        JSON structure:
+        {{
+            "response": "Your answer...",
+            "follow_up_questions": [
+                {{"question": "Follow up 1?", "type": "clarification"}},
+                {{"question": "Follow up 2?", "type": "deeper_analysis"}}
+            ]
+        }}
+        """
+        
+        messages = [{"role": "system", "content": system_prompt}]
+        
+        # Add article context
         if article_context:
-            user_prompt += "Relevant article context:\n"
-            for article in article_context[:3]:  # Limit context to avoid token limits
-                user_prompt += f"- {article.get('title', 'Unknown')}\n"
+            context_msg = "Relevant article context for this conversation:\n\n"
+            for article in article_context:
+                context_msg += f"Title: {article.get('title', 'Unknown')}\n"
+                if 'url' in article and article['url']:
+                    context_msg += f"URL: {article['url']}\n"
+                if 'organisms' in article and article['organisms']:
+                    context_msg += f"Organisms: {', '.join(article['organisms'])}\n"
+                if 'key_concepts' in article and article['key_concepts']:
+                    context_msg += f"Key Concepts: {', '.join(article['key_concepts'])}\n"
                 if 'summary' in article:
-                    user_prompt += f"  Summary: {article['summary'][:500]}...\n"
+                    context_msg += f"Summary: {article['summary'][:2000]}\n"
+                context_msg += "---\n"
+            messages.append({"role": "system", "content": context_msg})
+            
+        # Add chat history
+        if chat_history:
+            for msg in chat_history[-10:]:
+                role = msg.get("role", "user")
+                if role not in ["system", "user", "assistant"]:
+                    role = "user"
+                messages.append({"role": role, "content": msg.get("content", "")})
+                
+        # Add current query
+        messages.append({"role": "user", "content": query})
         
         try:
             response = self.client.chat.completions.create(
                 model=self.model,
-                messages=[
-                    {"role": "system", "content": system_prompt},
-                    {"role": "user", "content": user_prompt}
-                ],
+                messages=messages,
                 max_tokens=self.max_tokens,
-                temperature=0.3  # Lower temperature for more focused responses
+                temperature=0.3,
+                response_format={"type": "json_object"}
             )
             
-            return response.choices[0].message.content
+            result_text = response.choices[0].message.content
+            try:
+                parsed = json.loads(result_text)
+                return {
+                    "response": parsed.get("response", "Could not generate response."),
+                    "follow_up_questions": parsed.get("follow_up_questions", [])
+                }
+            except json.JSONDecodeError:
+                return {
+                    "response": result_text,
+                    "follow_up_questions": []
+                }
             
         except Exception as e:
-            return f"Error processing your question: {str(e)}"
+            return {
+                "response": f"Error processing your question: {str(e)}",
+                "follow_up_questions": []
+            }
     
     def recommend_articles_for_research(self, research_query: str, analyzed_articles: List[Dict], top_k: int = 5) -> Dict[str, Any]:
         """

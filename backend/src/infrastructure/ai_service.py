@@ -350,8 +350,10 @@ class AIService:
         if not research_query.strip():
             raise ValueError("Research query cannot be empty")
         
+        enriched_articles = self._enrich_selected_articles(selected_articles)
+        
         response = self.research_flow.generate_summaries_and_questions(
-            selected_articles, 
+            enriched_articles, 
             research_query
         )
         logger.info(
@@ -391,9 +393,11 @@ class AIService:
         if not selected_articles:
             raise ValueError("At least one article must be selected")
         
+        enriched_articles = self._enrich_selected_articles(selected_articles)
+        
         response = self.research_flow.chat_with_selected_articles(
             user_question,
-            selected_articles,
+            enriched_articles,
             research_query,
             chat_history or []
         )
@@ -404,6 +408,23 @@ class AIService:
             time.perf_counter() - started_at,
         )
         return response
+        
+    def _enrich_selected_articles(self, selected_articles: List[Dict]) -> List[Dict]:
+        """Enrich selected articles with full abstracts from memory."""
+        enriched = []
+        for article in selected_articles:
+            enriched_article = dict(article)
+            title = article.get('title', '')
+            for analyzed in self.analyzed_articles:
+                if analyzed.get('article_metadata', {}).get('title') == title:
+                    summary_obj = analyzed.get('summary', {})
+                    if isinstance(summary_obj, dict):
+                        enriched_article['abstract'] = summary_obj.get('summary', '')
+                    elif isinstance(summary_obj, str):
+                        enriched_article['abstract'] = summary_obj
+                    break
+            enriched.append(enriched_article)
+        return enriched
     
     def get_articles_list(self, limit: int = 10) -> List[Dict[str, Any]]:
         """

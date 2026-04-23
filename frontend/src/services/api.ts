@@ -88,12 +88,17 @@ export interface SummaryResponse {
 }
 
 export interface ChatResponse {
-  response: string;
+  status?: string;
+  step?: string;
+  research_query?: string;
   chat_history: Array<{
+    id?: string;
     role: 'user' | 'assistant';
-    message: string;
+    content: string;
+    timestamp?: number;
+    follow_up_questions?: Array<{ question: string; type?: string }>;
   }>;
-  follow_up_questions: string[];
+  follow_up_questions: Array<{ id?: string; question: string; type?: string }>;
 }
 
 export interface SystemStatus {
@@ -170,19 +175,20 @@ const buildMockSummary = async (selectedArticles: Article[], researchQuery: stri
 
 const buildMockChatResponse = async (
   userQuestion: string,
-  chatHistory: Array<{ role: 'user' | 'assistant'; message: string }> = []
+  chatHistory: Array<{ role: 'user' | 'assistant'; content: string }> = []
 ): Promise<ChatResponse> => {
   const mockData = await getMockResearchData();
   const assistantMessage = `${mockData.chat.response}\n\nPregunta actual: ${userQuestion}`;
 
   return {
-    response: assistantMessage,
+    status: 'success',
+    step: 'chat',
     chat_history: [
       ...chatHistory,
-      { role: 'user', message: userQuestion },
-      { role: 'assistant', message: assistantMessage },
+      { role: 'user', content: userQuestion },
+      { role: 'assistant', content: assistantMessage },
     ],
-    follow_up_questions: mockData.chat.follow_up_questions,
+    follow_up_questions: mockData.chat.follow_up_questions.map(q => ({ question: q })),
   };
 };
 
@@ -265,7 +271,7 @@ export const apiService = {
     userQuestion: string,
     selectedArticles: Article[],
     researchQuery: string,
-    chatHistory: Array<{ role: 'user' | 'assistant'; message: string }> = []
+    chatHistory: Array<{ role: 'user' | 'assistant'; content: string }> = []
   ): Promise<ChatResponse> {
     if (shouldForceMockData()) {
       return buildMockChatResponse(userQuestion, chatHistory);

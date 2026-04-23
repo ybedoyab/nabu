@@ -6,9 +6,11 @@ import { apiService, type Article, type RecommendationResponse, type SummaryResp
 export type ResearchStep = 'research-query' | 'recommendations' | 'summaries' | 'chat';
 
 export interface ChatMessage {
+  id?: string;
   role: 'user' | 'assistant';
-  message: string;
-  timestamp?: Date;
+  content: string;
+  timestamp?: number;
+  follow_up_questions?: { question: string; type?: string }[];
 }
 
 export interface ResearchState {
