@@ -191,6 +191,9 @@ class ResearchFlow:
         
         ai_response = ai_result.get("response", "Error generating response.")
         follow_up_questions = ai_result.get("follow_up_questions", [])
+        for i, q in enumerate(follow_up_questions):
+            if "id" not in q:
+                q["id"] = f"followup_{int(time.time())}_{i}"
         
         # Format chat response
         chat_message = {
@@ -261,7 +264,7 @@ class ResearchFlow:
             response = self.openai_client.client.chat.completions.create(
                 model=self.openai_client.model,
                 messages=[
-                    {"role": "system", "content": "You are a research assistant providing focused article summaries for scientists."},
+                    {"role": "system", "content": "You are a research assistant providing focused article summaries for scientists. Always respond in Spanish."},
                     {"role": "user", "content": summary_prompt}
                 ],
                 max_tokens=1000,
@@ -318,7 +321,7 @@ class ResearchFlow:
             response = self.openai_client.client.chat.completions.create(
                 model=self.openai_client.model,
                 messages=[
-                    {"role": "system", "content": "You are a research assistant generating insightful questions for scientists."},
+                    {"role": "system", "content": "You are a research assistant generating insightful questions for scientists. Write the 'question' and 'focus' fields in Spanish. Keep the 'type' field values in English (methodological|conceptual|practical|comparative)."},
                     {"role": "user", "content": questions_prompt}
                 ],
                 max_tokens=800,
@@ -328,14 +331,27 @@ class ResearchFlow:
             questions_text = response.choices[0].message.content
             
             try:
-                questions = json.loads(questions_text)
-                # Add metadata to each question
+                parsed = json.loads(questions_text)
+                if isinstance(parsed, dict):
+                    questions = parsed.get("questions") or next(
+                        (v for v in parsed.values() if isinstance(v, list)), []
+                    )
+                else:
+                    questions = parsed
+
+                normalized = []
                 for i, q in enumerate(questions):
-                    q["id"] = f"q_{int(time.time())}_{i}"
-                    q["article_id"] = article.get('id', '')
-                    q["article_title"] = title
-                
-                return questions
+                    if not isinstance(q, dict):
+                        continue
+                    normalized.append({
+                        "id": f"q_{int(time.time())}_{i}",
+                        "question": q.get("question", ""),
+                        "type": q.get("type", "conceptual"),
+                        "focus": q.get("focus", ""),
+                        "article_id": article.get("id", ""),
+                        "article_title": title,
+                    })
+                return normalized
             except json.JSONDecodeError:
                 # Fallback if JSON parsing fails
                 return [{
@@ -380,7 +396,7 @@ class ResearchFlow:
             response = self.openai_client.client.chat.completions.create(
                 model=self.openai_client.model,
                 messages=[
-                    {"role": "system", "content": "You are a research advisor providing comprehensive insights from multiple studies."},
+                    {"role": "system", "content": "You are a research advisor providing comprehensive insights from multiple studies. Always respond in Spanish."},
                     {"role": "user", "content": insights_prompt}
                 ],
                 max_tokens=1500,

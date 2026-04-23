@@ -261,7 +261,8 @@ export const apiService = {
         research_query: researchQuery,
       });
       return response.data;
-    } catch {
+    } catch (error) {
+      console.error('[apiService.getSummaries] /research/summaries failed, falling back to mock:', error);
       return buildMockSummary(selectedArticles, researchQuery);
     }
   },
