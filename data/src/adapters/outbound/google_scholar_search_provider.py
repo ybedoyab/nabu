@@ -8,7 +8,7 @@ import serpapi
 
 from ...domain.entities import ArticleRecord, Author
 from ...infrastructure.logger import setup_scraper_logger
-from ...scrapers import nih, nature, aaai, researchgate, springer, arxiv
+from ...scrapers import nih, nature, aaai, researchgate, springer, arxiv, ieee
 from ..types import OrganicResult
 
 SCRAPER_BY_DOMAIN: List[Tuple[str, Callable[[str], str]]] = [
@@ -18,6 +18,7 @@ SCRAPER_BY_DOMAIN: List[Tuple[str, Callable[[str], str]]] = [
     ("nature.com", nature.get_abstract),
     ("ojs.aaai.org", aaai.get_abstract),
     ("arxiv.org", arxiv.get_abstract),
+    ("ieeexplore.ieee.org", ieee.get_abstract),
 ]
 
 
