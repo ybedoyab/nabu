@@ -1,0 +1,152 @@
+{
+  "system_status": {
+    "status": "ok",
+    "message": "Modo demo activo con datos simulados",
+    "articles_count": 128,
+    "last_updated": "2026-04-22T15:00:00Z"
+  },
+  "recommendations": [
+    {
+      "id": "paper-001",
+      "title": "Evaluacion practica de sistemas multiagente para investigacion cientifica asistida",
+      "relevance_score": 9.6,
+      "relevance_reasons": [
+        "Cubre descubrimiento, comparacion y sintesis de literatura",
+        "Propone evaluacion de agentes con trazabilidad",
+        "Muy cercano al flujo funcional del MVP"
+      ],
+      "research_applications": [
+        "Asistentes para revision bibliografica",
+        "R&D en IA aplicada",
+        "Herramientas para estudiantes e investigadores"
+      ],
+      "url": "https://arxiv.org/abs/2604.00001",
+      "organisms": [],
+      "key_concepts": [
+        "sistemas multiagente",
+        "evaluacion",
+        "literatura cientifica"
+      ]
+    },
+    {
+      "id": "paper-002",
+      "title": "Comparacion de estrategias RAG para responder preguntas sobre articulos academicos",
+      "relevance_score": 9.1,
+      "relevance_reasons": [
+        "Relacion directa con preguntas fundamentadas en fuentes",
+        "Analiza recuperacion, ranking y generacion",
+        "Aporta criterios para priorizar lectura"
+      ],
+      "research_applications": [
+        "Busqueda semantica",
+        "Asistentes con citas",
+        "Sistemas de soporte a decisiones"
+      ],
+      "url": "https://arxiv.org/abs/2604.00002",
+      "organisms": [],
+      "key_concepts": [
+        "RAG",
+        "grounding",
+        "recuperacion de evidencia"
+      ]
+    },
+    {
+      "id": "paper-003",
+      "title": "Patrones de interfaz para copilotos de investigacion en contextos academicos y empresariales",
+      "relevance_score": 8.8,
+      "relevance_reasons": [
+        "Se enfoca en experiencia de usuario para investigacion",
+        "Compara necesidades de academia y empresa",
+        "Ayuda a definir una interfaz clara para el MVP"
+      ],
+      "research_applications": [
+        "UX para herramientas cientificas",
+        "Paneles de comparacion de papers",
+        "Flujos de trabajo para analisis rapido"
+      ],
+      "url": "https://scholar.google.com/scholar?q=research+copilot+interface+patterns",
+      "organisms": [],
+      "key_concepts": [
+        "UX",
+        "copilotos de investigacion",
+        "flujo de trabajo"
+      ]
+    },
+    {
+      "id": "paper-004",
+      "title": "Tendencias recientes en agentes para descubrimiento y sintesis de conocimiento",
+      "relevance_score": 8.5,
+      "relevance_reasons": [
+        "Aporta contexto de estado del arte",
+        "Resume tendencias recientes en agentes de IA",
+        "Ayuda a identificar oportunidades de diferenciacion"
+      ],
+      "research_applications": [
+        "Vigilancia tecnologica",
+        "Mapa de tendencias",
+        "Benchmarking de soluciones"
+      ],
+      "url": "https://arxiv.org/abs/2604.00003",
+      "organisms": [],
+      "key_concepts": [
+        "agentes",
+        "sintesis de conocimiento",
+        "estado del arte"
+      ]
+    }
+  ],
+  "summary": {
+    "status": "success",
+    "step": "summaries",
+    "research_query": "asistente inteligente para articulos de investigacion",
+    "combined_summary": "1. Objetivo: Los articulos seleccionados muestran que un asistente para literatura cientifica debe combinar recuperacion de articulos relevantes, comparacion entre trabajos y respuestas fundamentadas en evidencia.\n\n2. Hallazgos clave: Los enfoques mas utiles priorizan trazabilidad, ranking por relevancia y resumentes accionables. Tambien resaltan la necesidad de una experiencia clara para elegir que leer primero.\n\n3. Implicaciones para el MVP: El producto debe permitir ingresar un tema o pregunta, mostrar articulos recomendados con razones de relevancia, generar un resumen combinado y habilitar preguntas de seguimiento sobre la evidencia seleccionada.\n\n4. Oportunidad de diferenciacion: La interfaz puede ganar valor si reduce friccion en tres tareas: descubrir, comparar y decidir. En lugar de solo listar papers, debe ayudar a interpretar aportes, metodos y posibles aplicaciones.\n\n5. Recomendacion: Para una demo convincente, conviene mostrar una busqueda inicial, una seleccion de 2 a 4 articulos, un brief sintetizado y un chat con preguntas sugeridas.",
+    "article_summaries": [
+      {
+        "article_id": "paper-001",
+        "summary": "1. Aporte principal: Propone una arquitectura multiagente para descubrir, evaluar y sintetizar literatura cientifica.\n\n2. Valor para el proyecto: Sirve como referencia directa para el flujo del asistente porque integra recomendacion, comparacion y respuesta basada en fuentes.\n\n3. Aplicacion: Ayuda a definir los roles de los agentes y como coordinar el pipeline del MVP."
+      },
+      {
+        "article_id": "paper-002",
+        "summary": "1. Aporte principal: Compara tecnicas de recuperacion aumentada para responder preguntas sobre documentos tecnicos.\n\n2. Valor para el proyecto: Ofrece ideas para mejorar la relevancia de los articulos sugeridos y para sostener respuestas con evidencia.\n\n3. Aplicacion: Es especialmente util para el modulo de preguntas y respuestas del asistente."
+      },
+      {
+        "article_id": "paper-003",
+        "summary": "1. Aporte principal: Estudia patrones de interfaz para herramientas de investigacion en academia y empresa.\n\n2. Valor para el proyecto: Ayuda a justificar una interfaz minimalista con foco en claridad y decisiones rapidas.\n\n3. Aplicacion: Puede inspirar la estructura de la home, las tarjetas de articulos y la vista de resumen."
+      }
+    ],
+    "suggested_questions": [
+      {
+        "id": "sq-001",
+        "question": "¿Cuáles son las diferencias entre los enfoques propuestos por estos artículos?",
+        "type": "comparison",
+        "focus": "methodology",
+        "article_id": "paper-001",
+        "article_title": "Evaluacion practica de sistemas multiagente para investigacion cientifica asistida"
+      },
+      {
+        "id": "sq-002",
+        "question": "¿Qué artículo debería leer primero si quiero construir el MVP?",
+        "type": "decision",
+        "focus": "prioritization",
+        "article_id": "paper-002",
+        "article_title": "Comparacion de estrategias RAG para responder preguntas sobre articulos academicos"
+      },
+      {
+        "id": "sq-003",
+        "question": "¿Qué funcionalidades mínimas aparecen como más valiosas para usuarios académicos y de R&D?",
+        "type": "synthesis",
+        "focus": "product",
+        "article_id": "paper-003",
+        "article_title": "Patrones de interfaz para copilotos de investigacion en contextos academicos y empresariales"
+      }
+    ]
+  },
+  "chat": {
+    "response": "A nivel de MVP, lo mas recomendable es empezar por el articulo sobre sistemas multiagente y el de estrategias RAG. El primero te ayuda a estructurar el flujo general del asistente y el segundo te orienta sobre como sustentar respuestas con evidencia. El articulo de patrones de interfaz sirve para pulir la experiencia y priorizar claridad visual.",
+    "follow_up_questions": [
+      "¿Qué módulos debería implementar primero?",
+      "¿Cómo podría evaluar la calidad de las recomendaciones?",
+      "¿Qué diferencias hay entre una interfaz académica y una orientada a empresa?"
+    ]
+  }
+}

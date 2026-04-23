@@ -272,7 +272,6 @@ export const ResearchProvider: React.FC<{ children: ReactNode }> = ({ children }
     resetResearch: () => dispatch({ type: ActionTypes.RESET_RESEARCH }),
   };
 
-
   const value = {
     ...state,
     ...actions,

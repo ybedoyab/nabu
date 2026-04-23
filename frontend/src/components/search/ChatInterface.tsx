@@ -51,9 +51,13 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
     // Solo actualizar si hay nuevos mensajes en chatHistory
     const contextMessages = chatHistory as any[];
     if (contextMessages.length > lastChatHistoryLengthRef.current) {
-      setLocalMessages(contextMessages.map(msg => ({
-        ...msg,
-        isPending: false
+      setLocalMessages(contextMessages.map((msg, index) => ({
+        id: msg.id ?? `${msg.role}-${index}`,
+        type: msg.type ?? msg.role,
+        content: msg.content ?? msg.message,
+        timestamp: msg.timestamp ?? Date.now() / 1000,
+        follow_up_questions: msg.follow_up_questions,
+        isPending: false,
       })));
       
       // Si estamos esperando respuesta y llegaron nuevos mensajes, dejar de esperar
@@ -105,7 +109,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
       await sendChatMessage(userMessage, selectedArticles, researchQuery, chatHistory as any);
     } catch (error) {
       console.error('Error sending message:', error);
-      setLocalError('Failed to send message. Please try again.');
+      setLocalError('No se pudo enviar el mensaje. Inténtalo de nuevo.');
       setIsWaitingForResponse(false);
     }
   };
@@ -130,7 +134,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
       await sendChatMessage(q, selectedArticles, researchQuery, chatHistory as any);
     } catch (error) {
       console.error('Error sending question:', error);
-      setLocalError('Failed to send question. Please try again.');
+      setLocalError('No se pudo enviar la pregunta. Inténtalo de nuevo.');
       setIsWaitingForResponse(false);
     }
   };
@@ -144,34 +148,33 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
         {!hasMessages && !isWaitingForResponse ? (
           <div className="flex flex-col items-center justify-center h-full text-center px-4">
             <MessageCircle className="w-12 h-12 text-primary/30 mb-4" />
-            <h3 className="text-lg font-semibold text-base-content mb-2">Start a Conversation</h3>
+            <h3 className="text-lg font-semibold text-base-content mb-2">Pregunta sobre la evidencia</h3>
             <p className="text-sm text-base-content/70 mb-6 max-w-sm">
-              Ask questions about the selected articles or your research topic.
+              Pregunta por métodos, diferencias, limitaciones, oportunidades o implicaciones prácticas de los artículos seleccionados.
             </p>
 
-            {/* Starter Questions */}
             <div className="w-full max-w-md space-y-2">
-              <p className="text-xs text-base-content/60 font-medium mb-3">Suggested questions:</p>
+              <p className="text-xs text-base-content/60 font-medium mb-3">Preguntas sugeridas:</p>
               <button
-                onClick={() => handleQuestionClick('What are the main findings of these studies?')}
+                onClick={() => handleQuestionClick('¿Cuáles son los hallazgos principales de estos artículos?')}
                 className="w-full text-left text-sm p-3 bg-primary/5 hover:bg-primary/10 border border-primary/20 hover:border-primary/40 rounded-lg transition-all text-base-content"
                 disabled={isLoading || isWaitingForResponse}
               >
-                What are the main findings of these studies?
+                ¿Cuáles son los hallazgos principales de estos artículos?
               </button>
               <button
-                onClick={() => handleQuestionClick('How do these studies relate to each other?')}
+                onClick={() => handleQuestionClick('¿En qué se diferencian estos artículos en enfoque o metodología?')}
                 className="w-full text-left text-sm p-3 bg-primary/5 hover:bg-primary/10 border border-primary/20 hover:border-primary/40 rounded-lg transition-all text-base-content"
                 disabled={isLoading || isWaitingForResponse}
               >
-                How do these studies relate to each other?
+                ¿En qué se diferencian estos artículos en enfoque o metodología?
               </button>
               <button
-                onClick={() => handleQuestionClick('What are the practical applications?')}
+                onClick={() => handleQuestionClick('¿Qué artículo debería leer primero y por qué?')}
                 className="w-full text-left text-sm p-3 bg-primary/5 hover:bg-primary/10 border border-primary/20 hover:border-primary/40 rounded-lg transition-all text-base-content"
                 disabled={isLoading || isWaitingForResponse}
               >
-                What are the practical applications?
+                ¿Qué artículo debería leer primero y por qué?
               </button>
             </div>
           </div>
@@ -195,7 +198,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
                   {/* Follow-up questions in assistant messages */}
                   {msg.type === 'assistant' && msg.follow_up_questions && msg.follow_up_questions.length > 0 && (
                     <div className="mt-3 pt-3 border-t border-base-content/10">
-                      <p className="text-xs font-semibold mb-2 opacity-80">Follow-up questions:</p>
+                      <p className="text-xs font-semibold mb-2 opacity-80">Preguntas de seguimiento:</p>
                       <div className="space-y-1.5">
                         {msg.follow_up_questions.slice(0, 2).map((q, i) => (
                           <button
@@ -249,7 +252,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
             type="text"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
-            placeholder="Ask a question..."
+            placeholder="Pregunta por métodos, hallazgos, tendencias o diferencias..."
             className="input input-bordered flex-1 input-sm text-base-content bg-base-100"
             disabled={isLoading || isWaitingForResponse}
           />
@@ -266,7 +269,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({
           </button>
         </form>
         <p className="text-xs text-base-content/60 mt-2 truncate">
-          Topic: {researchQuery}
+          Tema: {researchQuery}
         </p>
       </div>
     </div>

@@ -13,12 +13,12 @@
     --color-base-200: oklch(97% 0.001 106.424);
     --color-base-300: oklch(92% 0.003 48.717);
     --color-base-content: oklch(21% 0.006 56.043);
-    --color-primary: oklch(51% 0.096 186.391);
+    --color-primary: oklch(46% 0.115 231.9);
     --color-primary-content: oklch(97% 0.013 236.62);
-    --color-secondary: oklch(52% 0.154 150.069);
+    --color-secondary: oklch(57% 0.122 210.4);
     --color-secondary-content: oklch(96% 0.015 12.422);
-    --color-accent: oklch(53% 0.157 131.589);
-    --color-accent-content: oklch(97% 0.014 308.299);
+    --color-accent: oklch(69% 0.102 221.5);
+    --color-accent-content: oklch(18% 0.04 255.2);
     --color-neutral: oklch(14% 0.004 49.25);
     --color-neutral-content: oklch(98% 0.001 106.423);
     --color-info: oklch(40% 0.101 131.063);
@@ -51,12 +51,12 @@
     --color-base-200: oklch(23.26% 0.014 253.1);
     --color-base-300: oklch(21.15% 0.012 254.09);
     --color-base-content: oklch(97.807% 0.029 256.847);
-    --color-primary: oklch(52% 0.154 150.069);
-    --color-primary-content: oklch(96% 0.018 272.314);
-    --color-secondary: oklch(51% 0.096 186.391);
+    --color-primary: oklch(71% 0.131 228.7);
+    --color-primary-content: oklch(23% 0.05 248.5);
+    --color-secondary: oklch(68% 0.126 210.2);
     --color-secondary-content: oklch(94% 0.028 342.258);
-    --color-accent: oklch(76% 0.233 130.85);
-    --color-accent-content: oklch(38% 0.063 188.416);
+    --color-accent: oklch(78% 0.1 223.1);
+    --color-accent-content: oklch(24% 0.04 252.4);
     --color-neutral: oklch(14% 0.005 285.823);
     --color-neutral-content: oklch(92% 0.004 286.32);
     --color-info: oklch(70% 0.14 182.503);
@@ -80,5 +80,4 @@
 
 @theme {
     --font-geist: "Geist", "sans-serif";
-    
 }

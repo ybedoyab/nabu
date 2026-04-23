@@ -35,7 +35,6 @@ const Navbar = () => {
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.5 }}
     >
-      {/* Gradient background - transparent at bottom, semi-opaque at top */}
       <div className="absolute inset-0 bg-gradient-to-b from-base-100/60 via-base-100/30 to-transparent backdrop-blur-sm" />
       
       <div className="navbar-start relative z-10">
