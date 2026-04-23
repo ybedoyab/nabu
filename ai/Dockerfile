@@ -34,12 +34,9 @@ WORKDIR /app/ai
 # Download spaCy model
 RUN python -m spacy download en_core_web_sm
 
-# Expose port (if needed for API)
-EXPOSE 8080
+# Health check — verify Python + core deps are importable
+HEALTHCHECK --interval=60s --timeout=10s --start-period=10s --retries=3 \
+    CMD python -c "from src.infrastructure.config import Config" || exit 1
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
-    CMD python -c "import sys; sys.exit(0)" || exit 1
-
-# Default command (can be overridden)
-CMD ["python", "main.py", "--help"]
+# Keep container alive and idle, waiting for calls from the backend
+CMD ["tail", "-f", "/dev/null"]

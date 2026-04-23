@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   # Backend FastAPI Service
   backend:
@@ -20,19 +18,21 @@ services:
       - OPENAI_MODEL=${OPENAI_MODEL:-gpt-4o-mini}
       - OPENAI_MAX_TOKENS=${OPENAI_MAX_TOKENS:-4000}
       - OPENAI_TEMPERATURE=${OPENAI_TEMPERATURE:-0.1}
+      - DATA_API_URL=http://data:8080
     volumes:
       - ./ai/data:/app/data
       - ./ai/output:/app/output
       - ./ai/cache:/app/cache
       - ./ai:/app/ai
-      - ./backend:/app
+      - ./backend:/app/backend
     networks:
       - nabu-network
     depends_on:
       - ai-service
+      - data
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      test: [ "CMD", "curl", "-f", "http://localhost:8000/health" ]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -59,16 +59,16 @@ services:
       - ./ai/data:/app/data
       - ./ai/output:/app/output
       - ./ai/cache:/app/cache
-      - ./ai:/app
+      - ./ai:/app/ai
     networks:
       - nabu-network
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "python", "-c", "import sys; sys.exit(0)"]
-      interval: 30s
+      test: [ "CMD", "python", "-c", "from src.infrastructure.config import Config" ]
+      interval: 60s
       timeout: 10s
       retries: 3
-      start_period: 40s
+      start_period: 10s
 
   data:
     build:
@@ -79,6 +79,7 @@ services:
       - "8081:8080"
     environment:
       - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - SERPAPI_API_KEY=${SERPAPI_API_KEY}
       - LOG_LEVEL=${LOG_LEVEL:-INFO}
     volumes:
       - ./data:/app/data
@@ -86,7 +87,7 @@ services:
       - nabu-network
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/health" ]
       interval: 30s
       timeout: 10s
       retries: 3
