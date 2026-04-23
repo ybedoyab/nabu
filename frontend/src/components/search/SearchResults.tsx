@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { motion } from "motion/react";
+import { useSearchParams } from "react-router-dom";
 import { useResearch } from "../../context/ResearchContext";
 import ArticleRecommendations from "./ArticleRecommendations";
 import ArticleSummaries from "./ArticleSummaries";
@@ -7,6 +8,7 @@ import { AlertCircle } from "lucide-react";
 import LoadingAnimation from "../common/LoadingAnimation";
 
 const SearchResults: React.FC = () => {
+  const [searchParams] = useSearchParams();
   const {
     currentStep,
     recommendations,
@@ -19,7 +21,19 @@ const SearchResults: React.FC = () => {
     deselectArticle,
     getSummaries,
     nextStep,
+    getRecommendations,
   } = useResearch();
+
+  // Handle URL parameters for automatic search
+  useEffect(() => {
+    const query = searchParams.get('q');
+    if (query && query !== researchQuery) {
+      // Only trigger search if we're not already loading and don't have recommendations
+      if (!isLoading && recommendations.length === 0) {
+        getRecommendations(query);
+      }
+    }
+  }, [searchParams, researchQuery, isLoading, recommendations.length, getRecommendations]);
 
   // Handle getting summaries
   const handleGetSummaries = async (articles: any[], query: string) => {
