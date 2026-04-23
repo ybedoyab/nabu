@@ -8,8 +8,10 @@ import ChatInterface from './ChatInterface';
 const parseMarkdownText = (text: string) => {
   if (!text) return null;
 
-  // Remove all ** markers for bold text
-  const cleanText = text.replace(/\*\*/g, '');
+  // Remove all ** markers for bold text and leading # heading markers
+  const cleanText = text
+    .replace(/\*\*/g, '')
+    .replace(/^\s{0,3}#{1,6}\s+/gm, '');
 
   // Split by numbered sections
   const sections = cleanText.split(/(?=\d+\.\s+[A-Z])/);
