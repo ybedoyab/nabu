@@ -171,10 +171,10 @@ const ArticleSummaries: React.FC<ArticleSummariesProps> = ({
       >
         <div>
           <h2 className="text-3xl font-bold text-primary mb-2">
-            Research Summary
+            Resumen de investigación
           </h2>
           <p className="text-lg text-base-content/70">
-            Based on {selectedArticles.length} selected article{selectedArticles.length > 1 ? 's' : ''}
+            Basado en {selectedArticles.length} artículo{selectedArticles.length > 1 ? 's' : ''} seleccionado{selectedArticles.length > 1 ? 's' : ''}
           </p>
         </div>
         <button 
@@ -182,14 +182,14 @@ const ArticleSummaries: React.FC<ArticleSummariesProps> = ({
           onClick={onGoBack}
         >
           <ArrowLeft className="w-4 h-4" />
-          Back to Articles
+          Volver a artículos
         </button>
       </motion.div>
       
       {/* Floating Chat Toggle Button */}
       <button
         type="button"
-        aria-label="Open chat"
+        aria-label="Abrir chat"
         onClick={() => setIsChatOpen(true)}
         className="fixed bottom-6 right-6 btn btn-primary btn-circle shadow-xl z-40"
       >
@@ -209,11 +209,11 @@ const ArticleSummaries: React.FC<ArticleSummariesProps> = ({
           <div className="flex items-center justify-between px-4 py-2 border-b border-base-300 bg-base-200/60">
             <div className="flex items-center gap-2">
               <MessageCircle className="w-4 h-4 text-primary" />
-              <span className="text-sm font-medium">AI Chat</span>
+              <span className="text-sm font-medium">Chat IA</span>
             </div>
             <button
               type="button"
-              aria-label="Close chat"
+              aria-label="Cerrar chat"
               onClick={() => setIsChatOpen(false)}
               className="btn btn-ghost btn-xs"
             >
@@ -249,8 +249,8 @@ const ArticleSummaries: React.FC<ArticleSummariesProps> = ({
                   <FileText className="w-6 h-6 text-primary-content" />
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-2xl font-bold text-primary">Combined Summary</h3>
-                  <p className="text-sm text-base-content/60 mt-1">Research Topic: {researchQuery}</p>
+                  <h3 className="text-2xl font-bold text-primary">Respuesta sintetizada</h3>
+                  <p className="text-sm text-base-content/60 mt-1">Consulta: {researchQuery}</p>
                 </div>
               </div>
               
@@ -263,9 +263,10 @@ const ArticleSummaries: React.FC<ArticleSummariesProps> = ({
                 ) : summaries.article_summaries && summaries.article_summaries.length > 0 ? (
                   <div className="space-y-6">
                     {summaries.article_summaries.map((summary, index) => (
-                      <div key={index} className="space-y-4">
-                        <div className="flex items-center gap-3 mb-4 p-3 bg-primary/5 rounded-lg border-l-4 border-primary">
-                          <div className="badge badge-primary badge-lg">Article {index + 1}</div>
+                        <div key={index} className="space-y-4">
+                          <div className="flex items-center gap-3 mb-4 p-3 bg-primary/5 rounded-lg border-l-4 border-primary">
+                          <div className="badge badge-primary badge-lg">Artículo {index + 1}</div>
+                          
                           <h4 className="text-base font-semibold text-primary flex-1">
                             {selectedArticles[index]?.title}
                           </h4>
@@ -277,7 +278,7 @@ const ArticleSummaries: React.FC<ArticleSummariesProps> = ({
                 ) : (
                   <div className="alert alert-info">
                     <Lightbulb className="w-5 h-5" />
-                    <span>No summary available for the selected articles.</span>
+                    <span>No hay resumen disponible para los artículos seleccionados.</span>
                   </div>
                 )}
               </div>
@@ -287,7 +288,7 @@ const ArticleSummaries: React.FC<ArticleSummariesProps> = ({
               <div className="mb-8">
                 <h4 className="text-lg font-semibold text-primary mb-4 flex items-center gap-2">
                   <FileText className="w-5 h-5" />
-                  Related Images
+                  Figuras y visuales relacionados
                 </h4>
                 
                 {imagesLoading ? (
@@ -308,11 +309,11 @@ const ArticleSummaries: React.FC<ArticleSummariesProps> = ({
                         target="_blank" 
                         rel="noreferrer" 
                         className="block group relative overflow-hidden rounded-lg border-2 border-base-300 hover:border-primary/50 transition-all shadow-md hover:shadow-xl"
-                        title={img.caption || 'View full image'}
+                        title={img.caption || 'Ver imagen completa'}
                       >
                         <img 
                           src={img.image_url} 
-                          alt={img.caption || 'Research figure'} 
+                          alt={img.caption || 'Figura de investigación'} 
                           className="w-full h-40 object-cover group-hover:scale-105 transition-transform duration-300" 
                           onError={(e) => {
                             console.error('Image failed to load:', img.image_url);
@@ -329,10 +330,10 @@ const ArticleSummaries: React.FC<ArticleSummariesProps> = ({
                   </div>
                 ) : (
                   <div className="alert alert-info">
-                    <Lightbulb className="w-5 h-5" />
-                    <span className="text-sm">No se encontraron imágenes para estos artículos.</span>
-                  </div>
-                )}
+                  <Lightbulb className="w-5 h-5" />
+                  <span className="text-sm">No se encontraron visuales relacionados para los artículos seleccionados.</span>
+                </div>
+              )}
               </div>
 
               {/* Selected Articles Reference */}
@@ -340,7 +341,7 @@ const ArticleSummaries: React.FC<ArticleSummariesProps> = ({
               <div>
                 <h4 className="text-lg font-semibold text-primary mb-4 flex items-center gap-2">
                   <FileText className="w-5 h-5" />
-                  Based on these articles:
+                  Basado en estos artículos:
                 </h4>
                 <div className="grid grid-cols-1 gap-3">
                   {selectedArticles.map((article, index) => (
@@ -356,7 +357,7 @@ const ArticleSummaries: React.FC<ArticleSummariesProps> = ({
                         <p className="font-medium text-sm truncate">{article.title}</p>
                         <div className="flex flex-wrap items-center gap-2 mt-1">
                           <span className="text-xs text-base-content/60">
-                            Relevance: {article.relevance_score}/10
+                            Relevancia: {article.relevance_score}/10
                           </span>
                           {article.organisms.length > 0 && (
                             <>
@@ -388,7 +389,7 @@ const ArticleSummaries: React.FC<ArticleSummariesProps> = ({
             <div className="card-body p-6">
               <h3 className="card-title text-lg text-primary mb-4 flex items-center gap-2">
                 <Users className="w-5 h-5" />
-                Individual Summaries
+                Notas por artículo
               </h3>
               
               <div className="space-y-3">
@@ -404,7 +405,7 @@ const ArticleSummaries: React.FC<ArticleSummariesProps> = ({
                           onClick={() => toggleAccordion(summary.article_id)}
                         >
                           <span className="text-sm font-semibold flex-1 pr-2 group-hover:text-primary transition-colors">
-                            {article?.title || `Article ${index + 1}`}
+                            {article?.title || `Artículo ${index + 1}`}
                           </span>
                           <div className={`transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}>
                             <ChevronDown className="w-4 h-4 text-primary" />
@@ -427,7 +428,7 @@ const ArticleSummaries: React.FC<ArticleSummariesProps> = ({
                     );
                   })
                 ) : (
-                  <p className="text-sm text-base-content/60 text-center py-4">No individual summaries available.</p>
+                  <p className="text-sm text-base-content/60 text-center py-4">No hay resúmenes individuales disponibles.</p>
                 )}
               </div>
             </div>
@@ -443,7 +444,7 @@ const ArticleSummaries: React.FC<ArticleSummariesProps> = ({
             <div className="card-body p-6">
               <h3 className="card-title text-lg text-primary mb-4 flex items-center gap-2">
                 <Lightbulb className="w-5 h-5" />
-                Suggested Questions
+                Preguntas sugeridas
               </h3>
               
               <div className="space-y-2">
@@ -465,7 +466,7 @@ const ArticleSummaries: React.FC<ArticleSummariesProps> = ({
                     </motion.button>
                   ))
                 ) : (
-                  <p className="text-sm text-base-content/60 text-center py-4">No suggested questions available.</p>
+                  <p className="text-sm text-base-content/60 text-center py-4">No hay preguntas sugeridas disponibles.</p>
                 )}
               </div>
             </div>
@@ -483,10 +484,9 @@ const ArticleSummaries: React.FC<ArticleSummariesProps> = ({
         <div className="alert alert-info shadow-lg max-w-2xl mx-auto border-2 border-info/30">
           <Lightbulb className="w-5 h-5" />
           <div>
-            <h4 className="font-semibold">What's next?</h4>
+            <h4 className="font-semibold">¿Qué sigue?</h4>
             <p className="text-sm">
-              You can ask specific questions about the research, explore suggested questions, 
-              or start a conversation to dive deeper into any topic.
+              Haz preguntas de seguimiento, explora las sugerencias o sigue refinando la literatura hasta decidir qué leer después.
             </p>
           </div>
         </div>

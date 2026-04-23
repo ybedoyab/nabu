@@ -10,7 +10,7 @@ const Footer = () => {
     >
       <div>
         <p className="text-sm lg:text-base text-base-content/60 font-geist">
-          Powered by AI-assisted literature discovery
+          Impulsado por literatura científica y flujos de investigación asistida
         </p>
       </div>
     </motion.footer>

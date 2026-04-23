@@ -44,7 +44,7 @@ const SearchNavbar = () => {
 
   return (
     <motion.div 
-      className="bg-base-100 border-b border-base-300"
+      className="border-b border-base-300/80 bg-base-100/80 backdrop-blur-xl"
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.4 }}
@@ -53,7 +53,7 @@ const SearchNavbar = () => {
         <div className="navbar-start gap-4 flex-1">
           <motion.button 
             onClick={handleLogoClick}
-            className="cursor-pointer hover:opacity-80 transition-opacity"
+            className="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
@@ -63,9 +63,12 @@ const SearchNavbar = () => {
               alt="Nabu Logo" 
               className="h-8 lg:h-10 w-auto"
             />
+            <div className="hidden md:block text-left">
+              <p className="text-sm font-semibold tracking-[0.22em] uppercase text-primary/80">Nabu</p>
+              <p className="text-xs text-base-content/60">Asistente de investigación</p>
+            </div>
           </motion.button>
           
-          {/* Search Bar */}
           <div className="hidden lg:flex flex-1 max-w-2xl">
             <SearchBar onSearch={handleSearch} defaultValue={query} isAIEnabled={true} />
           </div>
@@ -79,7 +82,6 @@ const SearchNavbar = () => {
         </div>
       </div>
 
-      {/* Mobile Search Bar */}
       <div className="lg:hidden px-4 pb-3">
         <SearchBar onSearch={handleSearch} defaultValue={query} isAIEnabled={true} />
       </div>

@@ -1,47 +1,34 @@
 import axios from 'axios';
-export {
-  handleApiError,
-  createLoadingState,
-  setLoading,
-  setSuccess,
-  setError,
-} from "./stateUtils";
 
-// AI API Configuration
-const AI_API_BASE_URL = import.meta.env.VITE_APP_AI_API_BASE_URL || 'http://localhost:8000';
-const AI_API_VERSION = import.meta.env.VITE_APP_AI_API_VERSION || 'v1';
-
-// Data API Configuration
-const DATA_API_BASE_URL = import.meta.env.VITE_APP_DATA_API_BASE_URL || 'http://localhost:8081';
+// API Configuration
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://angella-ungarmented-balefully.ngrok-free.dev';
+const API_VERSION = import.meta.env.VITE_API_VERSION || 'v1';
 
 // Use relative URL in development (with proxy) or full URL in production
-const aiBaseURL = import.meta.env.DEV 
-  ? `/api/${AI_API_VERSION}` 
-  : `${AI_API_BASE_URL}/api/${AI_API_VERSION}`;
+const baseURL = import.meta.env.DEV 
+  ? `/api/${API_VERSION}` 
+  : `${API_BASE_URL}/api/${API_VERSION}`;
 
-const dataBaseURL = import.meta.env.DEV 
-  ? `/data-api` 
-  : DATA_API_BASE_URL;
-
-// Create axios instances
-const aiApi = axios.create({
-  baseURL: aiBaseURL,
+// Create axios instance
+const api = axios.create({
+  baseURL,
   timeout: 120000, // 2 minutes timeout for AI operations
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-const dataApi = axios.create({
-  baseURL: dataBaseURL,
+// Instancia separada para Data backend (localhost:8000)
+const api2 = axios.create({
+  baseURL: 'http://localhost:8000',
   timeout: 120000,
   headers: {
     'Content-Type': 'application/json',
   },
 });
 
-// Request interceptors
-aiApi.interceptors.request.use(
+// Request interceptor
+api.interceptors.request.use(
   (config) => {
     return config;
   },
@@ -50,26 +37,8 @@ aiApi.interceptors.request.use(
   }
 );
 
-dataApi.interceptors.request.use(
-  (config) => {
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
-
-// Response interceptors
-aiApi.interceptors.response.use(
-  (response) => {
-    return response;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
-
-dataApi.interceptors.response.use(
+// Response interceptor
+api.interceptors.response.use(
   (response) => {
     return response;
   },
@@ -151,56 +120,168 @@ export interface QueryImagesResponse {
   timestamp: number;
 }
 
+interface MockResearchData {
+  system_status: SystemStatus;
+  recommendations: Article[];
+  summary: SummaryResponse;
+  chat: {
+    response: string;
+    follow_up_questions: string[];
+  };
+}
+
+let mockResearchDataPromise: Promise<MockResearchData> | null = null;
+
+const shouldForceMockData = () => {
+  if (typeof window === 'undefined') return false;
+  return new URLSearchParams(window.location.search).get('mock') === '1';
+};
+
+const getMockResearchData = async (): Promise<MockResearchData> => {
+  if (!mockResearchDataPromise) {
+    mockResearchDataPromise = fetch('/mock-research.json').then(async (response) => {
+      if (!response.ok) {
+        throw new Error('No se pudo cargar mock-research.json');
+      }
+      return response.json();
+    });
+  }
+
+  return mockResearchDataPromise;
+};
+
+const buildMockSummary = async (selectedArticles: Article[], researchQuery: string): Promise<SummaryResponse> => {
+  const mockData = await getMockResearchData();
+  const fallbackArticles = selectedArticles.length > 0
+    ? selectedArticles
+    : mockData.recommendations.slice(0, 3);
+
+  return {
+    ...mockData.summary,
+    research_query: researchQuery,
+    article_summaries: mockData.summary.article_summaries.filter((summary) =>
+      fallbackArticles.some((article) => article.id === summary.article_id)
+    ),
+    suggested_questions: mockData.summary.suggested_questions.filter((question) =>
+      fallbackArticles.some((article) => article.id === question.article_id)
+    ),
+  };
+};
+
+const buildMockChatResponse = async (
+  userQuestion: string,
+  chatHistory: Array<{ role: 'user' | 'assistant'; message: string }> = []
+): Promise<ChatResponse> => {
+  const mockData = await getMockResearchData();
+  const assistantMessage = `${mockData.chat.response}\n\nPregunta actual: ${userQuestion}`;
+
+  return {
+    response: assistantMessage,
+    chat_history: [
+      ...chatHistory,
+      { role: 'user', message: userQuestion },
+      { role: 'assistant', message: assistantMessage },
+    ],
+    follow_up_questions: mockData.chat.follow_up_questions,
+  };
+};
+
 // API Service Functions
 export const apiService = {
-  // AI API - Health and Status
+  // Health and Status
   async getHealth() {
-    const response = await aiApi.get('/health');
+    const response = await api.get('/health', { baseURL: import.meta.env.DEV ? undefined : API_BASE_URL });
     return response.data;
   },
 
   async getStatus(): Promise<SystemStatus> {
-    const response = await aiApi.get('/research/status');
-    return response.data;
+    if (shouldForceMockData()) {
+      const mockData = await getMockResearchData();
+      return mockData.system_status;
+    }
+
+    try {
+      const response = await api.get('/research/status');
+      return response.data;
+    } catch {
+      const mockData = await getMockResearchData();
+      return mockData.system_status;
+    }
   },
 
   async getArticlesList(limit = 10) {
-    const response = await aiApi.get(`/research/articles?limit=${limit}`);
+    const response = await api.get(`/research/articles?limit=${limit}`);
     return response.data;
   },
 
-  // AI API - Research Flow - Step 1: Get Recommendations
+  // Research Flow - Step 1: Get Recommendations
   async getRecommendations(researchQuery: string, topK: number = 5): Promise<RecommendationResponse> {
-    const response = await aiApi.post('/research/recommendations', {
-      research_query: researchQuery,
-      top_k: topK,
-    });
-    return response.data;
+    if (shouldForceMockData()) {
+      const mockData = await getMockResearchData();
+      return {
+        recommendations: mockData.recommendations.slice(0, topK).map((article) => ({
+          ...article,
+          selected: false,
+        })),
+      };
+    }
+
+    try {
+      const response = await api.post('/research/recommendations', {
+        research_query: researchQuery,
+        top_k: topK,
+      });
+      return response.data;
+    } catch {
+      const mockData = await getMockResearchData();
+      return {
+        recommendations: mockData.recommendations.slice(0, topK).map((article) => ({
+          ...article,
+          selected: false,
+        })),
+      };
+    }
   },
 
-  // AI API - Research Flow - Step 2: Get Summaries and Questions
+  // Research Flow - Step 2: Get Summaries and Questions
   async getSummaries(selectedArticles: Article[], researchQuery: string): Promise<SummaryResponse> {
-    const response = await aiApi.post('/research/summaries', {
-      selected_articles: selectedArticles,
-      research_query: researchQuery,
-    });
-    return response.data;
+    if (shouldForceMockData()) {
+      return buildMockSummary(selectedArticles, researchQuery);
+    }
+
+    try {
+      const response = await api.post('/research/summaries', {
+        selected_articles: selectedArticles,
+        research_query: researchQuery,
+      });
+      return response.data;
+    } catch {
+      return buildMockSummary(selectedArticles, researchQuery);
+    }
   },
 
-  // AI API - Research Flow - Step 3: Chat with Articles
+  // Research Flow - Step 3: Chat with Articles
   async chatWithArticles(
     userQuestion: string,
     selectedArticles: Article[],
     researchQuery: string,
     chatHistory: Array<{ role: 'user' | 'assistant'; message: string }> = []
   ): Promise<ChatResponse> {
-    const response = await aiApi.post('/research/chat', {
-      user_question: userQuestion,
-      selected_articles: selectedArticles,
-      research_query: researchQuery,
-      chat_history: chatHistory,
-    });
-    return response.data;
+    if (shouldForceMockData()) {
+      return buildMockChatResponse(userQuestion, chatHistory);
+    }
+
+    try {
+      const response = await api.post('/research/chat', {
+        user_question: userQuestion,
+        selected_articles: selectedArticles,
+        research_query: researchQuery,
+        chat_history: chatHistory,
+      });
+      return response.data;
+    } catch {
+      return buildMockChatResponse(userQuestion, chatHistory);
+    }
   },
 
   // Stats - Query-relevant images (usa backend Data local)
@@ -209,12 +290,64 @@ export const apiService = {
     const payload: any = { research_query: researchQuery };
     if (articleUrls && articleUrls.length > 0) payload.article_urls = articleUrls;
     console.log('[API] Sending POST to /api/v1/stats/query-images with payload:', payload);
-    const response = await dataApi.post('/api/v1/stats/query-images', payload);
+    const response = await api2.post('/api/v1/stats/query-images', payload);
     console.log('[API] getQueryImages response:', response.data);
     return response.data;
   },
 };
 
-// Export both API instances
-export { aiApi, dataApi };
-export default { aiApi, dataApi };
+// Error handling utility
+export const handleApiError = (error: any): string => {
+  if (error.response) {
+    // Server responded with error status
+    const { status, data } = error.response;
+    
+    switch (status) {
+      case 400:
+        return `Bad Request: ${data.message || 'Invalid input'}`;
+      case 404:
+        return 'API endpoint not found';
+      case 500:
+        return `Server Error: ${data.message || 'Internal server error'}`;
+      case 503:
+        return `Service Unavailable: ${data.message || 'AI service not ready'}`;
+      default:
+        return `API Error (${status}): ${data.message || 'Unknown error'}`;
+    }
+  } else if (error.request) {
+    // Network error
+    return 'Network Error: Unable to connect to the server. Please check your connection.';
+  } else {
+    // Other error
+    return `Error: ${error.message}`;
+  }
+};
+
+// Loading states utility
+export const createLoadingState = () => ({
+  isLoading: false,
+  error: null,
+  data: null,
+});
+
+export const setLoading = (state: any) => ({
+  ...state,
+  isLoading: true,
+  error: null,
+});
+
+export const setSuccess = (state: any, data: any) => ({
+  ...state,
+  isLoading: false,
+  error: null,
+  data,
+});
+
+export const setError = (state: any, error: any) => ({
+  ...state,
+  isLoading: false,
+  error,
+  data: null,
+});
+
+export default api;
