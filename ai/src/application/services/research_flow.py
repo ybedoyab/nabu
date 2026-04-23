@@ -9,6 +9,7 @@ Implements the complete scientific research workflow:
 import json
 import time
 import logging
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import Dict, List, Any, Optional
 from ...adapters.outbound.openai_client import OpenAIClient
 
@@ -93,20 +94,44 @@ class ResearchFlow:
             len(selected_articles),
         )
         
-        # Generate summaries for each selected article
-        article_summaries = []
-        all_suggested_questions = []
-        
-        for article in selected_articles:
-            # Get full article data (you'll need to pass this from the main system)
-            summary_data = self._generate_article_summary(article, research_query)
-            article_summaries.append(summary_data)
-            
-            # Generate suggested questions for this article
-            questions = self._generate_suggested_questions(article, research_query)
-            all_suggested_questions.extend(questions)
-        
-        # Generate overall research insights
+        # Run summary + questions for every article in parallel (2N OpenAI calls concurrently)
+        article_summaries: List[Optional[Dict[str, Any]]] = [None] * len(selected_articles)
+        questions_per_article: List[List[Dict[str, Any]]] = [[] for _ in selected_articles]
+
+        parallel_started_at = time.perf_counter()
+        max_workers = max(1, min(len(selected_articles) * 2, 10))
+        with ThreadPoolExecutor(max_workers=max_workers) as executor:
+            future_map: Dict[Any, tuple] = {}
+            for idx, article in enumerate(selected_articles):
+                future_map[executor.submit(self._generate_article_summary, article, research_query)] = ("summary", idx)
+                future_map[executor.submit(self._generate_suggested_questions, article, research_query)] = ("questions", idx)
+
+            for future in as_completed(future_map):
+                kind, idx = future_map[future]
+                try:
+                    result = future.result()
+                except Exception as exc:
+                    logger.exception("Parallel %s task failed for article %d: %s", kind, idx, exc)
+                    result = None
+
+                if kind == "summary":
+                    article_summaries[idx] = result or {
+                        "article_id": selected_articles[idx].get("id", ""),
+                        "title": selected_articles[idx].get("title", ""),
+                        "summary": "Error generating summary",
+                        "url": selected_articles[idx].get("url", ""),
+                        "relevance_score": selected_articles[idx].get("relevance_score", 0),
+                    }
+                else:
+                    questions_per_article[idx] = result or []
+
+        all_suggested_questions = [q for qs in questions_per_article for q in qs]
+        logger.info(
+            "ResearchFlow parallel per-article generation finished in %.2fs",
+            time.perf_counter() - parallel_started_at,
+        )
+
+        # Generate overall research insights (depends on summaries, so runs after)
         research_insights = self._generate_research_insights(article_summaries, research_query)
         
         # Format for frontend
