@@ -47,9 +47,9 @@ const ArticleRecommendations: React.FC<ArticleRecommendationsProps> = ({
         >
           <FileText className="w-6 h-6" />
           <div className="text-base-content">
-            <h3 className="font-semibold">No recommendations available</h3>
+            <h3 className="font-semibold">No hay recomendaciones disponibles</h3>
             <p className="text-sm mt-1">
-              Try searching for different AI or technology research terms.
+              Prueba con palabras clave más amplias, un método o una pregunta más específica.
             </p>
           </div>
         </motion.div>
@@ -62,11 +62,11 @@ const ArticleRecommendations: React.FC<ArticleRecommendationsProps> = ({
       {/* Header */}
       <div className="mb-8">
         <h2 className="text-3xl font-bold text-base-content mb-4 font-geist">
-          Recommended Articles
+          Artículos relevantes
         </h2>
         <div className="flex items-center justify-between">
           <p className="text-base-content/70">
-            Select one or more articles to get detailed summaries and research questions.
+            Selecciona los artículos que quieres resumir, comparar y usar como base para el siguiente paso.
           </p>
         </div>
       </div>
@@ -105,7 +105,7 @@ const ArticleRecommendations: React.FC<ArticleRecommendationsProps> = ({
                       <Circle className="w-5 h-5 text-base-content/40" />
                     )}
                     <span className="text-sm font-medium text-base-content/70">
-                      {article.selected ? 'Selected' : 'Click to select'}
+                      {article.selected ? 'Seleccionado' : 'Haz clic para seleccionar'}
                     </span>
                   </div>
                 </div>
@@ -124,9 +124,8 @@ const ArticleRecommendations: React.FC<ArticleRecommendationsProps> = ({
                 {article.title}
               </h3>
 
-              {/* Research Applications */}
               <div className="mb-4">
-                <h4 className="text-sm font-medium text-base-content mb-2">Research applications:</h4>
+                <h4 className="text-sm font-medium text-base-content mb-2">Aplicaciones potenciales:</h4>
                 <div className="flex flex-wrap gap-2">
                   {article.research_applications.slice(0, 3).map((app, index) => (
                     <span
@@ -139,12 +138,11 @@ const ArticleRecommendations: React.FC<ArticleRecommendationsProps> = ({
                 </div>
               </div>
 
-              {/* Organisms and Key Concepts */}
               <div className="flex items-center gap-4 mb-3 text-sm text-base-content/70">
                 {article.organisms.length > 0 && (
                   <div className="flex items-center gap-1">
                     <Users className="w-4 h-4" />
-                    <span>{article.organisms.slice(0, 2).join(', ')}</span>
+                    <span>Contexto: {article.organisms.slice(0, 2).join(', ')}</span>
                   </div>
                 )}
                 
@@ -158,7 +156,7 @@ const ArticleRecommendations: React.FC<ArticleRecommendationsProps> = ({
 
               {/* Relevance Reasons */}
               <div className="mb-4">
-                <h4 className="text-sm font-semibold text-primary mb-2">Why this is relevant:</h4>
+                <h4 className="text-sm font-semibold text-primary mb-2">Por qué coincide con tu búsqueda:</h4>
                 <div className="flex flex-wrap gap-2">
                   {article.relevance_reasons.slice(0, 3).map((reason, reasonIndex) => (
                     <span 
@@ -170,13 +168,12 @@ const ArticleRecommendations: React.FC<ArticleRecommendationsProps> = ({
                   ))}
                   {article.relevance_reasons.length > 3 && (
                     <span className="badge badge-outline badge-ghost badge-sm">
-                      +{article.relevance_reasons.length - 3} more
+                      +{article.relevance_reasons.length - 3} más
                     </span>
                   )}
                 </div>
               </div>
 
-              {/* External Link Button */}
               <div className="card-actions justify-end">
                 <a
                   href={article.url}
@@ -186,7 +183,7 @@ const ArticleRecommendations: React.FC<ArticleRecommendationsProps> = ({
                   className="btn btn-ghost btn-sm"
                 >
                   <ExternalLink className="w-4 h-4" />
-                  View Article
+                  Abrir artículo
                 </a>
               </div>
             </div>
@@ -204,10 +201,10 @@ const ArticleRecommendations: React.FC<ArticleRecommendationsProps> = ({
           {isLoading ? (
             <>
               <span className="loading loading-spinner loading-sm"></span>
-              Generating Summaries...
+              Preparando resumen...
             </>
           ) : (
-            `Continue with ${selectedArticles.length} Article${selectedArticles.length !== 1 ? 's' : ''}`
+            `Continuar con ${selectedArticles.length} artículo${selectedArticles.length !== 1 ? 's' : ''}`
           )}
         </button>
       </div>

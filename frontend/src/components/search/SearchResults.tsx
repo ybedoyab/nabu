@@ -1,6 +1,5 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { motion } from "motion/react";
-import { useSearchParams } from "react-router-dom";
 import { useResearch } from "../../context/ResearchContext";
 import ArticleRecommendations from "./ArticleRecommendations";
 import ArticleSummaries from "./ArticleSummaries";
@@ -8,7 +7,6 @@ import { AlertCircle } from "lucide-react";
 import LoadingAnimation from "../common/LoadingAnimation";
 
 const SearchResults: React.FC = () => {
-  const [searchParams] = useSearchParams();
   const {
     currentStep,
     recommendations,
@@ -21,19 +19,7 @@ const SearchResults: React.FC = () => {
     deselectArticle,
     getSummaries,
     nextStep,
-    getRecommendations,
   } = useResearch();
-
-  // Handle URL parameters for automatic search
-  useEffect(() => {
-    const query = searchParams.get('q');
-    if (query && query !== researchQuery) {
-      // Only trigger search if we're not already loading and don't have recommendations
-      if (!isLoading && recommendations.length === 0) {
-        getRecommendations(query);
-      }
-    }
-  }, [searchParams, researchQuery, isLoading, recommendations.length, getRecommendations]);
 
   // Handle getting summaries
   const handleGetSummaries = async (articles: any[], query: string) => {
@@ -53,10 +39,10 @@ const SearchResults: React.FC = () => {
   // Render loading state
   if (isLoading) {
     const loadingMessage = currentStep === 'research-query' 
-      ? 'Analyzing your research query...' 
+      ? 'Analizando tu consulta...' 
       : currentStep === 'recommendations' 
-      ? 'Generating summaries...' 
-      : 'Processing your request...';
+      ? 'Construyendo resúmenes...' 
+      : 'Preparando respuestas fundamentadas...';
     
     return <LoadingAnimation message={loadingMessage} isFullScreen={false} />;
   }
@@ -73,7 +59,7 @@ const SearchResults: React.FC = () => {
         >
           <AlertCircle className="w-6 h-6" />
           <div>
-            <h3 className="font-semibold">Error occurred</h3>
+            <h3 className="font-semibold">Ocurrió un error</h3>
             <p className="text-sm mt-1">{error}</p>
           </div>
         </motion.div>
@@ -107,8 +93,8 @@ const SearchResults: React.FC = () => {
               <div className="alert alert-warning max-w-md">
                 <AlertCircle className="w-6 h-6" />
                 <div>
-                  <h3 className="font-semibold">No summaries available</h3>
-                  <p className="text-sm mt-1">Please select articles first.</p>
+                  <h3 className="font-semibold">No hay resúmenes disponibles</h3>
+                  <p className="text-sm mt-1">Selecciona artículos primero.</p>
                 </div>
               </div>
             </div>
@@ -134,9 +120,9 @@ const SearchResults: React.FC = () => {
             >
               <AlertCircle className="w-6 h-6" />
               <div>
-                <h3 className="font-semibold">No search results</h3>
+                <h3 className="font-semibold">No hay resultados</h3>
                 <p className="text-sm mt-1">
-                  Try searching for AI and technology research topics.
+                  Prueba buscando un tema, método o pregunta de investigación.
                 </p>
               </div>
             </motion.div>

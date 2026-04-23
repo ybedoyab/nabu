@@ -13,6 +13,7 @@ describe("handleApiError", () => {
     const msg = handleApiError({ response: { status: 400, data: { message: "Bad data" } } });
     expect(msg).toContain("Bad Request");
   });
+
   it("handles 400 errors with default message", () => {
     const msg = handleApiError({ response: { status: 400, data: {} } });
     expect(msg).toBe("Bad Request: Invalid input");
@@ -27,6 +28,7 @@ describe("handleApiError", () => {
     const msg = handleApiError({ response: { status: 500, data: { message: "Crash" } } });
     expect(msg).toContain("Server Error");
   });
+
   it("handles 500 errors with default message", () => {
     const msg = handleApiError({ response: { status: 500, data: {} } });
     expect(msg).toBe("Server Error: Internal server error");
@@ -36,6 +38,7 @@ describe("handleApiError", () => {
     const msg = handleApiError({ response: { status: 503, data: { message: "Unavailable" } } });
     expect(msg).toContain("Service Unavailable");
   });
+
   it("handles 503 errors with default message", () => {
     const msg = handleApiError({ response: { status: 503, data: {} } });
     expect(msg).toBe("Service Unavailable: AI service not ready");
@@ -45,6 +48,7 @@ describe("handleApiError", () => {
     const msg = handleApiError({ response: { status: 418, data: { message: "Teapot" } } });
     expect(msg).toContain("API Error (418)");
   });
+
   it("handles generic response errors with default message", () => {
     const msg = handleApiError({ response: { status: 418, data: {} } });
     expect(msg).toBe("API Error (418): Unknown error");
