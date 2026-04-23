@@ -1,13 +1,23 @@
 import os
 import re
 from datetime import datetime, timezone
-from typing import List, Optional, Tuple
+from typing import Callable, List, Optional, Tuple
+from urllib.parse import urlparse
 
 import serpapi
 
 from ...domain.entities import ArticleRecord, Author
 from ...infrastructure.logger import setup_scraper_logger
+from ...scrapers import nih, nature, oup, researchgate, springer
 from ..types import OrganicResult
+
+SCRAPER_BY_DOMAIN: List[Tuple[str, Callable[[str], str]]] = [
+    ("pmc.ncbi.nlm.nih.gov", nih.get_abstract),
+    ("researchgate.net", researchgate.get_abstract),
+    ("link.springer.com", springer.get_abstract),
+    ("nature.com", nature.get_abstract),
+    ("academic.oup.com", oup.get_abstract),
+]
 
 
 class GoogleScholarSearchProvider:
@@ -64,6 +74,45 @@ class GoogleScholarSearchProvider:
         published_at = f"{year}-01-01T00:00:00Z" if year else None
         return venue, published_at
 
+    @staticmethod
+    def _match_scraper(url: str) -> Optional[Callable[[str], str]]:
+        host = (urlparse(url).hostname or "").lower()
+        if not host:
+            return None
+        for domain, fn in SCRAPER_BY_DOMAIN:
+            if host == domain or host.endswith("." + domain):
+                return fn
+        return None
+
+    def _fetch_abstract(self, item: OrganicResult) -> Tuple[str, bool]:
+        """
+        Pick the first candidate URL (landing link, then HTML/PDF resources) whose
+        domain has a dedicated scraper, and return (abstract, is_partial).
+        Falls back to (snippet, True) if no scraper matches or all scrapers fail.
+        """
+        candidates: List[str] = []
+        link = item.get("link")
+        if link:
+            candidates.append(link)
+        for resource in item.get("resources") or []:
+            resource_link = resource.get("link")
+            if resource_link:
+                candidates.append(resource_link)
+
+        for url in candidates:
+            scraper = self._match_scraper(url)
+            if not scraper:
+                continue
+            try:
+                abstract = scraper(url)
+                if abstract:
+                    return abstract.strip(), False
+            except Exception as e:
+                self.logger.warning(f"Scraper failed for {url}: {e}")
+
+        snippet = (item.get("snippet") or "").replace("…", "...").strip()
+        return snippet, True
+
     def search(self, query: str, limit: int) -> List[ArticleRecord]:
         """
         Fetches data from Google Scholar (via SerpAPI) based on a query and maps
@@ -79,7 +128,7 @@ class GoogleScholarSearchProvider:
             response = self.client.search(
                 {
                     "engine": "google_scholar",
-                    "q": query,
+                    "q": f"{query} -site:books.google.com -filetype:pdf",
                     "hl": "en",
                     "num": limit,
                 }
@@ -107,7 +156,7 @@ class GoogleScholarSearchProvider:
                     Author(name=a.get("name", ""), affiliation=None)
                     for a in publication_info.get("authors", []) or []
                 ]
-                abstract = (item.get("snippet") or "").replace("…", "...").strip()
+                abstract, snippet_is_partial = self._fetch_abstract(item)
 
                 records.append(
                     ArticleRecord(
@@ -125,7 +174,7 @@ class GoogleScholarSearchProvider:
                         keywords=[],
                         venue=venue,
                         citation_count=citation_count,
-                        snippet_is_partial=True,
+                        snippet_is_partial=snippet_is_partial,
                         authors_incomplete=False,
                         fetched_at=fetched_timestamp,
                     )

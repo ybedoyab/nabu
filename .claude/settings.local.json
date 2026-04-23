@@ -1,7 +1,11 @@
 {
   "permissions": {
     "allow": [
-      "Bash(C:\\\\Users\\\\aleja\\\\Documents\\\\nabu\\\\.venv\\\\Scripts\\\\python.exe *)"
+      "Bash(C:\\\\Users\\\\aleja\\\\Documents\\\\nabu\\\\.venv\\\\Scripts\\\\python.exe *)",
+      "Bash(.venv/Scripts/python.exe data/src/scrapers/science.py)",
+      "Bash(.venv/Scripts/python.exe -c ' *)",
+      "Bash(pip show *)",
+      "Bash(.venv/Scripts/python.exe data/src/scrapers/oup.py)"
     ]
   }
 }
