@@ -284,13 +284,14 @@ const ArticleSummaries: React.FC<ArticleSummariesProps> = ({
               </div>
 
               {/* Related Images Section */}
+              {/* TEMPORARILY HIDDEN
               <div className="divider my-8"></div>
               <div className="mb-8">
                 <h4 className="text-lg font-semibold text-primary mb-4 flex items-center gap-2">
                   <FileText className="w-5 h-5" />
                   Figuras y visuales relacionados
                 </h4>
-                
+
                 {imagesLoading ? (
                   <div className="flex items-center justify-center gap-3 py-12 text-base-content/60">
                     <span className="loading loading-spinner loading-lg" />
@@ -303,18 +304,18 @@ const ArticleSummaries: React.FC<ArticleSummariesProps> = ({
                 ) : relatedImages.length > 0 ? (
                   <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                     {relatedImages.map((img, idx) => (
-                      <a 
-                        key={idx} 
-                        href={img.image_url} 
-                        target="_blank" 
-                        rel="noreferrer" 
+                      <a
+                        key={idx}
+                        href={img.image_url}
+                        target="_blank"
+                        rel="noreferrer"
                         className="block group relative overflow-hidden rounded-lg border-2 border-base-300 hover:border-primary/50 transition-all shadow-md hover:shadow-xl"
                         title={img.caption || 'Ver imagen completa'}
                       >
-                        <img 
-                          src={img.image_url} 
-                          alt={img.caption || 'Figura de investigación'} 
-                          className="w-full h-40 object-cover group-hover:scale-105 transition-transform duration-300" 
+                        <img
+                          src={img.image_url}
+                          alt={img.caption || 'Figura de investigación'}
+                          className="w-full h-40 object-cover group-hover:scale-105 transition-transform duration-300"
                           onError={(e) => {
                             console.error('Image failed to load:', img.image_url);
                             e.currentTarget.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="100" height="100"%3E%3Crect fill="%23ddd" width="100" height="100"/%3E%3Ctext x="50%25" y="50%25" text-anchor="middle" dy=".3em" fill="%23999"%3ENo image%3C/text%3E%3C/svg%3E';
@@ -335,6 +336,7 @@ const ArticleSummaries: React.FC<ArticleSummariesProps> = ({
                 </div>
               )}
               </div>
+              */}
 
               {/* Selected Articles Reference */}
               <div className="divider my-8"></div>
