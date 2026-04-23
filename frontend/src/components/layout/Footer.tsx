@@ -9,7 +9,7 @@ const Footer = () => {
       transition={{ delay: 1, duration: 0.5 }}
     >
       <div>
-        <p className="text-sm lg:text-base text-base-content/60 font-geist">
+        <p className="text-sm lg:text-base text-white font-geist">
           Impulsado por literatura científica y flujos de investigación asistida
         </p>
       </div>

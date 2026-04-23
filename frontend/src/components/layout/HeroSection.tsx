@@ -1,10 +1,12 @@
 import { motion } from 'motion/react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import SearchBar from './SearchBar';
 import CategoryTags from './CategoryTags';
 
 const HeroSection = () => {
   const navigate = useNavigate();
+  const [searchValue, setSearchValue] = useState('');
 
   const handleSearch = (query: string) => {
     navigate(`/search?q=${encodeURIComponent(query)}`);
@@ -36,7 +38,7 @@ const HeroSection = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.6 }}
       >
-        <SearchBar onSearch={handleSearch} />
+        <SearchBar onSearch={handleSearch} value={searchValue} />
       </motion.div>
 
       <motion.div
@@ -44,7 +46,7 @@ const HeroSection = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.8 }}
       >
-        <CategoryTags />
+        <CategoryTags onSelect={setSearchValue} />
       </motion.div>
     </main>
   );

@@ -1,6 +1,6 @@
 import { Search, X, Sparkles } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useResearch } from '../../context/ResearchContext';
 import LoadingAnimation from '../common/LoadingAnimation';
@@ -8,12 +8,17 @@ import LoadingAnimation from '../common/LoadingAnimation';
 interface SearchBarProps {
   onSearch?: (query: string) => void;
   defaultValue?: string;
+  value?: string;
   isAIEnabled?: boolean;
 }
 
 
-const SearchBar = ({ onSearch, defaultValue = '', isAIEnabled = true }: SearchBarProps) => {
-  const [query, setQuery] = useState(defaultValue);
+const SearchBar = ({ onSearch, defaultValue = '', value, isAIEnabled = true }: SearchBarProps) => {
+  const [query, setQuery] = useState(value ?? defaultValue);
+
+  useEffect(() => {
+    if (value !== undefined) setQuery(value);
+  }, [value]);
   const [isSearching, setIsSearching] = useState(false);
   const navigate = useNavigate();
   const { getRecommendations, isLoading } = useResearch();

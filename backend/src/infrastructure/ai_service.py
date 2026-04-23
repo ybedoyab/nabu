@@ -47,6 +47,7 @@ class AIService:
         self.openai_client = None
         self.research_flow = None
         self.analyzed_articles = []
+        self._cached_query: Optional[str] = None
         self._initialize()
     
     def _initialize(self):
@@ -196,22 +197,33 @@ class AIService:
             Recommendations response
         """
         started_at = time.perf_counter()
+        if not research_query.strip():
+            raise ValueError("Research query cannot be empty")
+
+        normalized_query = research_query.strip().lower()
+        cache_hit = (
+            self._cached_query == normalized_query and bool(self.analyzed_articles)
+        )
         logger.info(
-            "Recommendations requested (query=%r, top_k=%d, cached_articles=%d)",
+            "Recommendations requested (query=%r, top_k=%d, cached_articles=%d, cache_hit=%s)",
             research_query,
             top_k,
             len(self.analyzed_articles),
+            cache_hit,
         )
-        if not self.analyzed_articles:
-            logger.info("No cached analyzed articles, triggering on-demand fetch")
+        if not cache_hit:
+            logger.info(
+                "Cache miss for query=%r (previous=%r), triggering on-demand fetch",
+                research_query,
+                self._cached_query,
+            )
             fetched = self._fetch_and_prepare_articles(research_query)
             if fetched == 0:
+                self._cached_query = None
                 raise ValueError(
                     "No articles available for this query. Please try a different query or check data providers."
                 )
-        
-        if not research_query.strip():
-            raise ValueError("Research query cannot be empty")
+            self._cached_query = normalized_query
         
         response = self.research_flow.get_research_recommendations(
             research_query, 
