@@ -64,6 +64,7 @@ class ResearchFlow:
                 "relevance_reasons": rec.get('relevance_reasons', []),
                 "research_applications": rec.get('research_applications', []),
                 "url": rec.get('url', ''),
+                "source": rec.get('source', '') or '',
                 "organisms": rec.get('organisms', []),
                 "key_concepts": rec.get('key_concepts', []),
                 "selected": False  # For frontend state management
@@ -126,6 +127,11 @@ class ResearchFlow:
                     questions_per_article[idx] = result or []
 
         all_suggested_questions = [q for qs in questions_per_article for q in qs]
+        all_suggested_questions = self._normalize_questions(
+            all_suggested_questions,
+            selected_articles=selected_articles,
+            research_query=research_query,
+        )
         logger.info(
             "ResearchFlow parallel per-article generation finished in %.2fs",
             time.perf_counter() - parallel_started_at,
@@ -133,6 +139,9 @@ class ResearchFlow:
 
         # Generate overall research insights (depends on summaries, so runs after)
         research_insights = self._generate_research_insights(article_summaries, research_query)
+        combined_summary = self._generate_combined_summary(article_summaries, research_query)
+        if not combined_summary.strip():
+            combined_summary = research_insights.get("overall_insights", "").strip()
         
         # Format for frontend
         frontend_response = {
@@ -141,6 +150,7 @@ class ResearchFlow:
             "research_query": research_query,
             "article_summaries": article_summaries,
             "suggested_questions": all_suggested_questions,
+            "combined_summary": combined_summary,
             "research_insights": research_insights,
             "metadata": {
                 "articles_count": len(selected_articles),
@@ -298,21 +308,21 @@ class ResearchFlow:
         title = article.get('title', '')
         
         questions_prompt = f"""
-        Based on the article "{title}" and the research query "{research_query}", 
-        generate 3-5 specific questions that a researcher might want to explore further.
-        
-        Questions should be:
-        - Specific to the article content
-        - Relevant to the research query
-        - Actionable for further research
-        - Different types (methodological, conceptual, practical)
-        
-        Return as JSON array:
+        Basado en el artículo "{title}" y la consulta de investigación "{research_query}",
+        genera entre 3 y 5 preguntas específicas que un investigador podría explorar.
+
+        Requisitos:
+        - Deben estar escritas en español.
+        - Deben ser variadas y NO repetidas entre sí.
+        - Deben ser accionables y relevantes para la consulta.
+        - Usa tipos variados: methodological, conceptual, practical, comparative.
+
+        Responde SOLO como arreglo JSON con este formato:
         [
             {{
-                "question": "Question text",
+                "question": "Pregunta en español",
                 "type": "methodological|conceptual|practical|comparative",
-                "focus": "What aspect this question explores"
+                "focus": "Enfoque breve en español"
             }}
         ]
         """
@@ -356,9 +366,9 @@ class ResearchFlow:
                 # Fallback if JSON parsing fails
                 return [{
                     "id": f"q_{int(time.time())}_0",
-                    "question": "What are the key findings of this study?",
+                    "question": f"¿Cuáles son los hallazgos clave de \"{title}\" para {research_query}?",
                     "type": "conceptual",
-                    "focus": "Main research outcomes",
+                    "focus": "Resultados principales del estudio",
                     "article_id": article.get('id', ''),
                     "article_title": title
                 }]
@@ -366,12 +376,120 @@ class ResearchFlow:
         except Exception as e:
             return [{
                 "id": f"q_{int(time.time())}_0",
-                "question": f"Error generating questions: {str(e)}",
-                "type": "error",
-                "focus": "System error",
+                "question": f"¿Qué línea de investigación priorizarías a partir de \"{title}\"?",
+                "type": "practical",
+                "focus": "Priorización de próximos pasos",
                 "article_id": article.get('id', ''),
                 "article_title": title
             }]
+
+    def _normalize_questions(
+        self,
+        questions: List[Dict[str, Any]],
+        selected_articles: List[Dict[str, Any]],
+        research_query: str,
+    ) -> List[Dict[str, Any]]:
+        """Remove duplicates, enforce Spanish-oriented defaults, and ensure variety."""
+        seen = set()
+        normalized: List[Dict[str, Any]] = []
+
+        for idx, q in enumerate(questions):
+            question_text = (q.get("question", "") or "").strip()
+            if not question_text:
+                continue
+
+            key = " ".join(question_text.lower().split())
+            if key in seen:
+                continue
+            seen.add(key)
+
+            qtype = (q.get("type", "conceptual") or "conceptual").lower()
+            if qtype not in {"methodological", "conceptual", "practical", "comparative"}:
+                qtype = "conceptual"
+
+            focus = (q.get("focus", "") or "").strip()
+            if not focus:
+                focus = "Análisis del tema de investigación"
+
+            normalized.append({
+                "id": q.get("id") or f"q_{int(time.time())}_{idx}",
+                "question": question_text,
+                "type": qtype,
+                "focus": focus,
+                "article_id": q.get("article_id"),
+                "article_title": q.get("article_title"),
+            })
+
+        if len(normalized) < 5:
+            seed_title = selected_articles[0].get("title", "el artículo principal") if selected_articles else "el artículo"
+            fallbacks = [
+                f"¿Qué evidencia adicional se necesita para validar los resultados sobre {research_query}?",
+                f"¿Cómo se compara {seed_title} con otros estudios recientes sobre {research_query}?",
+                f"¿Qué limitaciones metodológicas podrían afectar la generalización de estos hallazgos?",
+                f"¿Qué experimento de seguimiento propondrías para profundizar en {research_query}?",
+                f"¿Qué implicaciones prácticas tienen estos resultados en contextos reales?",
+            ]
+            fallback_types = ["conceptual", "comparative", "methodological", "practical", "practical"]
+
+            for i, text in enumerate(fallbacks):
+                key = " ".join(text.lower().split())
+                if key in seen:
+                    continue
+                seen.add(key)
+                normalized.append({
+                    "id": f"q_fb_{int(time.time())}_{i}",
+                    "question": text,
+                    "type": fallback_types[i],
+                    "focus": "Pregunta de apoyo para profundizar la investigación",
+                    "article_id": selected_articles[0].get("id", "") if selected_articles else "",
+                    "article_title": selected_articles[0].get("title", "") if selected_articles else "",
+                })
+                if len(normalized) >= 6:
+                    break
+
+        return normalized[:8]
+
+    def _generate_combined_summary(self, article_summaries: List[Dict], research_query: str) -> str:
+        """Generate a general synthesis and comparison across selected articles."""
+        comparison_prompt = f"""
+        Consulta de investigación: "{research_query}"
+
+        A partir de los siguientes resúmenes de artículos, redacta una síntesis general y comparación.
+
+        Resúmenes:
+        {json.dumps([{
+            "title": s.get("title", ""),
+            "summary": s.get("summary", "")
+        } for s in article_summaries], ensure_ascii=False, indent=2)}
+
+        Requisitos de salida (en español):
+        1) Síntesis general (idea central conjunta)
+        2) Coincidencias entre estudios
+        3) Diferencias o contradicciones
+        4) Implicaciones prácticas
+        5) Conclusión breve para toma de decisiones
+        """
+
+        try:
+            response = self.openai_client.client.chat.completions.create(
+                model=self.openai_client.model,
+                messages=[
+                    {
+                        "role": "system",
+                        "content": (
+                            "Eres un analista de investigación científica. "
+                            "Produce comparaciones claras, accionables y en español."
+                        ),
+                    },
+                    {"role": "user", "content": comparison_prompt},
+                ],
+                max_tokens=1200,
+                temperature=0.3,
+            )
+            return (response.choices[0].message.content or "").strip()
+        except Exception as exc:
+            logger.exception("Failed to generate combined summary: %s", exc)
+            return ""
     
     def _generate_research_insights(self, article_summaries: List[Dict], research_query: str) -> Dict[str, Any]:
         """Generate overall research insights from selected articles."""

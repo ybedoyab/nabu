@@ -22,6 +22,40 @@ const ArticleRecommendations: React.FC<ArticleRecommendationsProps> = ({
   researchQuery,
   isLoading 
 }) => {
+  const [sourceFilter, setSourceFilter] = React.useState<'all' | 'arxiv' | 'scholar'>('all');
+
+  const normalizeSource = (source?: string, url?: string) => {
+    const src = (source || '').toLowerCase();
+    if (src.includes('arxiv')) return 'arxiv';
+    if (src.includes('scholar') || src.includes('google')) return 'scholar';
+    const link = (url || '').toLowerCase();
+    if (link.includes('arxiv.org')) return 'arxiv';
+    if (link.includes('scholar.google')) return 'scholar';
+    return 'unknown';
+  };
+
+  const sourceLabel = (source?: string, url?: string) => {
+    const normalized = normalizeSource(source, url);
+    if (normalized === 'arxiv') return 'arXiv';
+    if (normalized === 'scholar') return 'Google Scholar';
+    return 'Otra fuente';
+  };
+
+  const sourceCounts = recommendations.reduce(
+    (acc, article) => {
+      const source = normalizeSource(article.source, article.url);
+      if (source === 'arxiv') acc.arxiv += 1;
+      if (source === 'scholar') acc.scholar += 1;
+      return acc;
+    },
+    { arxiv: 0, scholar: 0 }
+  );
+
+  const visibleRecommendations = recommendations.filter((article) => {
+    if (sourceFilter === 'all') return true;
+    return normalizeSource(article.source, article.url) === sourceFilter;
+  });
+
   const handleArticleToggle = (article: Article) => {
     if (article.selected) {
       onDeselectArticle(article.id);
@@ -64,17 +98,40 @@ const ArticleRecommendations: React.FC<ArticleRecommendationsProps> = ({
         <h2 className="text-3xl font-bold text-base-content mb-4 font-geist">
           Artículos relevantes
         </h2>
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between gap-4 flex-wrap">
           <p className="text-base-content/70">
             Selecciona los artículos que quieres resumir, comparar y usar como base para el siguiente paso.
           </p>
+          <div className="join">
+            <button
+              type="button"
+              className={`btn btn-sm join-item ${sourceFilter === 'all' ? 'btn-primary' : 'btn-outline'}`}
+              onClick={() => setSourceFilter('all')}
+            >
+              Todos ({recommendations.length})
+            </button>
+            <button
+              type="button"
+              className={`btn btn-sm join-item ${sourceFilter === 'arxiv' ? 'btn-primary' : 'btn-outline'}`}
+              onClick={() => setSourceFilter('arxiv')}
+            >
+              arXiv ({sourceCounts.arxiv})
+            </button>
+            <button
+              type="button"
+              className={`btn btn-sm join-item ${sourceFilter === 'scholar' ? 'btn-primary' : 'btn-outline'}`}
+              onClick={() => setSourceFilter('scholar')}
+            >
+              Google Scholar ({sourceCounts.scholar})
+            </button>
+          </div>
         </div>
       </div>
 
 
       {/* Articles Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-        {recommendations.map((article, index) => (
+        {visibleRecommendations.map((article, index) => (
           <motion.div
             key={article.id}
             className={`card shadow-lg border-2 transition-all duration-300 cursor-pointer ${
@@ -123,6 +180,9 @@ const ArticleRecommendations: React.FC<ArticleRecommendationsProps> = ({
               <h3 className="card-title text-lg font-semibold text-base-content mb-3 line-clamp-2">
                 {article.title}
               </h3>
+              <div className="mb-3">
+                <span className="badge badge-outline badge-sm">{sourceLabel(article.source, article.url)}</span>
+              </div>
 
               <div className="mb-4">
                 <h4 className="text-sm font-medium text-base-content mb-2">Aplicaciones potenciales:</h4>

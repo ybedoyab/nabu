@@ -89,19 +89,26 @@ Unificadas en:
 
 ## Ejecución local rápida
 
-### Opción recomendada
+### Flujo recomendado (único comando)
 
 ```powershell
 .\deploy.ps1 --local
 ```
 
-Esto levanta todos los servicios locales con Docker Compose.
+`deploy.ps1` está preparado para primera ejecución y ejecuciones posteriores:
 
-### Opción manual
+- Verifica prerequisitos (`python/py`, `npm`; usa `winget` para instalar si faltan).
+- Crea `.env` automáticamente desde `env.example` si no existe. (usar el compartido como material suplementario en el forms)
+- Crea `.venv` si no existe.
+- Instala/actualiza dependencias Python desde `requirements.txt` cuando cambian.
+- Instala/actualiza dependencias frontend (`npm install`) cuando cambia `package-lock.json`.
+- Libera automáticamente puertos ocupados `8000`, `8081`, `3000`.
+- Levanta `backend`, `data` y `frontend`, valida readiness y deja logs en streaming.
 
-```bash
-docker-compose up --build -d
-docker-compose ps
+### Modo Docker
+
+```powershell
+.\deploy.ps1 --docker
 ```
 
 ## Endpoints y URLs locales
@@ -111,6 +118,11 @@ docker-compose ps
 - Backend docs: `http://localhost:8000/docs`
 - Data API: `http://localhost:8081`
 - Data health: `http://localhost:8081/health`
+
+## Notas de primera ejecución
+
+- Si `winget` instala Python o Node.js por primera vez y no aparecen en PATH inmediatamente, reinicia la terminal y vuelve a ejecutar `.\deploy.ps1 --local`.
+- Si `.env` fue creado automáticamente, configura `OPENAI_API_KEY` para habilitar todas las funciones de IA.
 
 ## Testing
 

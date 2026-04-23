@@ -1,0 +1,24 @@
+2026-04-22 14:25:53,893 - arxiv_provider - INFO - ArxivSearchProvider instantiated.
+2026-04-22 14:26:23,177 - arxiv_provider - INFO - ArxivSearchProvider instantiated.
+2026-04-22 14:26:23,177 - arxiv_provider - INFO - Fetching arXiv data for query: 'transformers' (limit=1)
+2026-04-22 14:26:24,887 - arxiv_provider - INFO - Successfully retrieved and normalized 1 results from arXiv.
+2026-04-22 14:29:31,203 - arxiv_provider - INFO - ArxivSearchProvider instantiated.
+2026-04-22 14:42:29,389 - arxiv_provider - INFO - ArxivSearchProvider instantiated.
+2026-04-22 14:44:37,735 - arxiv_provider - INFO - ArxivSearchProvider instantiated.
+2026-04-22 14:46:02,442 - arxiv_provider - INFO - ArxivSearchProvider instantiated.
+2026-04-22 15:01:22,749 - arxiv_provider - INFO - ArxivSearchProvider instantiated.
+2026-04-22 15:03:52,763 - arxiv_provider - INFO - ArxivSearchProvider instantiated.
+2026-04-22 15:06:36,050 - arxiv_provider - INFO - ArxivSearchProvider instantiated.
+2026-04-22 15:09:41,765 - arxiv_provider - INFO - ArxivSearchProvider instantiated.
+2026-04-22 15:11:33,799 - arxiv_provider - INFO - ArxivSearchProvider instantiated.
+2026-04-22 15:12:52,977 - arxiv_provider - INFO - ArxivSearchProvider instantiated.
+2026-04-22 15:15:01,362 - arxiv_provider - INFO - Fetching arXiv data for query: 'machine learning in healthcare' (limit=15)
+2026-04-22 15:15:05,352 - arxiv_provider - INFO - Successfully retrieved and normalized 15 results from arXiv.
+2026-04-22 15:18:31,872 - arxiv_provider - INFO - ArxivSearchProvider instantiated.
+2026-04-22 15:20:59,527 - arxiv_provider - INFO - ArxivSearchProvider instantiated.
+2026-04-22 15:27:54,190 - arxiv_provider - INFO - ArxivSearchProvider instantiated.
+2026-04-22 15:29:03,721 - arxiv_provider - INFO - ArxivSearchProvider instantiated.
+2026-04-22 15:29:54,062 - arxiv_provider - INFO - ArxivSearchProvider instantiated.
+2026-04-22 15:31:05,035 - arxiv_provider - INFO - ArxivSearchProvider instantiated.
+2026-04-22 15:41:43,207 - arxiv_provider - INFO - ArxivSearchProvider instantiated.
+2026-04-22 15:44:23,184 - arxiv_provider - INFO - ArxivSearchProvider instantiated.

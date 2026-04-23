@@ -55,6 +55,7 @@ export interface Article {
   relevance_reasons: string[];
   research_applications: string[];
   url: string;
+  source?: string;
   organisms: string[];
   key_concepts: string[];
   selected?: boolean;
@@ -206,13 +207,8 @@ export const apiService = {
       return mockData.system_status;
     }
 
-    try {
-      const response = await api.get('/research/status');
-      return response.data;
-    } catch {
-      const mockData = await getMockResearchData();
-      return mockData.system_status;
-    }
+    const response = await api.get('/research/status');
+    return response.data;
   },
 
   async getArticlesList(limit = 10) {
@@ -221,7 +217,7 @@ export const apiService = {
   },
 
   // Research Flow - Step 1: Get Recommendations
-  async getRecommendations(researchQuery: string, topK: number = 5): Promise<RecommendationResponse> {
+  async getRecommendations(researchQuery: string, topK: number = 10): Promise<RecommendationResponse> {
     if (shouldForceMockData()) {
       const mockData = await getMockResearchData();
       return {
@@ -232,21 +228,11 @@ export const apiService = {
       };
     }
 
-    try {
-      const response = await api.post('/research/recommendations', {
-        research_query: researchQuery,
-        top_k: topK,
-      });
-      return response.data;
-    } catch {
-      const mockData = await getMockResearchData();
-      return {
-        recommendations: mockData.recommendations.slice(0, topK).map((article) => ({
-          ...article,
-          selected: false,
-        })),
-      };
-    }
+    const response = await api.post('/research/recommendations', {
+      research_query: researchQuery,
+      top_k: topK,
+    });
+    return response.data;
   },
 
   // Research Flow - Step 2: Get Summaries and Questions
@@ -255,16 +241,11 @@ export const apiService = {
       return buildMockSummary(selectedArticles, researchQuery);
     }
 
-    try {
-      const response = await api.post('/research/summaries', {
-        selected_articles: selectedArticles,
-        research_query: researchQuery,
-      });
-      return response.data;
-    } catch (error) {
-      console.error('[apiService.getSummaries] /research/summaries failed, falling back to mock:', error);
-      return buildMockSummary(selectedArticles, researchQuery);
-    }
+    const response = await api.post('/research/summaries', {
+      selected_articles: selectedArticles,
+      research_query: researchQuery,
+    });
+    return response.data;
   },
 
   // Research Flow - Step 3: Chat with Articles
@@ -278,17 +259,13 @@ export const apiService = {
       return buildMockChatResponse(userQuestion, chatHistory);
     }
 
-    try {
-      const response = await api.post('/research/chat', {
-        user_question: userQuestion,
-        selected_articles: selectedArticles,
-        research_query: researchQuery,
-        chat_history: chatHistory,
-      });
-      return response.data;
-    } catch {
-      return buildMockChatResponse(userQuestion, chatHistory);
-    }
+    const response = await api.post('/research/chat', {
+      user_question: userQuestion,
+      selected_articles: selectedArticles,
+      research_query: researchQuery,
+      chat_history: chatHistory,
+    });
+    return response.data;
   },
 
   // Stats - Query-relevant images (usa backend Data local)

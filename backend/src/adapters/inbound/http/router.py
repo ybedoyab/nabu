@@ -59,6 +59,12 @@ def create_research_router(container: Container, api_prefix: str) -> APIRouter:
             response = container.get_recommendations_use_case.execute(
                 request.research_query, request.top_k
             )
+            if request.top_k >= 10:
+                logger.info(
+                    "Recommendation source distribution: arxiv=%d scholar=%d",
+                    len([r for r in response.get("recommendations", []) if (r.get("source") or "").lower() == "arxiv"]),
+                    len([r for r in response.get("recommendations", []) if (r.get("source") or "").lower() == "scholar"]),
+                )
             logger.info(
                 "HTTP recommendations request completed (returned=%d, elapsed=%.2fs)",
                 len(response.get("recommendations", [])),

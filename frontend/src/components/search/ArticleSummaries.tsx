@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
-import { FileText, MessageCircle, ArrowLeft, Lightbulb, Users, ChevronDown, X } from 'lucide-react';
+import { FileText, MessageCircle, ArrowLeft, Lightbulb, ChevronDown, X, ExternalLink } from 'lucide-react';
 import { type SummaryResponse, type Article, apiService } from '../../services/api';
 import ChatInterface from './ChatInterface';
 
@@ -82,6 +82,14 @@ const parseMarkdownText = (text: string) => {
   }).filter(Boolean);
 };
 
+const getSourceLabel = (url?: string) => {
+  if (!url) return 'Fuente';
+  const lower = url.toLowerCase();
+  if (lower.includes('arxiv.org')) return 'arXiv';
+  if (lower.includes('scholar.google')) return 'Google Scholar';
+  return 'Abrir fuente';
+};
+
 interface ArticleSummariesProps {
   summaries: SummaryResponse;
   selectedArticles: Article[];
@@ -95,9 +103,7 @@ const ArticleSummaries: React.FC<ArticleSummariesProps> = ({
   researchQuery,
   onGoBack,
 }) => {
-  const [openAccordion, setOpenAccordion] = useState<string | null>(
-    summaries.article_summaries?.[0]?.article_id || null
-  );
+  const [openAccordion, setOpenAccordion] = useState<string | null>(null);
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [selectedQuestion, setSelectedQuestion] = useState<string | null>(null);
   
@@ -235,10 +241,10 @@ const ArticleSummaries: React.FC<ArticleSummariesProps> = ({
         </motion.div>
       )}
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
         {/* Main Summary */}
         <motion.div 
-          className="lg:col-span-2"
+          className="lg:col-span-3"
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
@@ -257,32 +263,77 @@ const ArticleSummaries: React.FC<ArticleSummariesProps> = ({
               </div>
               
               {/* Summary Content */}
-              <div className="max-w-none">
-                {summaries.combined_summary ? (
-                  <div className="space-y-4">
-                    {parseMarkdownText(summaries.combined_summary)}
-                  </div>
-                ) : summaries.article_summaries && summaries.article_summaries.length > 0 ? (
-                  <div className="space-y-6">
-                    {summaries.article_summaries.map((summary, index) => (
-                        <div key={index} className="space-y-4">
-                          <div className="flex items-center gap-3 mb-4 p-3 bg-primary/5 rounded-lg border-l-4 border-primary">
-                          <div className="badge badge-primary badge-lg">Artículo {index + 1}</div>
-                          
-                          <h4 className="text-base font-semibold text-primary flex-1">
-                            {selectedArticles[index]?.title}
-                          </h4>
-                        </div>
-                        {parseMarkdownText(summary.summary)}
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="alert alert-info">
-                    <Lightbulb className="w-5 h-5" />
-                    <span>No hay resumen disponible para los artículos seleccionados.</span>
-                  </div>
-                )}
+              <div className="max-w-none space-y-6">
+                <div className="rounded-xl border-2 border-primary/20 bg-base-100/80 p-4 lg:p-5">
+                  <h4 className="text-base lg:text-lg font-semibold text-primary mb-3">
+                    Resumen general y comparación
+                  </h4>
+                  {summaries.combined_summary ? (
+                    <div className="space-y-4">
+                      {parseMarkdownText(summaries.combined_summary)}
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-3 text-sm text-base-content/70 leading-relaxed">
+                      <span className="loading loading-dots loading-sm text-primary" />
+                      <span>Generando resumen general y comparación...</span>
+                    </div>
+                  )}
+                </div>
+
+                <div>
+                  <h4 className="text-base lg:text-lg font-semibold text-primary mb-3">
+                    Resúmenes individuales
+                  </h4>
+                  {summaries.article_summaries && summaries.article_summaries.length > 0 ? (
+                    <div className="space-y-4">
+                      {summaries.article_summaries.map((summary, index) => {
+                        const article = selectedArticles.find((a) => a.id === summary.article_id);
+                        const isOpen = openAccordion === summary.article_id;
+                        return (
+                          <div
+                            key={summary.article_id || index}
+                            className="border-2 border-base-300 rounded-lg overflow-hidden bg-base-100 hover:border-primary/30 transition-colors"
+                          >
+                            <button
+                              className="w-full p-4 text-left flex items-center justify-between gap-3 hover:bg-base-200 transition-colors group"
+                              onClick={() => toggleAccordion(summary.article_id)}
+                            >
+                              <div className="flex items-center gap-2 min-w-0 flex-1">
+                                <span className="badge badge-primary px-3 py-2 h-auto whitespace-nowrap shrink-0">
+                                  Artículo {index + 1}
+                                </span>
+                                <span className="text-sm font-semibold text-primary truncate">
+                                  {article?.title || `Artículo ${index + 1}`}
+                                </span>
+                              </div>
+                              <div className={`transition-transform duration-300 shrink-0 ${isOpen ? 'rotate-180' : ''}`}>
+                                <ChevronDown className="w-4 h-4 text-primary" />
+                              </div>
+                            </button>
+                            {isOpen && (
+                              <motion.div
+                                className="border-t-2 border-base-300 bg-base-50"
+                                initial={{ opacity: 0, height: 0 }}
+                                animate={{ opacity: 1, height: 'auto' }}
+                                exit={{ opacity: 0, height: 0 }}
+                                transition={{ duration: 0.3 }}
+                              >
+                                <div className="p-4 text-sm">
+                                  {parseMarkdownText(summary.summary)}
+                                </div>
+                              </motion.div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  ) : (
+                    <div className="alert alert-info">
+                      <Lightbulb className="w-5 h-5" />
+                      <span>No hay resumen disponible para los artículos seleccionados.</span>
+                    </div>
+                  )}
+                </div>
               </div>
 
               {/* Related Images Section */}
@@ -363,6 +414,21 @@ const ArticleSummaries: React.FC<ArticleSummariesProps> = ({
                           <span className="text-xs text-base-content/60">
                             Relevancia: {article.relevance_score}/10
                           </span>
+                          {article.url && (
+                            <>
+                              <span className="text-xs text-base-content/40">•</span>
+                              <a
+                                href={article.url}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="inline-flex items-center gap-1 text-xs text-primary hover:underline"
+                                title={article.url}
+                              >
+                                {getSourceLabel(article.url)}
+                                <ExternalLink className="w-3 h-3" />
+                              </a>
+                            </>
+                          )}
                           {article.organisms.length > 0 && (
                             <>
                               <span className="text-xs text-base-content/40">•</span>
@@ -377,73 +443,19 @@ const ArticleSummaries: React.FC<ArticleSummariesProps> = ({
                   ))}
                 </div>
               </div>
+
             </div>
           </div>
         </motion.div>
 
         {/* Sidebar */}
         <div className="space-y-6">
-          {/* Individual Summaries */}
-          <motion.div 
-            className="card shadow-lg border-2 border-primary/20 bg-base-100"
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-          >
-            <div className="card-body p-6">
-              <h3 className="card-title text-lg text-primary mb-4 flex items-center gap-2">
-                <Users className="w-5 h-5" />
-                Notas por artículo
-              </h3>
-              
-              <div className="space-y-3">
-                {summaries.article_summaries && summaries.article_summaries.length > 0 ? (
-                  summaries.article_summaries.map((summary, index) => {
-                    const article = selectedArticles.find(a => a.id === summary.article_id);
-                    const isOpen = openAccordion === summary.article_id;
-                    
-                    return (
-                      <div key={summary.article_id} className="border-2 border-base-300 rounded-lg overflow-hidden bg-base-100 hover:border-primary/30 transition-colors">
-                        <button
-                          className="w-full p-4 text-left flex items-center justify-between hover:bg-base-200 transition-colors group"
-                          onClick={() => toggleAccordion(summary.article_id)}
-                        >
-                          <span className="text-sm font-semibold flex-1 pr-2 group-hover:text-primary transition-colors">
-                            {article?.title || `Artículo ${index + 1}`}
-                          </span>
-                          <div className={`transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}>
-                            <ChevronDown className="w-4 h-4 text-primary" />
-                          </div>
-                        </button>
-                        {isOpen && (
-                          <motion.div 
-                            className="border-t-2 border-base-300 bg-base-50"
-                            initial={{ opacity: 0, height: 0 }}
-                            animate={{ opacity: 1, height: 'auto' }}
-                            exit={{ opacity: 0, height: 0 }}
-                            transition={{ duration: 0.3 }}
-                          >
-                            <div className="p-4 text-sm">
-                              {parseMarkdownText(summary.summary)}
-                            </div>
-                          </motion.div>
-                        )}
-                      </div>
-                    );
-                  })
-                ) : (
-                  <p className="text-sm text-base-content/60 text-center py-4">No hay resúmenes individuales disponibles.</p>
-                )}
-              </div>
-            </div>
-          </motion.div>
-
           {/* Suggested Questions */}
           <motion.div 
             className="card shadow-lg border-2 border-primary/20 bg-gradient-to-br from-info/5 to-base-100"
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.3 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
           >
             <div className="card-body p-6">
               <h3 className="card-title text-lg text-primary mb-4 flex items-center gap-2">
@@ -453,7 +465,13 @@ const ArticleSummaries: React.FC<ArticleSummariesProps> = ({
               
               <div className="space-y-2">
                 {summaries.suggested_questions && summaries.suggested_questions.length > 0 ? (
-                  summaries.suggested_questions.map((questionObj, index) => (
+                  Array.from(
+                    new Map(
+                      summaries.suggested_questions
+                        .filter((q) => q?.question?.trim())
+                        .map((q) => [q.question.trim().toLowerCase(), q])
+                    ).values()
+                  ).map((questionObj, index) => (
                     <motion.button
                       key={questionObj.id || index}
                       className="btn btn-sm w-full justify-start text-left h-auto py-3 px-4 hover:bg-primary/10 hover:border-primary/40 border-2 border-base-300 bg-base-100"

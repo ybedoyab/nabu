@@ -230,6 +230,10 @@ class AIService:
             self.analyzed_articles, 
             top_k
         )
+        response["recommendations"] = self._normalize_and_balance_recommendations(
+            response.get("recommendations", []),
+            top_k=top_k,
+        )
         logger.info(
             "Recommendations generated (query=%r, returned=%d, elapsed=%.2fs)",
             research_query,
@@ -237,6 +241,96 @@ class AIService:
             time.perf_counter() - started_at,
         )
         return response
+
+    def _normalize_and_balance_recommendations(
+        self,
+        recommendations: List[Dict[str, Any]],
+        top_k: int,
+    ) -> List[Dict[str, Any]]:
+        normalized: List[Dict[str, Any]] = []
+        for rec in recommendations:
+            source = (rec.get("source", "") or "").strip().lower()
+            if not source:
+                url = (rec.get("url", "") or "").lower()
+                if "arxiv.org" in url:
+                    source = "arxiv"
+                elif (
+                    "scholar.google" in url
+                    or "nature.com" in url
+                    or "sciencedirect.com" in url
+                    or "springer.com" in url
+                    or "academic.oup.com" in url
+                ):
+                    source = "scholar"
+            normalized.append({**rec, "source": source})
+
+        arxiv = [r for r in normalized if r.get("source") == "arxiv"]
+        scholar = [r for r in normalized if r.get("source") == "scholar"]
+        others = [r for r in normalized if r.get("source") not in {"arxiv", "scholar"}]
+
+        if top_k >= 10 and len(arxiv) >= 5 and len(scholar) >= 5:
+            selected = arxiv[:5] + scholar[:5]
+            leftovers = arxiv[5:] + scholar[5:] + others
+            selected_keys = {
+                ((r.get("title") or "") + "|" + (r.get("url") or "")).strip().lower()
+                for r in selected
+            }
+            for rec in leftovers:
+                if len(selected) >= top_k:
+                    break
+                key = ((rec.get("title") or "") + "|" + (rec.get("url") or "")).strip().lower()
+                if key in selected_keys:
+                    continue
+                selected.append(rec)
+                selected_keys.add(key)
+            return selected
+
+        if top_k >= 10:
+            selected = normalized[:top_k]
+            selected_keys = {
+                ((r.get("title") or "") + "|" + (r.get("url") or "")).strip().lower()
+                for r in selected
+            }
+            current_arxiv = len([r for r in selected if r.get("source") == "arxiv"])
+            current_scholar = len([r for r in selected if r.get("source") == "scholar"])
+
+            deficits = {
+                "arxiv": max(0, 5 - current_arxiv),
+                "scholar": max(0, 5 - current_scholar),
+            }
+            for source_name, deficit in deficits.items():
+                if deficit <= 0:
+                    continue
+                source_candidates = [
+                    a for a in self.analyzed_articles
+                    if (a.get("article_metadata", {}).get("source", "") or "").lower() == source_name
+                ]
+                for candidate in source_candidates:
+                    if deficit <= 0:
+                        break
+                    title = candidate.get("article_metadata", {}).get("title", "")
+                    url = candidate.get("article_metadata", {}).get("url", "")
+                    key = (title + "|" + url).strip().lower()
+                    if not title or key in selected_keys:
+                        continue
+                    selected.append({
+                        "id": f"rec_extra_{source_name}_{len(selected)+1}",
+                        "title": title,
+                        "relevance_score": 0,
+                        "relevance_reasons": [f"Resultado complementario de {source_name}"],
+                        "research_applications": [],
+                        "url": url,
+                        "source": source_name,
+                        "organisms": candidate.get("organism_analysis", {}).get("organisms", []),
+                        "key_concepts": candidate.get("knowledge_analysis", {}).get("key_concepts", []),
+                        "selected": False,
+                    })
+                    selected_keys.add(key)
+                    deficit -= 1
+
+            return selected[:top_k]
+
+        return normalized
 
     def _fetch_and_prepare_articles(self, research_query: str) -> int:
         """Fetch articles from Data API and map them into recommendation-ready format."""
@@ -303,6 +397,7 @@ class AIService:
             "article_metadata": {
                 "title": title,
                 "url": article.get("landing_url", ""),
+                "source": article.get("source", ""),
             },
             "summary": {
                 "summary": abstract,
@@ -368,6 +463,24 @@ class AIService:
             enriched_articles, 
             research_query
         )
+        if not (response.get("combined_summary") or "").strip():
+            response["combined_summary"] = (
+                response.get("research_insights", {}).get("overall_insights", "") or ""
+            ).strip()
+        if not (response.get("combined_summary") or "").strip():
+            response["combined_summary"] = (
+                "Síntesis general no disponible temporalmente. "
+                "Vuelve a intentar en unos segundos para regenerar la comparación."
+            )
+        response["suggested_questions"] = self._postprocess_suggested_questions(
+            response.get("suggested_questions", []),
+            selected_articles=enriched_articles,
+            research_query=research_query,
+        )
+        response["metadata"] = {
+            **response.get("metadata", {}),
+            "questions_generated": len(response.get("suggested_questions", [])),
+        }
         logger.info(
             "Summaries generation completed (query=%r, summaries=%d, questions=%d, elapsed=%.2fs)",
             research_query,
@@ -376,6 +489,72 @@ class AIService:
             time.perf_counter() - started_at,
         )
         return response
+
+    def _postprocess_suggested_questions(
+        self,
+        questions: List[Dict[str, Any]],
+        selected_articles: List[Dict[str, Any]],
+        research_query: str,
+    ) -> List[Dict[str, Any]]:
+        """Normalize, de-duplicate and ensure Spanish suggested questions."""
+        normalized: List[Dict[str, Any]] = []
+        seen = set()
+        generic_en = "what are the key findings of this study?"
+
+        for idx, q in enumerate(questions):
+            if not isinstance(q, dict):
+                continue
+            question_text = (q.get("question", "") or "").strip()
+            if not question_text:
+                continue
+
+            if question_text.lower() == generic_en:
+                article_title = q.get("article_title") or selected_articles[0].get("title", "este estudio")
+                question_text = f"¿Cuáles son los hallazgos clave de \"{article_title}\" para {research_query}?"
+                q["focus"] = "Resultados principales del estudio"
+                q["type"] = "conceptual"
+
+            key = " ".join(question_text.lower().split())
+            if key in seen:
+                continue
+            seen.add(key)
+
+            normalized.append({
+                "id": q.get("id") or f"q_norm_{int(time.time())}_{idx}",
+                "question": question_text,
+                "type": q.get("type", "conceptual"),
+                "focus": q.get("focus", "Análisis del tema de investigación"),
+                "article_id": q.get("article_id", ""),
+                "article_title": q.get("article_title", ""),
+            })
+
+        if len(normalized) < 5:
+            seed_title = selected_articles[0].get("title", "el artículo principal") if selected_articles else "el artículo"
+            templates = [
+                f"¿Qué evidencia adicional se requiere para fortalecer las conclusiones sobre {research_query}?",
+                f"¿Cómo se compara {seed_title} con otros trabajos recientes sobre {research_query}?",
+                "¿Qué limitaciones metodológicas podrían sesgar la interpretación de estos resultados?",
+                f"¿Qué experimento de seguimiento sería prioritario para avanzar en {research_query}?",
+                "¿Qué implicaciones prácticas tienen estos hallazgos en escenarios reales?",
+            ]
+            types = ["conceptual", "comparative", "methodological", "practical", "practical"]
+            for i, text in enumerate(templates):
+                key = " ".join(text.lower().split())
+                if key in seen:
+                    continue
+                seen.add(key)
+                normalized.append({
+                    "id": f"q_tpl_{int(time.time())}_{i}",
+                    "question": text,
+                    "type": types[i],
+                    "focus": "Pregunta guía para profundizar la investigación",
+                    "article_id": selected_articles[0].get("id", "") if selected_articles else "",
+                    "article_title": selected_articles[0].get("title", "") if selected_articles else "",
+                })
+                if len(normalized) >= 6:
+                    break
+
+        return normalized[:8]
     
     def chat_with_articles(self, user_question: str, selected_articles: List[Dict], 
                           research_query: str, chat_history: Optional[List[Dict]] = None) -> Dict[str, Any]:

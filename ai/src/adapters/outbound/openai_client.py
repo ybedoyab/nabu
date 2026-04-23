@@ -593,9 +593,7 @@ Format as JSON with this structure:
         
         # Sort by relevance score (highest first)
         scored_articles.sort(key=lambda x: x.get('relevance_score', 0), reverse=True)
-        
-        # Take top_k recommendations
-        top_recommendations = scored_articles[:top_k]
+        top_recommendations = self._select_diverse_top_k(scored_articles, top_k)
         
         # Format recommendations
         formatted_recommendations = []
@@ -676,19 +674,66 @@ Format as JSON with this structure:
             max_possible_score = len(query_words) * 3 + 5  # Title matches + bonus
             normalized_score = min(10, (score / max_possible_score) * 10) if max_possible_score > 0 else 0
             
-            if normalized_score > 0:
-                article_copy = article.copy()
-                article_copy['relevance_score'] = round(normalized_score, 1)
-                article_copy['relevance_reasons'] = self._generate_fast_reasons(query_words, title, summary, concepts, organisms)
-                article_copy['research_applications'] = self._generate_fast_applications(concepts, organisms)
-                article_copy['contribution'] = f"Provides insights on {', '.join(concepts[:3])} relevant to your research query"
-                scored_articles.append(article_copy)
+            article_copy = article.copy()
+            article_copy['relevance_score'] = round(normalized_score, 1)
+            article_copy['relevance_reasons'] = self._generate_fast_reasons(query_words, title, summary, concepts, organisms)
+            article_copy['research_applications'] = self._generate_fast_applications(concepts, organisms)
+            article_copy['contribution'] = f"Provides insights on {', '.join(concepts[:3])} relevant to your research query"
+
+            scored_articles.append(article_copy)
         
         # Sort by relevance score (highest first)
         scored_articles.sort(key=lambda x: x.get('relevance_score', 0), reverse=True)
         
-        # Take top_k recommendations
-        top_recommendations = scored_articles[:top_k]
+        # Build source buckets after scoring
+        arxiv_articles = [
+            a for a in scored_articles
+            if self._infer_source(a) == 'arxiv'
+        ]
+        scholar_articles = [
+            a for a in scored_articles
+            if self._infer_source(a) == 'scholar'
+        ]
+        other_articles = [
+            a for a in scored_articles
+            if self._infer_source(a) not in {'arxiv', 'scholar'}
+        ]
+
+        top_recommendations = []
+        selected_titles = set()
+
+        # If possible, enforce at least 5 and 5 when top_k allows it.
+        if top_k >= 10 and len(arxiv_articles) >= 5 and len(scholar_articles) >= 5:
+            for article in arxiv_articles[:5] + scholar_articles[:5]:
+                title_key = (article.get('article_metadata', {}).get('title', '') or '').strip().lower()
+                if title_key and title_key not in selected_titles:
+                    top_recommendations.append(article)
+                    selected_titles.add(title_key)
+        else:
+            # Fallback: interleave sources so both appear when available.
+            i = 0
+            while len(top_recommendations) < top_k and (i < len(arxiv_articles) or i < len(scholar_articles)):
+                if i < len(arxiv_articles):
+                    title_key = (arxiv_articles[i].get('article_metadata', {}).get('title', '') or '').strip().lower()
+                    if title_key and title_key not in selected_titles and len(top_recommendations) < top_k:
+                        top_recommendations.append(arxiv_articles[i])
+                        selected_titles.add(title_key)
+                if i < len(scholar_articles):
+                    title_key = (scholar_articles[i].get('article_metadata', {}).get('title', '') or '').strip().lower()
+                    if title_key and title_key not in selected_titles and len(top_recommendations) < top_k:
+                        top_recommendations.append(scholar_articles[i])
+                        selected_titles.add(title_key)
+                i += 1
+
+        # Fill remaining slots by global score order
+        for article in scored_articles + other_articles:
+            if len(top_recommendations) >= top_k:
+                break
+            title_key = (article.get('article_metadata', {}).get('title', '') or '').strip().lower()
+            if not title_key or title_key in selected_titles:
+                continue
+            top_recommendations.append(article)
+            selected_titles.add(title_key)
         
         # Format recommendations
         formatted_recommendations = []
@@ -703,6 +748,7 @@ Format as JSON with this structure:
                 "research_applications": article.get('research_applications', []),
                 "contribution": article.get('contribution', ''),
                 "url": article.get('article_metadata', {}).get('url', ''),
+                "source": self._infer_source(article),
                 "organisms": organisms,
                 "key_concepts": concepts
             })
@@ -756,6 +802,49 @@ Format as JSON with this structure:
             applications.append(f"Studies using {organisms[0]} as model organism")
         
         return applications[:3] if applications else ["General research applications"]
+
+    @staticmethod
+    def _infer_source(article: Dict[str, Any]) -> str:
+        source = (article.get('article_metadata', {}).get('source', '') or '').strip().lower()
+        if source:
+            return source
+        url = (article.get('article_metadata', {}).get('url', '') or '').lower()
+        if 'arxiv.org' in url:
+            return 'arxiv'
+        if 'scholar.google' in url or 'nature.com' in url or 'sciencedirect.com' in url or 'springer.com' in url:
+            return 'scholar'
+        return ''
+
+    def _select_diverse_top_k(self, sorted_articles: List[Dict], top_k: int) -> List[Dict]:
+        """
+        Select top-k while trying to include multiple sources (e.g., arxiv + scholar)
+        when available among high-scoring candidates.
+        """
+        if len(sorted_articles) <= top_k:
+            return sorted_articles
+
+        by_source = {}
+        for article in sorted_articles:
+            source = (article.get('article_metadata', {}).get('source', '') or 'unknown').lower()
+            by_source.setdefault(source, []).append(article)
+
+        selected: List[Dict] = []
+        # First pass: pick one from each source pool (best scored per source)
+        for source in list(by_source.keys()):
+            if by_source[source] and len(selected) < top_k:
+                selected.append(by_source[source].pop(0))
+
+        # Second pass: fill remaining slots by global score order
+        selected_ids = {id(a) for a in selected}
+        for article in sorted_articles:
+            if len(selected) >= top_k:
+                break
+            if id(article) in selected_ids:
+                continue
+            selected.append(article)
+            selected_ids.add(id(article))
+
+        return selected[:top_k]
     
     def _analyze_article_relevance(self, query: str, title: str, summary: str, organisms: List[str], concepts: List[str]) -> Dict:
         """

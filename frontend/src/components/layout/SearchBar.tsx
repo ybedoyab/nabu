@@ -1,9 +1,8 @@
 import { Search, X, Sparkles } from 'lucide-react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion } from 'motion/react';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useResearch } from '../../context/ResearchContext';
-import LoadingAnimation from '../common/LoadingAnimation';
 
 interface SearchBarProps {
   onSearch?: (query: string) => void;
@@ -111,12 +110,19 @@ const SearchBar = ({ onSearch, defaultValue = '', value, isAIEnabled = true }: S
           )}
         </motion.button>
         </motion.div>
-      </form>
 
-      {/* Loading Animation Overlay */}
-      <AnimatePresence>
-        {isSearching && <LoadingAnimation message="Buscando..." isFullScreen={true} />}
-      </AnimatePresence>
+        {(isSearching || isLoading) && (
+          <motion.div
+            className="mt-3 flex items-center justify-center gap-2 text-sm text-base-content/70"
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <span className="loading loading-dots loading-sm text-primary" />
+            <span>Cargando artículos...</span>
+          </motion.div>
+        )}
+      </form>
     </>
   );
 };

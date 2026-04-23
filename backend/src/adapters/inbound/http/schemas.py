@@ -28,6 +28,7 @@ class ArticleRecommendation(BaseModel):
     relevance_reasons: List[str]
     research_applications: List[str]
     url: str
+    source: str = ""
     organisms: List[str] = Field(default=[])
     key_concepts: List[str] = Field(default=[])
     selected: bool = False
@@ -72,6 +73,7 @@ class SummariesResponse(BaseModel):
     research_query: str
     article_summaries: List[ArticleSummary]
     suggested_questions: List[SuggestedQuestion]
+    combined_summary: str
     research_insights: ResearchInsights
     metadata: Dict[str, Any]
 

@@ -208,7 +208,7 @@ export const ResearchProvider: React.FC<{ children: ReactNode }> = ({ children }
     
     setResearchQuery: (query: string) => dispatch({ type: ActionTypes.SET_RESEARCH_QUERY, payload: query }),
     
-    getRecommendations: async (query: string, topK: number = 5) => {
+    getRecommendations: async (query: string, topK: number = 10) => {
       dispatch({ type: ActionTypes.SET_LOADING, payload: true });
       dispatch({ type: ActionTypes.SET_RESEARCH_QUERY, payload: query });
       try {
@@ -236,9 +236,27 @@ export const ResearchProvider: React.FC<{ children: ReactNode }> = ({ children }
       try {
         const response = await apiService.getSummaries(selectedArticles, researchQuery);
         console.log('getSummaries response:', response);
-        dispatch({ type: ActionTypes.SET_SUMMARIES, payload: response });
-        dispatch({ type: ActionTypes.SET_SUGGESTED_QUESTIONS, payload: response.suggested_questions });
-        return response;
+
+        const fallbackCombinedSummary =
+          (response.research_insights?.overall_insights || '').trim() ||
+          (response.article_summaries || [])
+            .slice(0, 5)
+            .map((item, index) => {
+              const title = item?.title || `Artículo ${index + 1}`;
+              const summary = (item?.summary || '').trim();
+              return summary ? `${index + 1}. ${title}\n${summary}` : '';
+            })
+            .filter(Boolean)
+            .join('\n\n');
+
+        const normalizedResponse: SummaryResponse = {
+          ...response,
+          combined_summary: (response.combined_summary || '').trim() || fallbackCombinedSummary,
+        };
+
+        dispatch({ type: ActionTypes.SET_SUMMARIES, payload: normalizedResponse });
+        dispatch({ type: ActionTypes.SET_SUGGESTED_QUESTIONS, payload: normalizedResponse.suggested_questions });
+        return normalizedResponse;
       } catch (error: any) {
         console.error('getSummaries error:', error);
         dispatch({ type: ActionTypes.SET_ERROR, payload: error.message });

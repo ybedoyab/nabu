@@ -12,6 +12,202 @@ function Test-CommandExists {
     return $null -ne (Get-Command $CommandName -ErrorAction SilentlyContinue)
 }
 
+function Ensure-WingetPackage {
+    param(
+        [string]$PackageId,
+        [string]$DisplayName
+    )
+
+    if (-not (Test-CommandExists "winget")) {
+        Write-Host "Error: $DisplayName is missing and winget is not available to install it automatically." -ForegroundColor Red
+        return $false
+    }
+
+    Write-Host "$DisplayName is missing. Installing with winget..." -ForegroundColor Yellow
+    try {
+        winget install --id $PackageId --silent --accept-package-agreements --accept-source-agreements
+        return $true
+    } catch {
+        Write-Host "Error installing $DisplayName with winget: $($_.Exception.Message)" -ForegroundColor Red
+        return $false
+    }
+}
+
+function Ensure-EnvFile {
+    $envPath = Join-Path $script:Root ".env"
+    if (Test-Path $envPath) {
+        return
+    }
+
+    $envExamplePath = Join-Path $script:Root "env.example"
+    if (Test-Path $envExamplePath) {
+        Copy-Item -Path $envExamplePath -Destination $envPath -Force
+        Write-Host "Created .env from env.example. Review OPENAI_API_KEY before using AI features." -ForegroundColor Yellow
+        return
+    }
+
+    New-Item -Path $envPath -ItemType File -Force | Out-Null
+    Write-Host "Created empty .env file. Set OPENAI_API_KEY before using AI features." -ForegroundColor Yellow
+}
+
+function Ensure-NodeAndNpm {
+    if (Test-CommandExists "npm") {
+        return $true
+    }
+
+    $installed = Ensure-WingetPackage -PackageId "OpenJS.NodeJS.LTS" -DisplayName "Node.js (npm)"
+    if (-not $installed) {
+        return $false
+    }
+
+    if (-not (Test-CommandExists "npm")) {
+        Write-Host "npm is still not available in PATH. Restart the terminal and run deploy.ps1 again." -ForegroundColor Red
+        return $false
+    }
+
+    return $true
+}
+
+function Ensure-PythonBase {
+    if ((Test-CommandExists "python") -or (Test-CommandExists "py")) {
+        return $true
+    }
+
+    $installed = Ensure-WingetPackage -PackageId "Python.Python.3.12" -DisplayName "Python 3.12"
+    if (-not $installed) {
+        return $false
+    }
+
+    if (-not ((Test-CommandExists "python") -or (Test-CommandExists "py"))) {
+        Write-Host "Python is still not available in PATH. Restart the terminal and run deploy.ps1 again." -ForegroundColor Red
+        return $false
+    }
+
+    return $true
+}
+
+function New-ProjectVenvIfMissing {
+    $venvPython = Join-Path $script:Root ".venv/Scripts/python.exe"
+    if (Test-Path $venvPython) {
+        return $venvPython
+    }
+
+    Write-Host "Creating Python virtual environment (.venv)..." -ForegroundColor Cyan
+    if (Test-CommandExists "py") {
+        & py -3 -m venv (Join-Path $script:Root ".venv")
+    } elseif (Test-CommandExists "python") {
+        & python -m venv (Join-Path $script:Root ".venv")
+    } else {
+        Write-Host "Error: Could not find a Python launcher to create .venv." -ForegroundColor Red
+        return $null
+    }
+
+    if (-not (Test-Path $venvPython)) {
+        Write-Host "Error: failed creating .venv at $venvPython" -ForegroundColor Red
+        return $null
+    }
+
+    return $venvPython
+}
+
+function Ensure-PythonDependencies {
+    param(
+        [string]$PythonExe
+    )
+
+    $requirementsPath = Join-Path $script:Root "requirements.txt"
+    if (-not (Test-Path $requirementsPath)) {
+        Write-Host "Error: requirements.txt not found at project root." -ForegroundColor Red
+        return $false
+    }
+
+    $hashFile = Join-Path $script:Root ".venv/.nabu-requirements.hash"
+    $requirementsHash = (Get-FileHash -Path $requirementsPath -Algorithm SHA256).Hash
+    $currentHash = ""
+    if (Test-Path $hashFile) {
+        $currentHash = (Get-Content $hashFile -ErrorAction SilentlyContinue | Select-Object -First 1)
+    }
+
+    if ($requirementsHash -eq $currentHash) {
+        return $true
+    }
+
+    Write-Host "Installing/updating Python dependencies..." -ForegroundColor Cyan
+    & $PythonExe -m pip install --upgrade pip
+    if ($LASTEXITCODE -ne 0) { return $false }
+    & $PythonExe -m pip install -r $requirementsPath
+    if ($LASTEXITCODE -ne 0) { return $false }
+
+    Set-Content -Path $hashFile -Value $requirementsHash -Encoding UTF8
+    return $true
+}
+
+function Ensure-FrontendDependencies {
+    $frontendDir = Join-Path $script:Root "frontend"
+    $lockFile = Join-Path $frontendDir "package-lock.json"
+    $hashFile = Join-Path $frontendDir "node_modules/.nabu-package-lock.hash"
+
+    if (-not (Test-Path $lockFile)) {
+        Write-Host "Error: frontend/package-lock.json not found." -ForegroundColor Red
+        return $false
+    }
+
+    $lockHash = (Get-FileHash -Path $lockFile -Algorithm SHA256).Hash
+    $currentHash = ""
+    if (Test-Path $hashFile) {
+        $currentHash = (Get-Content $hashFile -ErrorAction SilentlyContinue | Select-Object -First 1)
+    }
+
+    if ((Test-Path (Join-Path $frontendDir "node_modules")) -and $lockHash -eq $currentHash) {
+        return $true
+    }
+
+    Write-Host "Installing/updating frontend dependencies..." -ForegroundColor Cyan
+    Push-Location $frontendDir
+    try {
+        npm install
+        if ($LASTEXITCODE -ne 0) { return $false }
+    } finally {
+        Pop-Location
+    }
+
+    if (-not (Test-Path (Join-Path $frontendDir "node_modules"))) {
+        return $false
+    }
+
+    Set-Content -Path $hashFile -Value $lockHash -Encoding UTF8
+    return $true
+}
+
+function Ensure-LocalEnvironment {
+    Ensure-EnvFile
+
+    if (-not (Ensure-NodeAndNpm)) {
+        return $null
+    }
+
+    if (-not (Ensure-PythonBase)) {
+        return $null
+    }
+
+    $pythonExe = New-ProjectVenvIfMissing
+    if (-not $pythonExe) {
+        return $null
+    }
+
+    if (-not (Ensure-PythonDependencies -PythonExe $pythonExe)) {
+        Write-Host "Error: failed installing Python dependencies." -ForegroundColor Red
+        return $null
+    }
+
+    if (-not (Ensure-FrontendDependencies)) {
+        Write-Host "Error: failed installing frontend dependencies." -ForegroundColor Red
+        return $null
+    }
+
+    return $pythonExe
+}
+
 function Stop-LocalJobs {
     if ($script:Jobs.Count -eq 0) {
         return
@@ -141,21 +337,10 @@ function Wait-ForAllServices {
 function Start-LocalMode {
     Write-Host "Starting Nabu in local mode (no Docker)..." -ForegroundColor Green
 
-    if (-not (Test-Path (Join-Path $script:Root ".env"))) {
-        Write-Host "Error: .env file not found at project root." -ForegroundColor Red
-        Write-Host "Create it from env.example and set OPENAI_API_KEY." -ForegroundColor Yellow
+    $pythonExe = Ensure-LocalEnvironment
+    if (-not $pythonExe) {
         exit 1
     }
-    if (-not (Test-CommandExists "npm")) {
-        Write-Host "Error: npm is not available in PATH." -ForegroundColor Red
-        exit 1
-    }
-    if (-not (Test-Path (Join-Path $script:Root ".venv/Scripts/python.exe"))) {
-        Write-Host "Error: Python virtual env not found at .venv/Scripts/python.exe" -ForegroundColor Red
-        exit 1
-    }
-
-    $pythonExe = Join-Path $script:Root ".venv/Scripts/python.exe"
 
     Write-Host "Checking required ports (8000, 8081, 3000)..." -ForegroundColor Cyan
     Stop-ProcessesOnPorts -Ports @(8000, 8081, 3000)
